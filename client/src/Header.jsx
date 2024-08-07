@@ -1,7 +1,8 @@
 function Header() {
     return (
         <header>
-            <h1>Dota Boost</h1>
+            <h1>DotaBoost</h1>
+            <img src="src/assets/img/pudje.png" alt=""></img>
         </header>
     );
 }
