@@ -25,7 +25,7 @@ NavBarProfile.propTypes = {
 
 NavBarProfile.defaultProps = {
     isLoggedIn: false,
-    name: "Гость",
+    name: "Пользователь",
     balance: 0.0,
     icon: "src/assets/img/default_profile_icon.png" 
 }

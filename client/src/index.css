@@ -27,7 +27,7 @@ li a:hover {
     list-style-type: none;
     overflow: hidden;
     background-color: rgba(69, 69, 69, 0.5);
-    padding: 10px 10px;
+    padding: 10px 15px;
     margin: 0px;
     border: solid;
     border-color: rgba(39, 39, 39, 1.0);
@@ -48,14 +48,14 @@ li a:hover {
     color: rgba(255, 255, 255, 0.75); 
     display: inline;
     position: relative;
-    margin: 0px 10px;
+    margin: 0px 15px;
     top: 5px;
 }
 
 .NavBarProfile img {
     width: 45px;
     height: 45px;
-    margin: 0px 5px;
+    margin: 0px 10px;
     display: inline;
     float: left;
 }
@@ -63,7 +63,8 @@ li a:hover {
 .NavBarProfile h3 {
     font-family: 'Nunito', sans-serif;
     font-size: 0.8em;
-    float: left;
+    float: right;
+    white-space: nowrap;
     display: inline;
     position: relative;
     margin: 0px;
@@ -74,7 +75,8 @@ li a:hover {
     font-size: 0.6em;
     font-weight: 500;
     margin: 0px;
+    top: 25px;
     position: relative;
-    bottom: 5px;
+    white-space: nowrap;
 }
 
