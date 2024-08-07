@@ -13,7 +13,8 @@ class UserController {
         if (!email || !password || !username){
             return next(ApiError.badRequest('wrong input format'))
         }
-        
+        console.log('ebat')
+
         const candidateByUsername = await User.findOne({where: {username}})
         if (candidateByUsername) {
             return next(ApiError.badRequest('username is already in use'))
@@ -47,6 +48,14 @@ class UserController {
 
     async check(req, res, next){
         res.json({message: "user authorized"})
+    }
+
+    async getBalance(req, res, next){
+        const token = req.headers.authorization.split(' ')[1]
+        const decoded = jwt.verify(token, process.env.SECRET_KEY)
+        const email = decoded.email
+        const user = await User.findOne({where: {email}})
+        res.json({message: user.balance})
     }
 
 }
