@@ -1,0 +1,80 @@
+:root {
+  font-family: Arial, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+li a {
+    color: rgba(255, 255, 255, 0.75); 
+    text-decoration: none;
+}
+
+li a:hover {
+    color: rgba(255, 150, 150, 0.95);
+    text-decoration: none;
+}
+
+.NavBar {
+    list-style-type: none;
+    overflow: hidden;
+    background-color: rgba(69, 69, 69, 0.5);
+    padding: 10px 10px;
+    margin: 0px;
+    border: solid;
+    border-color: rgba(39, 39, 39, 1.0);
+    border-radius: 10px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.5em;
+}
+
+.NavBar .NavBarItem {
+    float: left;
+    text-align: center;
+    padding: 10px 10px;
+}
+
+.NavBar .NavBarProfile {
+    text-align: center;
+    float: right;
+    color: rgba(255, 255, 255, 0.75); 
+    display: inline;
+    position: relative;
+    margin: 0px 10px;
+    top: 5px;
+}
+
+.NavBarProfile img {
+    width: 45px;
+    height: 45px;
+    margin: 0px 5px;
+    display: inline;
+    float: left;
+}
+
+.NavBarProfile h3 {
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.8em;
+    float: left;
+    display: inline;
+    position: relative;
+    margin: 0px;
+}
+
+.NavBarProfile h4 {
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.6em;
+    font-weight: 500;
+    margin: 0px;
+    position: relative;
+    bottom: 5px;
+}
+
