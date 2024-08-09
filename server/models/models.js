@@ -7,6 +7,7 @@ const User = sequelize.define('user', {
     username: {type: DataTypes.STRING, unique: true},
     password: {type: DataTypes.STRING},
     balance: {type: DataTypes.FLOAT, defaultValue: 0.0},
+    avatar: {type: DataTypes.STRING}, 
     role: {type: DataTypes.STRING, defaultValue: "USER"},
 })
 
