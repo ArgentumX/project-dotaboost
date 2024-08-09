@@ -5,9 +5,9 @@ function NavBarProfile(props) {
         return (
             <>
                 <li className = "NavBarProfile">
-                    <img src={props.icon} alt = ""/>
-                    <h3>{props.name}</h3>
-                    <h4>{props.balance.toFixed(2)} ₽</h4>
+                    <a href="#"><img src={props.icon} alt = ""></img></a>
+                    <h3><a href="#">{props.name}</a></h3>
+                    <h4><a href="#">{props.balance.toFixed(2)} ₽</a></h4>
                 </li>
             </>
         );

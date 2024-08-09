@@ -1,0 +1,6 @@
+export const MAINPAGE_ROUTE = '/'
+export const ABOUTUS_ROUTE = '/about_us'
+export const BOOST_ROUTE = '/boosts'
+export const BOOSTER_ROUTE = '/booster'
+export const LOGIN_ROUTE = '/login'
+export const REGISTER_ROUTE = '/register'
