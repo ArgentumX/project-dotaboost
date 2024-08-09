@@ -49,15 +49,15 @@ class UserController {
     }
 
     async check(req, res, next){
-        res.json({message: "user authorized"})
+        return res.json({message: "user authorized"})
     }
 
-    async getBalance(req, res, next){
+    async getCurrentUser(req, res, next){
         const token = req.headers.authorization.split(' ')[1]
         const decoded = jwt.verify(token, process.env.SECRET_KEY)
-        const email = decoded.email
-        const user = await User.findOne({where: {email}})
-        res.json({message: user.balance})
+        const id = decoded.id
+        const user = await User.findOne({where: {id}})
+        return res.json(user)
     }
 
     async uploadAvatar(req, res, next){
@@ -65,8 +65,8 @@ class UserController {
             const image = req.files.file
             const token = req.headers.authorization.split(' ')[1]
             const decoded = jwt.verify(token, process.env.SECRET_KEY)
-            const email = decoded.email
-            const user = await User.findOne({where: {email}})
+            const id = decoded.id
+            const user = await User.findOne({where: {id}})
             let imageName = Uuid.v4() + ".jpg"
             image.mv(path.resolve(__dirname, '..', 'static', imageName))
             user.avatar = imageName
