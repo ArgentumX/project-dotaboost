@@ -57,7 +57,7 @@ class UserController {
         const decoded = jwt.verify(token, process.env.SECRET_KEY)
         const id = decoded.id
         const user = await User.findOne({where: {id}})
-        return res.json(user)
+        return res.json({id: user.id, email: user.email, username: user.username, avatar: user.avatar, balance: user.balance})
     }
 
     async uploadAvatar(req, res, next){
