@@ -1,6 +1,5 @@
 :root {
   font-family: Arial, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light dark;
@@ -13,14 +12,26 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-li a {
-    color: rgba(255, 255, 255, 0.75); 
-    text-decoration: none;
+img {
+    user-drag: none;
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 }
 
-li a:hover {
+.NavBar li a {
+    color: rgba(255, 255, 255, 0.75); 
+    text-decoration: none;
+    transition: 
+        color 0.5s;
+}
+
+.NavBar li a:hover {
     color: rgba(255, 150, 150, 0.95);
     text-decoration: none;
+    font-size: 1.01em;
 }
 
 .NavBar {
@@ -33,7 +44,7 @@ li a:hover {
     border-color: rgba(39, 39, 39, 1.0);
     border-radius: 10px;
     font-family: 'Nunito', sans-serif;
-    font-size: 1.5em;
+    font-size: 1.3em;
 }
 
 .NavBar .NavBarItem {
@@ -49,7 +60,7 @@ li a:hover {
     display: inline;
     position: relative;
     margin: 0px 15px;
-    top: 5px;
+    top: 0px;
 }
 
 .NavBarProfile img {
@@ -58,6 +69,10 @@ li a:hover {
     margin: 0px 10px;
     display: inline;
     float: left;
+}
+
+.NavBarProfile img:hover {
+    transform: scale(1.1);
 }
 
 .NavBarProfile h3 {
