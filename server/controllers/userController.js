@@ -15,8 +15,6 @@ class UserController {
         if (!email || !password || !username){
             return next(ApiError.badRequest('wrong input format'))
         }
-        console.log('ebat')
-
         const candidateByUsername = await User.findOne({where: {username}})
         if (candidateByUsername) {
             return next(ApiError.badRequest('username is already in use'))
@@ -78,7 +76,6 @@ class UserController {
             return res.status(400).json({message:"upload avatar error"})
         }
     }
-
 }
 
 module.exports = new UserController()
