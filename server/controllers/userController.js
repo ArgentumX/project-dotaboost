@@ -58,6 +58,7 @@ class UserController {
         return res.json({id: user.id, email: user.email, username: user.username, avatar: user.avatar, balance: user.balance})
     }
 
+    
     async uploadAvatar(req, res, next){
         try{
             const image = req.files.file
