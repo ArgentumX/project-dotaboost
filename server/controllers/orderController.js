@@ -17,13 +17,8 @@ class OrderController {
         }
     }
 
-    async removeOrder(req, res, next){
-
-    }
-
     async getOne(req, res, next){
         const {id} = req.params
-        console.log(id)
         const order = await Order.findByPk(id)
         return res.json(order)
     }

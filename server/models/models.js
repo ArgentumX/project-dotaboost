@@ -9,6 +9,7 @@ const User = sequelize.define('user', {
     balance: {type: DataTypes.FLOAT, defaultValue: 0.0},
     avatar: {type: DataTypes.STRING}, 
     role: {type: DataTypes.STRING, defaultValue: "USER"},
+    verifiedEmail: {type: DataTypes.BOOLEAN, defaultValue: false},
 })
 
 const Order = sequelize.define('order', {
