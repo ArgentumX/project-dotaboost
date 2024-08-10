@@ -9,26 +9,28 @@ const User = sequelize.define('user', {
     balance: {type: DataTypes.FLOAT, defaultValue: 0.0},
     avatar: {type: DataTypes.STRING}, 
     role: {type: DataTypes.STRING, defaultValue: "USER"},
+    verifiedEmail: {type: DataTypes.BOOLEAN, defaultValue: false},
 })
 
 const Order = sequelize.define('order', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    text: {type: DataTypes.STRING},
 })
 
-const ExecutingOrder = sequelize.define('executing_order', {
+// Сreated upon special verification
+const Executor = sequelize.define('executor', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    completedOrders: {type: DataTypes.INTEGER, defaultValue: 0}
 })
 
 User.hasMany(Order)
 Order.belongsTo(User)
 
-User.hasMany(ExecutingOrder)
-ExecutingOrder.belongsTo(User)
+User.hasOne(Executor)
+Executor.belongsTo(User)
 
-Order.hasOne(ExecutingOrder)
-ExecutingOrder.belongsTo(Order)
+Order.hasOne(Executor)
+Executor.belongsTo(Order)
 
 module.exports = {
-    User, Order, ExecutingOrder
+    User, Order, Executor
 }
