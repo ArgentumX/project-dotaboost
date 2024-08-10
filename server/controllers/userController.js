@@ -4,6 +4,7 @@ const {User} = require('../models/models')
 const jwt = require('jsonwebtoken')
 const Uuid = require('uuid')
 const path = require('path');
+const { validationResult } = require('express-validator')
 
 const generateJwt = (id, email, username, role) => {
     return jwt.sign({id, email, username, role}, process.env.SECRET_KEY, {expiresIn: '24h'})
@@ -12,7 +13,8 @@ const generateJwt = (id, email, username, role) => {
 class UserController {
     async registration(req, res, next){
         const {email, username, password, role } = req.body
-        if (!email || !password || !username){
+        const valErrors = validationResult(req)
+        if (!valErrors.isEmpty() || !password || !username){
             return next(ApiError.badRequest('wrong input format'))
         }
         const candidateByUsername = await User.findOne({where: {username}})
@@ -25,7 +27,7 @@ class UserController {
             return next(ApiError.badRequest('email is already in use'))
         }
 
-        const hashPassword = await bcrypt.hash(password, process.env.HASH_REPEAT)
+        const hashPassword = await bcrypt.hash(password, Number(process.env.HASH_REPEAT))
         const user = await User.create({email, username, role, password: hashPassword})
         const token = generateJwt(user.id, user.email, user.username, user.role)
         return res.json({token})

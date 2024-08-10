@@ -13,7 +13,7 @@ class OrderController {
         }
         catch (e) {
             console.log(e)
-            return next(ApiError.internal("unexpected error"))
+            return next(ApiError.badRequest("wrong user id"))
         }
     }
 
