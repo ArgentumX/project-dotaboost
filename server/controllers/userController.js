@@ -42,7 +42,7 @@ class UserController {
         {
             return next(ApiError.badRequest("wrong email or password"))
         }
-        const token = generateJwt(user.id, user.email, user.role)
+        const token = generateJwt(user.id, user.email, user.username, user.role)
         return res.json({token})
     }
 
@@ -58,7 +58,7 @@ class UserController {
         return res.json({id: user.id, email: user.email, username: user.username, avatar: user.avatar, balance: user.balance})
     }
 
-    
+
     async uploadAvatar(req, res, next){
         try{
             const image = req.files.file
