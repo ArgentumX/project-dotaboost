@@ -84,6 +84,12 @@ class UserController {
             return res.status(400).json({message:"upload avatar error"})
         }
     }
+
+    async getAuthUserJWTData(req, res, next){
+        const token = req.headers.authorization.split(' ')[1]
+        const decoded = jwt.verify(token, process.env.SECRET_KEY)
+        return decoded
+    }
 }
 
 module.exports = new UserController()

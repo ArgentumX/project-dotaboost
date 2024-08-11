@@ -43,6 +43,15 @@ const UserRole = sequelize.define('user_role', {
     }
   })
 
+const VerifyExecutorTicket = sequelize.define('verify_executor_ticket', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    testPoints: {type: DataTypes.BOOLEAN, defaultValue: false},
+    image: {type: DataTypes.STRING},
+    requiredNickname: {type: DataTypes.STRING},
+    verificated: {type: DataTypes.BOOLEAN, defaultValue: false},
+    paid: {type: DataTypes.BOOLEAN, defaultValue: false},
+    closed: {type: DataTypes.BOOLEAN, defaultValue: false},
+}) 
 
 
 User.hasMany(Order)
@@ -57,6 +66,9 @@ Executor.belongsTo(Order)
 User.belongsToMany(Role, { through: UserRole })
 Role.belongsToMany(User, { through: UserRole})
 
+User.hasMany(VerifyExecutorTicket)
+VerifyExecutorTicket.belongsTo(User)
+
 module.exports = {
-    User, Order, Executor, Role, UserRole
+    User, Order, Executor, Role, UserRole, VerifyExecutorTicket
 }
