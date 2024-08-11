@@ -6,7 +6,7 @@ const { body } = require('express-validator')
 
 
 router.post('/registration', body('email').isEmail(), userController.registration)
-router.post('/login', userController.login)
+router.post('/login', body('email').isEmail(), userController.login)
 router.get('/auth', authMiddleware, userController.check)
 router.get('/info', authMiddleware, userController.getCurrentUser)
 router.post('/avatar', authMiddleware, userController.uploadAvatar) 

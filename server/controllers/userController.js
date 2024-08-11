@@ -15,7 +15,7 @@ class UserController {
         const {email, username, password, role } = req.body
         const valErrors = validationResult(req)
         if (!valErrors.isEmpty() || !password || !username){
-            return next(ApiError.badRequest('wrong input format'))
+            return next(ApiError.badRequest('validation error'))
         }
         const candidateByUsername = await User.findOne({where: {username}})
         if (candidateByUsername) {
@@ -35,6 +35,11 @@ class UserController {
 
     async login(req, res, next){
         const {email, password} = req.body
+        const valErrors = validationResult(req)
+        if (!valErrors.isEmpty() || !password){
+            return next(ApiError.badRequest('validation error'))
+        }
+        console.log(email, password);
         const user = await User.findOne({where: {email}})
         if (!user){
             return next(ApiError.badRequest('wrong email or password'))
