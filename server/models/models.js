@@ -22,6 +22,29 @@ const Executor = sequelize.define('executor', {
     completedOrders: {type: DataTypes.INTEGER, defaultValue: 0}
 })
 
+const Role = sequelize.define('role', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    title: {type: DataTypes.STRING, allowNull: false},
+    display: {type: DataTypes.BOOLEAN, defaultValue: true}
+})
+
+const UserRole = sequelize.define('user_role', {
+    userId: { type: DataTypes.INTEGER,
+      references: {
+        model: User,
+        key: 'id'
+      }
+    },
+    roleId: { type: DataTypes.INTEGER,
+      references: {
+        model: Role,
+        key: 'id'
+      }
+    }
+  })
+
+
+
 User.hasMany(Order)
 Order.belongsTo(User)
 
@@ -31,6 +54,9 @@ Executor.belongsTo(User)
 Order.hasOne(Executor)
 Executor.belongsTo(Order)
 
+User.belongsToMany(Role, { through: UserRole })
+Role.belongsToMany(User, { through: UserRole})
+
 module.exports = {
-    User, Order, Executor
+    User, Order, Executor, Role, UserRole
 }
