@@ -31,7 +31,6 @@ img {
 .NavBar li a:hover {
     color: rgba(255, 150, 150, 0.95);
     text-decoration: none;
-    font-size: 1.01em;
 }
 
 .NavBar {
@@ -40,8 +39,6 @@ img {
     background-color: rgba(69, 69, 69, 0.5);
     padding: 10px 15px;
     margin: 0px;
-    border: solid;
-    border-color: rgba(39, 39, 39, 1.0);
     border-radius: 10px;
     font-family: 'Nunito', sans-serif;
     font-size: 1.3em;
@@ -71,10 +68,6 @@ img {
     float: left;
 }
 
-.NavBarProfile img:hover {
-    transform: scale(1.1);
-}
-
 .NavBarProfile h3 {
     font-family: 'Nunito', sans-serif;
     font-size: 0.8em;
@@ -94,4 +87,55 @@ img {
     position: relative;
     white-space: nowrap;
 }
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15rem;
+}
+
+.textbox {
+    background-color: #242424;
+    font-size: 1.3rem;
+    padding: 0.7rem 1rem;
+    margin: 0.3rem;
+    width: 25em;
+    border-radius: 15px;
+    border: solid;
+    border-width: 2px;
+    border-color: #242424;
+    position: relative;
+    bottom: 2rem;
+    outline: none;
+    transition:
+        border-width 500ms,
+        border-color 500ms,
+        margin 500ms;
+}
+
+.textbox:focus {
+    border-color: grey;
+}
+
+.AuthBox {
+    border-radius: 15px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.3em;
+    background-color: rgba(69, 69, 69, 0.5);
+    padding: 8rem 15rem;
+    max-width: 15rem;
+    max-height: 8rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.AuthBox h1 {
+    position: relative;
+    bottom: 2rem;
+}
+
 

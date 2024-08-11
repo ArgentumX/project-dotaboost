@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import {Routes, Route, Navigate} from 'react-router-dom'
 import { publicRoutes } from "../routes";
 import { MAINPAGE_ROUTE } from "../utils/consts";
+import { Context } from "..";
 
 function AppRouter () {
-    const isAuth = false
+    const {user} = useContext(Context)
 
     return (
         <Routes>
