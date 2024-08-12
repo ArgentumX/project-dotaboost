@@ -7,6 +7,8 @@ const fileUpload = require('express-fileupload')
 const router = require('./routers/index')
 const errorHandler = require('./middleware/errorHandlingMiddleware')
 const path = require('path')
+const roleController = require('./controllers/roleController')
+
 
 const PORT = process.env.PORT || 5000
 
@@ -19,10 +21,13 @@ app.use('/api', router)
 // Must be the last for errors handling of previous lines (I think...)
 app.use(errorHandler)
 
+
+
 const start = async () => {
     try {
         await sequelize.authenticate()
         await sequelize.sync()
+        await roleController.initRoles()
         app.listen(PORT, () => console.log(`Server started on port ${PORT}`))
     }catch (e) {
         console.log(e)
