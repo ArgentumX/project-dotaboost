@@ -1,10 +1,11 @@
 import React, { useContext } from "react";
 import {Routes, Route, Navigate} from 'react-router-dom'
-import { publicRoutes } from "../routes";
+import { authRoutes, publicRoutes } from "../routes";
 import { MAINPAGE_ROUTE } from "../utils/consts";
 import { Context } from "..";
+import { observer } from "mobx-react-lite";
 
-function AppRouter () {
+const AppRouter = observer(() => {
     const {user} = useContext(Context)
 
     return (
@@ -13,9 +14,13 @@ function AppRouter () {
                 <Route key={path} path={path} element={<Component/>} exact/>
             )} 
             
+            {user.isAuth && authRoutes.map(({path, Component}) => 
+                <Route key={path} path={path} element={<Component/>} exact/>
+            )} 
+
             <Route path="*"  element={<Navigate to={MAINPAGE_ROUTE}/>}/>
         </Routes>
-    );
-}
+   );
+});
 
 export default AppRouter;

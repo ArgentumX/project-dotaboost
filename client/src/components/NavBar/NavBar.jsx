@@ -1,19 +1,42 @@
-import { useContext } from "react";
-import { ABOUTUS_ROUTE, BOOST_ROUTE, BOOSTER_ROUTE, MAINPAGE_ROUTE, LOGIN_ROUTE, REGISTER_ROUTE} from "../../utils/consts";
-import PropTypes from 'prop-types'
+import { useContext, useEffect, useState } from "react";
+import { ABOUTUS_ROUTE, BOOST_ROUTE, BOOSTER_ROUTE, MAINPAGE_ROUTE, LOGIN_ROUTE, REGISTER_ROUTE, PROFILE_ROUTE} from "../../utils/consts";
 import { Context } from "../..";
 import { NavLink } from "react-router-dom";
+import { observer } from "mobx-react-lite";
+import { fetchUser } from "../../http/userAPI";
 
-function NavBarProfile(props) {
+const NavBarProfile = observer(() => {
     const {user} = useContext(Context)
+
+    const [loading, setLoading] = useState(true)
+    
+    useEffect(() => {
+        if (user.isAuth) {
+            fetchUser().then(data => {
+                user.setID(data.id)
+                user.setEmail(data.email)
+                user.setName(data.username)
+                user.setAvatar(data.avatar)
+                user.setBalance(data.balance)
+            }).finally(() => setLoading(false))
+        }
+    }, [user.isAuth])
+
+    if (loading && user.isAuth){
+        return <div/>
+    }
+
+    const defaultAvatar = "src/assets/img/default_profile_icon.png" 
 
     if (user.isAuth) {
         return (
             <div>
                 <li className = "NavBarProfile">
-                    <a href={LOGIN_ROUTE}><img src={props.icon} alt = ""></img></a>
-                    <h3><NavLink to="#">{props.name}</NavLink></h3>
-                    <h4><NavLink to="#">{props.balance.toFixed(2)} ₽</NavLink></h4>
+                    <NavLink to={PROFILE_ROUTE}>
+                        <img src={user.avatar == null ? defaultAvatar : user.avatar} alt = ""/>
+                    </NavLink> 
+                    <h3><NavLink to={PROFILE_ROUTE}>{user.name}</NavLink></h3>
+                    <h4><NavLink to="#">{user.balance.toFixed(2)} ₽</NavLink></h4>
                 </li>
             </div>
         );
@@ -22,42 +45,19 @@ function NavBarProfile(props) {
         return (
             <div>
                 <li className = "NavBarProfile">
-                    <img src={props.icon} alt = ""/>
+                    <img src={defaultAvatar} alt = ""/>
                     <h3><NavLink to={REGISTER_ROUTE}>Регистрация</NavLink></h3>
                     <h4><NavLink to={LOGIN_ROUTE}>Вход</NavLink></h4>
                 </li>
             </div>
         );
     }
-}
-
-NavBarProfile.propTypes = {
-    name: PropTypes.string,
-    balance: PropTypes.number,
-    icon: PropTypes.string
-}
-
-NavBarProfile.defaultProps = {
-    isLoggedIn: true,
-    name: "Пользователь",
-    balance: 0.0,
-    icon: "src/assets/img/default_profile_icon.png" 
-}
+});
 
 function NavBarItem(props) {
     return(
         <li className='NavBarItem'><NavLink to={props.link}>{props.text}</NavLink></li>
     );
-}
-
-NavBarItem.propTypes = {
-    text: PropTypes.string,
-    link: PropTypes.string
-}
-
-NavBarItem.defaultProps = {
-    text: "Главная",
-    link: "#"
 }
 
 function NavBar() {

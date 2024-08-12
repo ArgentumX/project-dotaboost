@@ -1,5 +1,5 @@
 :root {
-  font-family: Arial, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Nunito', system-ui, Avenir, Helvetica, Arial, sans-serif;
   font-weight: 400;
 
   color-scheme: light dark;
@@ -97,6 +97,7 @@ img {
 
 .textbox {
     background-color: #242424;
+    font-family: 'Nunito', sans-serif;
     font-size: 1.3rem;
     padding: 0.7rem 1rem;
     margin: 0.3rem;
@@ -118,12 +119,42 @@ img {
     border-color: grey;
 }
 
+button {
+    background-color: #c42c21;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    padding: 0.5rem 2rem;
+    border-radius: 1em;
+    border: solid;
+    border-width: 2px;
+    border-color: #c42c21;
+    min-width: 2rem;
+    font-size: 1.3rem;
+    transition: 500ms;
+}
+
+.AuthBox button {
+    position: relative;
+    bottom: 1rem;
+}
+
+button:hover{
+    cursor: pointer;
+    background-color: #99221a;
+    border-color: #99221a;
+    transition: 300ms;
+}
+
+button:active {
+    border-color: grey;
+}
+
 .AuthBox {
     border-radius: 15px;
     font-family: 'Nunito', sans-serif;
     font-size: 1.3em;
     background-color: rgba(69, 69, 69, 0.5);
-    padding: 8rem 15rem;
+    padding: 9rem 15rem;
     max-width: 15rem;
     max-height: 8rem;
     display: flex;
@@ -135,7 +166,7 @@ img {
 
 .AuthBox h1 {
     position: relative;
-    bottom: 2rem;
+    bottom: 1rem;
 }
 
 

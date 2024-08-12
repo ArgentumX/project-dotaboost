@@ -1,11 +1,17 @@
-import { ABOUTUS_ROUTE, BOOST_ROUTE, BOOSTER_ROUTE, LOGIN_ROUTE, MAINPAGE_ROUTE, REGISTER_ROUTE } from "./utils/consts";
+import { ABOUTUS_ROUTE, BOOST_ROUTE, BOOSTER_ROUTE, LOGIN_ROUTE, MAINPAGE_ROUTE, PROFILE_ROUTE, REGISTER_ROUTE } from "./utils/consts";
 import MainPage from './pages/MainPage';
 import AboutUs from './pages/AboutUs';
 import GetBoosted from './pages/GetBoosted';
 import BecomeABooster from './pages/BecomeABooster';
 import Auth from './pages/Auth';
+import Profile from "./pages/Profile";
 
-export const authRoutes = [] 
+export const authRoutes = [
+    {
+        path: PROFILE_ROUTE,
+        Component: Profile
+    },
+] 
 export const publicRoutes = [
     {
         path: MAINPAGE_ROUTE,

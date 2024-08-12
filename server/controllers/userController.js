@@ -14,6 +14,7 @@ class UserController {
     async registration(req, res, next){
         const {email, username, password, role } = req.body
         const valErrors = validationResult(req)
+
         if (!valErrors.isEmpty() || !password || !username){
             return next(ApiError.badRequest('wrong input format'))
         }
@@ -49,7 +50,9 @@ class UserController {
     }
 
     async check(req, res, next){
-        return res.json({message: "user authorized"})
+        //rewrite
+        return res.json({token: req.headers.authorization.split(' ')[1]})        
+        //return res.json({message: "user authorized"})
     }
 
     async getCurrentUser(req, res, next){
