@@ -11,7 +11,7 @@ const App = observer(() => {
     const {user} = useContext(Context)
 
     check().then(data => {
-        data == localStorage.getItem('token') ? user.setIsAuth(true): user.setIsAuth(false)
+        data === localStorage.getItem('token') ? user.setIsAuth(true): user.setIsAuth(false)
     })
 
     return (
