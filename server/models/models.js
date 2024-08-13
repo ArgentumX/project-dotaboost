@@ -31,8 +31,7 @@ const Executor = sequelize.define('executor', {
 })
 
 const Role = sequelize.define('role', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    title: {type: DataTypes.STRING(16), allowNull: false},
+    title: {type: DataTypes.STRING(16), primaryKey: true, allowNull: false},
     display: {type: DataTypes.BOOLEAN, defaultValue: true}
 })
 
@@ -43,10 +42,10 @@ const UserRole = sequelize.define('userRole', {
         key: 'id'
       }
     },
-    roleId: { type: DataTypes.INTEGER,
+    roleId: { type: DataTypes.STRING(16),
       references: {
         model: Role,
-        key: 'id'
+        key: 'title'
       }
     }
   })
@@ -71,8 +70,8 @@ Executor.belongsTo(User)
 Order.hasOne(Executor)
 Executor.belongsTo(Order)
 
-User.belongsToMany(Role, { through: UserRole })
-Role.belongsToMany(User, { through: UserRole})
+User.belongsToMany(Role, { through: UserRole})
+Role.belongsToMany(User, { through: UserRole, foreignKey: "roleId" })
 
 User.hasMany(VerifyExecutorTicket)
 VerifyExecutorTicket.belongsTo(User)

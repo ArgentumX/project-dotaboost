@@ -23,7 +23,7 @@ class Roles {
     // "user" type is model from models/models.js
     async addUserRole(user, roleTitle){
         try {
-            const role = await Role.findOne({where: {title: roleTitle}})
+            const role = await Role.findByPk(roleTitle)
             if (!(await user.hasRole(role))){
                 await user.addRole(role)
             }

@@ -6,8 +6,8 @@ const Uuid = require('uuid')
 const path = require('path');
 const { validationResult } = require('express-validator')
 
-const generateJwt = (id, email, username, role) => {
-    return jwt.sign({id, email, username, role}, process.env.SECRET_KEY, {expiresIn: '24h'})
+const generateJwt = (id, email, username) => {
+    return jwt.sign({id, email, username}, process.env.SECRET_KEY, {expiresIn: '24h'})
 }
 
 class UserController {
@@ -30,7 +30,7 @@ class UserController {
 
         const hashPassword = await bcrypt.hash(password, Number(process.env.HASH_REPEAT))
         const user = await User.create({email, username, role, password: hashPassword})
-        const token = generateJwt(user.id, user.email, user.username, user.role)
+        const token = generateJwt(user.id, user.email, user.username)
         return res.json({token})
     }
 
@@ -50,10 +50,10 @@ class UserController {
         {
             return next(ApiError.badRequest("wrong email or password"))
         }
-        const token = generateJwt(user.id, user.email, user.username, user.role)
+        const token = generateJwt(user.id, user.email, user.username)
         return res.json({token})
     }
-
+    
     async check(req, res, next){
         //rewrite
         return res.json({token: req.headers.authorization.split(' ')[1]})        
