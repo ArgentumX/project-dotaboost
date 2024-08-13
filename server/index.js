@@ -7,7 +7,7 @@ const fileUpload = require('express-fileupload')
 const router = require('./routers/index')
 const errorHandler = require('./middleware/errorHandlingMiddleware')
 const path = require('path')
-const roleController = require('./controllers/roleController')
+const roleController = require('./logic/roles')
 
 
 const PORT = process.env.PORT || 5000

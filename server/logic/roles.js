@@ -2,7 +2,7 @@ const ApiError = require("../errors/ApiError")
 const {Order, User, Executor, Role, UserRole} = require('../models/models')
 const config = require("../config")
 
-class RoleController {
+class Roles {
 
     async initRoles() {
         const roles = config.ROLES;
@@ -16,10 +16,21 @@ class RoleController {
                 }
             }
         } catch (error) {
-            console.error('Roles creation error: ', error)
+            console.error('roles creation error: ', error)
         }
     }
     
+    // "user" type is model from models/models.js
+    async addUserRole(user, roleTitle){
+        try {
+            const role = await Role.findOne({where: {title: roleTitle}})
+            if (!(await user.hasRole(role))){
+                await user.addRole(role)
+            }
+        } catch(e) {
+            console.error('add user role error: ', e)
+        }
+    }
 }
 
-module.exports = new RoleController()
+module.exports = new Roles()
