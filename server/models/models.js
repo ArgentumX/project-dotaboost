@@ -18,10 +18,11 @@ const Order = sequelize.define('order', {
     priority: {type: DataTypes.BOOLEAN, defaultValue: false},
     steamGuard: {type: DataTypes.BOOLEAN, defaultValue: false},
     playTime: {type: DataTypes.JSON },
-    steamNickname: { type: DataTypes.STRING(32), allowNull: false },
+    steamUsername: { type: DataTypes.STRING(32), allowNull: false },
     steamPassword: { type: DataTypes.STRING(64), allowNull: false },
     vk: {type: DataTypes.STRING(64)},
     telegram: {type: DataTypes.STRING(64)},
+    paid: {type: DataTypes.BOOLEAN, defaultValue: false},
 })
 
 // Сreated upon special verification
@@ -52,7 +53,7 @@ const UserRole = sequelize.define('userRole', {
 
 const VerifyExecutorTicket = sequelize.define('verifyExecutorTicket', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    testPoints: {type: DataTypes.BOOLEAN, defaultValue: false},
+    passedTest: {type: DataTypes.BOOLEAN, defaultValue: false},
     image: {type: DataTypes.STRING},
     requiredUsername: {type: DataTypes.STRING(32), allowNull: false},
     verified: {type: DataTypes.BOOLEAN, defaultValue: false},

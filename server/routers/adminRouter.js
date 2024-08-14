@@ -8,7 +8,7 @@ const checkRoleMiddleware = require('../middleware/checkRoleMiddleware')
 const config = require('../config')
 
 router.post('/verify', authMiddleware, checkRoleMiddleware(config.ROLES.admin.title), adminController.approveDotaAccount)
-// rewrite
+// rework
 router.post('/force-verify', authMiddleware, checkRoleMiddleware(config.ROLES.admin.title), executorTicketController.verifyExecutor)
 
 module.exports = router

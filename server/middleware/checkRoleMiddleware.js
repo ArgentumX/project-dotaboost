@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken')
 const {User, UserRole, Role} = require('../models/models')
 const config = require('../config')
+const users = require('../logic/users')
 
 module.exports = function (roleTitle) {
     return async function (req, res, next){
@@ -8,11 +9,7 @@ module.exports = function (roleTitle) {
             next()
         }
         try{
-            const token = req.headers.authorization.split(' ')[1]
-            if (!token){
-                return res.status(401).json({message:"not authorized"})
-            }
-            const decoded = jwt.verify(token, process.env.SECRET_KEY)
+            const decoded = req.user
             const userWithRole = await User.findByPk(decoded.id, {
                 include: [{
                   model: Role,
@@ -25,7 +22,7 @@ module.exports = function (roleTitle) {
             next()
         }catch(e){
             console.log(e)
-            res.status(401).json({message: "not authorized"})
+            res.status(401).json({message: "no permission"})
         }
     }
 }

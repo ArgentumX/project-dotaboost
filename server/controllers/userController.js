@@ -5,6 +5,8 @@ const jwt = require('jsonwebtoken')
 const Uuid = require('uuid')
 const path = require('path');
 const { validationResult } = require('express-validator')
+const files = require("../logic/files")
+const config = require("../config")
 
 const generateJwt = (id, email, username) => {
     return jwt.sign({id, email, username}, process.env.SECRET_KEY, {expiresIn: '24h'})
@@ -61,10 +63,8 @@ class UserController {
     }
 
     async getCurrentUser(req, res, next){
-        const token = req.headers.authorization.split(' ')[1]
-        const decoded = jwt.verify(token, process.env.SECRET_KEY)
-        const id = decoded.id
-        const user = await User.findOne({where: {id}})
+        const decoded = req.user
+        const user = await User.findOne({where: {id: decoded.id}})
         return res.json({id: user.id, email: user.email, username: user.username, avatar: user.avatar, balance: user.balance})
     }
 
@@ -72,13 +72,9 @@ class UserController {
     async uploadAvatar(req, res, next){
         try{
             const image = req.files.file
-            const token = req.headers.authorization.split(' ')[1]
-            const decoded = jwt.verify(token, process.env.SECRET_KEY)
-            const id = decoded.id
-            const user = await User.findOne({where: {id}})
-            let imageName = Uuid.v4() + ".jpg"
-            image.mv(path.resolve(__dirname, '..', 'static', imageName))
-            user.avatar = imageName
+            const decoded = req.user
+            const user = await User.findOne({where: {id: decoded.id}})
+            user.avatar = files.createStaticImage(image, config.AVATAR_FILE_PREFIX)
             return res.json({message: "avatar was uploaded"})
         
         }

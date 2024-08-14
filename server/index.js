@@ -18,7 +18,7 @@ app.use(express.json())
 app.use(express.static(path.resolve(__dirname, 'static')))
 app.use(fileUpload({}))
 app.use('/api', router)
-// Must be the last for errors handling of previous lines (I think...)
+// Must be the last for errors handling of previous lines
 app.use(errorHandler)
 
 
