@@ -169,4 +169,62 @@ button:active {
     bottom: 1rem;
 }
 
+.profile {
+    width: 945px;
+    overflow: hidden;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
 
+.profilePageImg {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
+.profilePageInfo {
+    text-align: center;
+    position: relative;
+    bottom: 8rem;
+    left: 3rem;
+    width: fit-content;
+}
+
+.profilePageEditIcon {
+    margin: 0;
+    position: relative;
+    bottom: 8.3em;
+    left: 3em;
+}
+
+.profilePageEditIcon:hover {
+    cursor: pointer;
+}
+
+.profilePageAvatar {
+    width: 141.75px;
+    display: block;
+    margin: auto;
+}
+
+.profilePageInfo h1 {
+    margin: 0;
+    position: relative;
+    bottom: 1em;
+}
+
+.profilePageInfo h4 {
+    margin: 0;
+    font-weight: 400;
+    position: relative;
+    bottom: 2em;
+}
+
+.profilePageInfo button {
+    padding: 0.1em 0.9em;
+    font-size: 1em; 
+    position: relative;
+    bottom: 1em;
+}
