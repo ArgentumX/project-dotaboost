@@ -21,6 +21,18 @@ class Executors {
         }
         return result;
     }
+
+    // answers example: "123131323244"
+    getTestPoints(answers){
+        let points = 0
+        let rightAnswers = config.TEST.ANSWERS
+        for (let i = 0; i < rightAnswers.length; i++){
+            if (rightAnswers[i] === answers[i]){
+                points += 1
+            }
+        }
+        return points
+    }
 }
 
 module.exports = new Executors()
