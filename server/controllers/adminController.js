@@ -3,19 +3,19 @@ const {VerifyExecutorTicket} = require('../models/models')
 
 class AdminController {
 
-    async verifyExecutor(req, res, next){
-        const { verifyExecutorTicketId, success} = req.body
-        if (!verifyExecutorTicketId){
+    async approveDotaAccount(req, res, next){
+        const { ticketId, success} = req.body
+        if (!ticketId){
             return next(ApiError.badRequest("wrong input format"))
         }
         
-        const ticket = await VerifyExecutorTicket.findByPk(verifyExecutorTicketId)
+        const ticket = await VerifyExecutorTicket.findByPk(ticketId)
         if (!ticket){
             return next(ApiError.badRequest("ticket not found"))
         }
         
         if (success) {
-            ticket.verificated = true;
+            ticket.verified = true;
             await ticket.save()
             return res.json({message: "successfully verificated"})
         }

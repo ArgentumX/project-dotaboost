@@ -1,25 +1,37 @@
 const ApiError = require("../errors/ApiError")
+const users = require("../logic/users")
 const {Order, User} = require('../models/models')
 
 
 class OrderController {
+    // rework
     async createOrder(req, res, next){
-        try {
-            const { creatorId } = req.body
-            const order = await Order.create({})
-            const user = await User.findByPk(creatorId)
-            order.setUser(user)
-            return res.json({message: "order was created"})
+        const {party, priority, steamGuard, playTime, steamUsername, steamPassword} = req.body
+        const decoded = req.user
+ 
+        const user = await User.findByPk(decoded.id)
+        if (!user){
+            return next(ApiError.badRequest("user not found"))
         }
-        catch (e) {
-            console.log(e)
-            return next(ApiError.badRequest("wrong user id"))
+
+        const hasNoPaidOrder = await Order.findOne({where: {paid: false, userId: decoded.id}})
+        if (hasNoPaidOrder){
+            return next(ApiError.badRequest("unable to create new orders before other not paided"))
         }
+        const order = await Order.create({party, priority, steamGuard, playTime, steamUsername, steamPassword})
+        await order.setUser(user)
+        return res.json({message: "order was created"})
     }
 
     async getOne(req, res, next){
         const {id} = req.params
+        if (!id){
+            return next(ApiError.badRequest("wrong input format"))
+        }
         const order = await Order.findByPk(id)
+        if (!order){
+            return next(ApiError.badRequest("order not found"))
+        }
         return res.json(order)
     }
 

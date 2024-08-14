@@ -3,9 +3,9 @@ const {DataTypes} = require('sequelize')
 
 const User = sequelize.define('user', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    email: {type: DataTypes.STRING, unique: true},
-    username: {type: DataTypes.STRING, unique: true},
-    password: {type: DataTypes.STRING},
+    email: {type: DataTypes.STRING, unique: true, allowNull: false},
+    username: {type: DataTypes.STRING, unique: true, allowNull: false},
+    password: {type: DataTypes.STRING, allowNull: false},
     balance: {type: DataTypes.FLOAT, defaultValue: 0.0},
     avatar: {type: DataTypes.STRING}, 
     role: {type: DataTypes.STRING, defaultValue: "USER"},
@@ -14,6 +14,15 @@ const User = sequelize.define('user', {
 
 const Order = sequelize.define('order', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    party: {type: DataTypes.BOOLEAN, defaultValue: false},
+    priority: {type: DataTypes.BOOLEAN, defaultValue: false},
+    steamGuard: {type: DataTypes.BOOLEAN, defaultValue: false},
+    playTime: {type: DataTypes.JSON },
+    steamUsername: { type: DataTypes.STRING(32), allowNull: false },
+    steamPassword: { type: DataTypes.STRING(64), allowNull: false },
+    vk: {type: DataTypes.STRING(64)},
+    telegram: {type: DataTypes.STRING(64)},
+    paid: {type: DataTypes.BOOLEAN, defaultValue: false},
 })
 
 // Сreated upon special verification
@@ -23,32 +32,31 @@ const Executor = sequelize.define('executor', {
 })
 
 const Role = sequelize.define('role', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    title: {type: DataTypes.STRING, allowNull: false},
+    title: {type: DataTypes.STRING(16), primaryKey: true, allowNull: false},
     display: {type: DataTypes.BOOLEAN, defaultValue: true}
 })
 
-const UserRole = sequelize.define('user_role', {
+const UserRole = sequelize.define('userRole', {
     userId: { type: DataTypes.INTEGER,
       references: {
         model: User,
         key: 'id'
       }
     },
-    roleId: { type: DataTypes.INTEGER,
+    roleId: { type: DataTypes.STRING(16),
       references: {
         model: Role,
-        key: 'id'
+        key: 'title'
       }
     }
   })
 
-const VerifyExecutorTicket = sequelize.define('verify_executor_ticket', {
+const VerifyExecutorTicket = sequelize.define('verifyExecutorTicket', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    testPoints: {type: DataTypes.BOOLEAN, defaultValue: false},
+    passedTest: {type: DataTypes.BOOLEAN, defaultValue: false},
     image: {type: DataTypes.STRING},
-    requiredNickname: {type: DataTypes.STRING},
-    verificated: {type: DataTypes.BOOLEAN, defaultValue: false},
+    requiredUsername: {type: DataTypes.STRING(32), allowNull: false},
+    verified: {type: DataTypes.BOOLEAN, defaultValue: false},
     paid: {type: DataTypes.BOOLEAN, defaultValue: false},
     closed: {type: DataTypes.BOOLEAN, defaultValue: false},
 }) 
@@ -63,8 +71,8 @@ Executor.belongsTo(User)
 Order.hasOne(Executor)
 Executor.belongsTo(Order)
 
-User.belongsToMany(Role, { through: UserRole })
-Role.belongsToMany(User, { through: UserRole})
+User.belongsToMany(Role, { through: UserRole})
+Role.belongsToMany(User, { through: UserRole, foreignKey: "roleId" })
 
 User.hasMany(VerifyExecutorTicket)
 VerifyExecutorTicket.belongsTo(User)
