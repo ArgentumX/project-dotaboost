@@ -61,6 +61,10 @@ const VerifyExecutorTicket = sequelize.define('verifyExecutorTicket', {
     closed: {type: DataTypes.BOOLEAN, defaultValue: false},
 }) 
 
+const Comment = sequelize.define('comment', {
+  id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+  text: {type: DataTypes.TEXT, allowNull: false}
+})
 
 User.hasMany(Order)
 Order.belongsTo(User)
@@ -76,6 +80,12 @@ Role.belongsToMany(User, { through: UserRole, foreignKey: "roleId" })
 
 User.hasMany(VerifyExecutorTicket)
 VerifyExecutorTicket.belongsTo(User)
+
+User.hasMany(Comment, {foreignKey: "authorId"})
+Comment.belongsTo(User, {foreignKey: "authorId"})
+
+User.hasMany(Comment, { foreignKey: "targetId"})
+Comment.belongsTo(User, { foreignKey: "targetId"})
 
 module.exports = {
     User, Order, Executor, Role, UserRole, VerifyExecutorTicket
