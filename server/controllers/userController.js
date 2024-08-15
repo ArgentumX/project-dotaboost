@@ -74,7 +74,11 @@ class UserController {
             const image = req.files.file
             const decoded = req.user
             const user = await User.findOne({where: {id: decoded.id}})
+            if (user.avatar){
+                files.deleteStaticImage(user.avatar)
+            }
             user.avatar = files.createStaticImage(image, config.AVATAR_FILE_PREFIX)
+            await user.save()
             return res.json({message: "avatar was uploaded"})
         
         }

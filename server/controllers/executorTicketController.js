@@ -38,11 +38,15 @@ class ExecutorTicketController {
                 return next(ApiError.badRequest("wrong input format"))
             }
             const decoded = req.user
-            const ticket = VerifyExecutorTicket.findOne({where: {userId: decoded.id, closed: false}})
+            const ticket = await VerifyExecutorTicket.findOne({where: {userId: decoded.id, closed: false}})
             if (!ticket){
                 return next(ApiError.badRequest("open ticket not found"))
             }
+            if (ticket.image){
+                files.deleteStaticImage(ticket.image)
+            }
             ticket.image = files.createStaticImage(image, config.SCREEN_FILE_PREFIX)
+            await ticket.save()
             return res.json({message: "screen was uploaded"})
         
         }
