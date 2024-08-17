@@ -87,7 +87,7 @@ class UserService {
   async uploadAvatar(userId, image) {
     const user = await User.findOne({ where: { id: userId } });
     if (user.avatar) {
-      files.deleteStaticImage(user.avatar);
+      fileUtils.deleteStaticImage(user.avatar);
     }
     user.avatar = fileUtils.createStaticImage(image, config.AVATAR_FILE_PREFIX);
     await user.save();

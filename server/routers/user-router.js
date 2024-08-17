@@ -4,6 +4,7 @@ const userController = require("../controllers/user-controller");
 const authMiddleware = require("../middleware/auth-middleware");
 const { body } = require("express-validator");
 const config = require("../config");
+const imageUploadMiddleware = require("../middleware/image-upload-middleware");
 
 router.post(
   "/registration",
@@ -29,7 +30,12 @@ router.post(
   userController.login
 );
 router.post("/logout", authMiddleware, userController.logout);
-router.post("/avatar", authMiddleware, userController.uploadAvatar);
+router.post(
+  "/avatar",
+  authMiddleware,
+  imageUploadMiddleware,
+  userController.uploadAvatar
+);
 router.get("/activate/:link", authMiddleware, userController.activate);
 router.get("/refresh", userController.refresh);
 

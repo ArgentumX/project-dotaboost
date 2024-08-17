@@ -75,10 +75,10 @@ class UserController {
       next(e);
     }
   }
-  // TODO rework (validation)
+
   async uploadAvatar(req, res, next) {
     try {
-      const image = req.files.file;
+      const image = req.files.image;
       const userData = req.user;
       const avatar = await userService.uploadAvatar(userData.id, image);
       return res.json(avatar);

@@ -18,7 +18,7 @@ const User = sequelize.define("user", {
 
 const Token = sequelize.define("token", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  refreshToken: { type: DataTypes.STRING(256), allowNull: false },
+  refreshToken: { type: DataTypes.STRING(400), allowNull: false },
 });
 
 const Order = sequelize.define("order", {

@@ -2,7 +2,9 @@ const jwt = require("jsonwebtoken");
 const { User, UserRole, Role } = require("../models/models");
 const config = require("../config");
 const users = require("../services/user-service");
+const ApiError = require("../errors/api-error");
 
+// TODO replace to roleService
 module.exports = function (roleTitle) {
   return async function (req, res, next) {
     if (req.method === "OPTIONS") {
@@ -19,12 +21,11 @@ module.exports = function (roleTitle) {
         ],
       });
       if (!userWithRole) {
-        return res.status(403).json({ message: "no permission" });
+        return next(ApiError.NoPermissions());
       }
       next();
     } catch (e) {
-      console.log(e);
-      res.status(401).json({ message: "no permission" });
+      return next(ApiError.NoPermissions());
     }
   };
 };

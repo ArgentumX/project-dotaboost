@@ -14,6 +14,9 @@ class ApiError extends Error {
   static BadRequest(message, errors = []) {
     return new ApiError(404, message, errors);
   }
+  static NoPermissions() {
+    return new ApiError(403, "No permissions");
+  }
   static Internal(message) {
     return new ApiError(500, message);
   }
