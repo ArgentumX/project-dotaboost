@@ -1,10 +1,10 @@
-const ApiError = require("../errors/ApiError")
+const ApiError = require("../errors/api-error")
 const {VerifyExecutorTicket, User} = require('../models/models')
-const users = require('../logic/users')
-const executors = require('../logic/executors')
+const users = require('../services/user-service')
+const executors = require('../services/executor-service')
 const { json } = require("sequelize")
 const config = require("../config")
-const files = require("../logic/files")
+const files = require("../utils/file-utils")
 
 class ExecutorTicketController {
     async createTicket(req, res, next){

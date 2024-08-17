@@ -1,4 +1,4 @@
-const ApiError = require("../errors/ApiError")
+const ApiError = require("../errors/api-error")
 const {VerifyExecutorTicket} = require('../models/models')
 
 class AdminController {

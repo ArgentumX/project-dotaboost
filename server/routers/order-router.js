@@ -1,7 +1,7 @@
 const Router = require('express')
 const router = new Router()
-const orderController = require('../controllers/orderController')
-const authMiddleware = require('../middleware/authMiddleware')
+const orderController = require('../controllers/order-controller')
+const authMiddleware = require('../middleware/auth-middleware')
 
 router.post('/', authMiddleware, orderController.createOrder)
 router.get('/:id', orderController.getOne) // Returns order by id.

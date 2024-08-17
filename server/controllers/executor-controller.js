@@ -1,7 +1,7 @@
 const config = require("../config")
-const ApiError = require("../errors/ApiError")
+const ApiError = require("../errors/api-error")
 const {VerifyExecutorTicket, User, Executor} = require('../models/models')
-const roleController = require("../logic/roles")
+const RoleService = require("../services/role-service")
 
 class ExecutorController {
 

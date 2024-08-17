@@ -1,5 +1,5 @@
-const ApiError = require("../errors/ApiError")
-const users = require("../logic/users")
+const ApiError = require("../errors/api-error")
+const users = require('../services/user-service')
 const {Order, User} = require('../models/models')
 
 

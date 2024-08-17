@@ -1,37 +1,36 @@
-require('dotenv').config()
-const express = require('express')
-const sequelize = require('./db')
-const models = require('./models/models')
-const cors = require('cors')
-const fileUpload = require('express-fileupload')
-const router = require('./routers/index')
-const errorHandler = require('./middleware/errorHandlingMiddleware')
-const path = require('path')
-const roleController = require('./logic/roles')
+require("dotenv").config();
+const cookieParser = require("cookie-parser");
+const express = require("express");
+const sequelize = require("./db");
+const models = require("./models/models");
+const cors = require("cors");
+const fileUpload = require("express-fileupload");
+const router = require("./routers/index");
+const errorHandler = require("./middleware/error-middleware");
+const path = require("path");
+const RoleService = require("./services/role-service.js");
 
+const PORT = process.env.PORT || 5000;
 
-const PORT = process.env.PORT || 5000
-
-const app = express()
-app.use(cors())
-app.use(express.json())
-app.use(express.static(path.resolve(__dirname, 'static')))
-app.use(fileUpload({}))
-app.use('/api', router)
+const app = express();
+app.use(cookieParser());
+app.use(cors());
+app.use(express.json());
+app.use(express.static(path.resolve(__dirname, "static")));
+app.use(fileUpload({}));
+app.use("/api", router);
 // Must be the last for errors handling of previous lines
-app.use(errorHandler)
-
-
+app.use(errorHandler);
 
 const start = async () => {
-    try {
-        await sequelize.authenticate()
-        await sequelize.sync()
-        await roleController.initRoles()
-        app.listen(PORT, () => console.log(`Server started on port ${PORT}`))
-    }catch (e) {
-        console.log(e)
-    }
-}
+  try {
+    await sequelize.authenticate();
+    await sequelize.sync();
+    await RoleService.initRoles();
+    app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+  } catch (e) {
+    console.log(e);
+  }
+};
 
-start()
+start();

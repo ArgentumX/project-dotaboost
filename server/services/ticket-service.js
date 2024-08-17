@@ -1,9 +1,10 @@
-const ApiError = require("../errors/ApiError")
+const ApiError = require("../errors/api-error")
 const {Order, User, Executor, Role, UserRole} = require('../models/models')
 const config = require("../config")
 const jwt = require('jsonwebtoken')
 
-class Users {
+class TicketService {
+
 }
 
-module.exports = new Users()
+module.exports = new TicketService()
