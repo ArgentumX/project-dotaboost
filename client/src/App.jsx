@@ -1,24 +1,38 @@
 import { BrowserRouter } from "react-router-dom";
 import AppRouter from "./components/AppRouter";
-import NavBar from "./components/NavBar/NavBar";
+import NavBar from "./components/NavBar";
 import Footer from "./components/Footer"
+import ActivatePrompt from "./components/ActivatePrompt";
 import { observer } from "mobx-react-lite";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { Context } from ".";
-import { check } from "./http/userAPI";
+import ReactLoading from "react-loading";
 
 const App = observer(() => {
-    const {user} = useContext(Context)
+    const {store} = useContext(Context)
 
-    check().then(data => {
-        data === localStorage.getItem('token') ? user.setIsAuth(true): user.setIsAuth(false)
-    })
+    useEffect(() => {
+        if (localStorage.getItem('token')) {
+            store.checkAuth()
+        } 
+    }, [])
 
+    if (store.isLoading) {
+        return (
+            <div>
+                <ReactLoading type="cylon" color="#696969" height={100} width={50} />
+            </div>
+        );
+    }
+    
     return (
         <BrowserRouter>
-            <NavBar/>
-            <AppRouter/>    
-            <Footer/>
+            <div id="container">
+                <NavBar/> 
+                <AppRouter/>    
+                <Footer/>
+            </div>
+            {!store.user.isActivated && store.isAuth ? <ActivatePrompt/> : null}
         </BrowserRouter>
     );
 });

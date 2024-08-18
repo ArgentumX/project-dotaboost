@@ -1,42 +1,23 @@
 import { useContext, useEffect, useState } from "react";
-import { ABOUTUS_ROUTE, BOOST_ROUTE, BOOSTER_ROUTE, MAINPAGE_ROUTE, LOGIN_ROUTE, REGISTER_ROUTE, PROFILE_ROUTE} from "../../utils/consts";
-import { Context } from "../..";
+import { ABOUTUS_ROUTE, BOOST_ROUTE, BOOSTER_ROUTE, MAINPAGE_ROUTE, LOGIN_ROUTE, REGISTER_ROUTE, PROFILE_ROUTE} from "../utils/consts";
+import { Context } from "..";
 import { NavLink } from "react-router-dom";
 import { observer } from "mobx-react-lite";
-import { fetchUser } from "../../http/userAPI";
 
 const NavBarProfile = observer(() => {
-    const {user} = useContext(Context)
-
-    const [loading, setLoading] = useState(true)
-    
-    useEffect(() => {
-        if (user.isAuth) {
-            fetchUser().then(data => {
-                user.setID(data.id)
-                user.setEmail(data.email)
-                user.setName(data.username)
-                user.setAvatar(data.avatar)
-                user.setBalance(data.balance)
-            }).finally(() => setLoading(false))
-        }
-    }, [user.isAuth])
-
-    if (loading && user.isAuth){
-        return <div/>
-    }
+    const {store} = useContext(Context)
 
     const defaultAvatar = "src/assets/img/default_profile_icon.png" 
 
-    if (user.isAuth) {
+    if (store.isAuth) {
         return (
             <div>
                 <li className = "NavBarProfile">
                     <NavLink to={PROFILE_ROUTE}>
-                        <img src={user.avatar == null ? defaultAvatar : user.avatar} alt = ""/>
+                        <img src={store.user.avatar == null ? defaultAvatar : store.user.avatar} alt = ""/>
                     </NavLink> 
-                    <h3><NavLink to={PROFILE_ROUTE}>{user.name}</NavLink></h3>
-                    <h4><NavLink to="#">{user.balance.toFixed(2)} ₽</NavLink></h4>
+                    <h3><NavLink to={PROFILE_ROUTE}>{store.user.username}</NavLink></h3>
+                    <h4><NavLink to="#">{store.user.balance.toFixed(2)} ₽</NavLink></h4>
                 </li>
             </div>
         );
