@@ -7,8 +7,7 @@ const config = require("../config");
 
 function playTimeValidation(playTime) {
     const requiredKeys = config.PLAY_TIME_KEYS;
-    const keys = Object.keys(playTime);
-    if (requiredKeys.length !== keys.length) {
+    if (requiredKeys.length !== Object.keys(playTime).length) {
         throw new Error("playTime validation error");
     }
     for (const key of requiredKeys) {

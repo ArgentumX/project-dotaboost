@@ -4,12 +4,10 @@ const orderService = require("../services/order-service");
 const { validationResult } = require("express-validator");
 
 class OrderController {
-    // TODO validation
     async createOrder(req, res, next) {
         try {
             const userData = req.user;
             const valErrors = validationResult(req);
-            console.log(valErrors);
             if (!valErrors.isEmpty()) {
                 return next(ApiError.ValidationError());
             }
