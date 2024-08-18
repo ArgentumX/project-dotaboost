@@ -1,70 +1,53 @@
 const ApiError = require("../errors/api-error");
 const { Order, User } = require("../models/models");
+const orderService = require("../services/order-service");
+const { validationResult } = require("express-validator");
 
 class OrderController {
-  // rework
-  async createOrder(req, res, next) {
-    const {
-      party,
-      priority,
-      steamGuard,
-      playTime,
-      steamUsername,
-      steamPassword,
-    } = req.body;
-    const decoded = req.user;
-
-    const user = await User.findByPk(decoded.id);
-    if (!user) {
-      return next(ApiError.badRequest("user not found"));
+    // TODO validation
+    async createOrder(req, res, next) {
+        try {
+            const userData = req.user;
+            const valErrors = validationResult(req);
+            console.log(valErrors);
+            if (!valErrors.isEmpty()) {
+                return next(ApiError.ValidationError());
+            }
+            const orderData = await orderService.createOrder(userData.id, req.body);
+            return res.json(orderData);
+        } catch (e) {
+            next(e);
+        }
     }
 
-    const hasNoPaidOrder = await Order.findOne({
-      where: { paid: false, userId: decoded.id },
-    });
-    if (hasNoPaidOrder) {
-      return next(
-        ApiError.badRequest(
-          "unable to create new orders before other not paided"
-        )
-      );
+    async getOrder(req, res, next) {
+        try {
+            const { id } = req.params;
+            console.log(1);
+            const valErrors = validationResult(req);
+            if (!valErrors.isEmpty()) {
+                return next(ApiError.BadRequest("wrong input format"));
+            }
+            const orderData = await orderService.getOrder(id);
+            return res.json(orderData);
+        } catch (e) {
+            next(e);
+        }
     }
-    const order = await Order.create({
-      party,
-      priority,
-      steamGuard,
-      playTime,
-      steamUsername,
-      steamPassword,
-    });
-    await order.setUser(user);
-    return res.json({ message: "order was created" });
-  }
 
-  async getOne(req, res, next) {
-    const { id } = req.params;
-    if (!id) {
-      return next(ApiError.badRequest("wrong input format"));
+    async getOrders(req, res, next) {
+        try {
+            const { creatorId } = req.query;
+            const valErrors = validationResult(req);
+            if (!valErrors.isEmpty()) {
+                return next(ApiError.BadRequest("wrong input format"));
+            }
+            const ordersData = await orderService.getOrders(creatorId);
+            return res.json(ordersData);
+        } catch (e) {
+            next(e);
+        }
     }
-    const order = await Order.findByPk(id);
-    if (!order) {
-      return next(ApiError.badRequest("order not found"));
-    }
-    return res.json(order);
-  }
-
-  async getAll(req, res, next) {
-    const { creatorId } = req.query;
-    let orders;
-
-    if (!creatorId) {
-      orders = await Order.findAll();
-    }
-    if (creatorId) {
-      orders = await Order.findAll({ where: { userId: creatorId } });
-    }
-    return res.json(orders);
-  }
 }
 
 module.exports = new OrderController();
