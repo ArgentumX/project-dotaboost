@@ -34,7 +34,7 @@ router.post("/logout", authMiddleware, userController.logout);
 
 router.post("/avatar", authMiddleware, imageUploadMiddleware(), userController.uploadAvatar);
 
-router.get("/activate/:link", authMiddleware, userController.activate);
+router.get("/activate/:link", userController.activate);
 
 router.get("/refresh", userController.refresh);
 
