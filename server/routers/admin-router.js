@@ -8,17 +8,19 @@ const checkRoleMiddleware = require("../middleware/check-role-middleware");
 const config = require("../config");
 
 router.post(
-  "/verify",
-  authMiddleware,
-  checkRoleMiddleware(config.ROLES.admin.title),
-  adminController.approveDotaAccount
+    "/verify",
+    authMiddleware,
+    checkRoleMiddleware(config.ROLES.admin.title),
+    body("ticketId").isNumeric(),
+    body("success").isBoolean(),
+    adminController.verifyExecutorInfo
 );
 // TODO rework
-router.post(
-  "/force-verify",
-  authMiddleware,
-  checkRoleMiddleware(config.ROLES.admin.title),
-  executorTicketController.verifyExecutor
-);
+/*router.post(
+    "/force-verify",
+    authMiddleware,
+    checkRoleMiddleware(config.ROLES.admin.title),
+    executorTicketController.
+);*/
 
 module.exports = router;

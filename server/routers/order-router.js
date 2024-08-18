@@ -1,10 +1,36 @@
-const Router = require('express')
-const router = new Router()
-const orderController = require('../controllers/order-controller')
-const authMiddleware = require('../middleware/auth-middleware')
+const Router = require("express");
+const router = new Router();
+const orderController = require("../controllers/order-controller");
+const authMiddleware = require("../middleware/auth-middleware");
+const { body, query, param } = require("express-validator");
+const config = require("../config");
 
-router.post('/', authMiddleware, orderController.createOrder)
-router.get('/:id', orderController.getOne) // Returns order by id.
-router.get('/', orderController.getAll) // Returns all orders. May be filtered by creatorId (.../order/?creatorId=123).
+function playTimeValidation(playTime) {
+    const requiredKeys = config.PLAY_TIME_KEYS;
+    if (requiredKeys.length !== Object.keys(playTime).length) {
+        throw new Error("playTime validation error");
+    }
+    for (const key of requiredKeys) {
+        if (!(key in playTime) || typeof playTime[key] !== "boolean") {
+            throw new Error("playTime validation error");
+        }
+    }
+    return true;
+}
 
-module.exports = router
+router.post(
+    "/",
+    authMiddleware,
+    body(["party", "priority", "steamGuard"]).optional({ values: null }).isBoolean(),
+    body(["steamUsername", "steamPassword"]).isString(),
+    body("playTime").optional({ values: null }).isObject().custom(playTimeValidation),
+    orderController.createOrder
+);
+router.get("/:id", param("id").isNumeric(), orderController.getOrder); // Returns order by id.
+router.get(
+    "/",
+    query("creatorId").optional({ values: null }).isNumeric(),
+    orderController.getOrders
+); // Returns all orders. May be filtered by creatorId (.../order/?creatorId=123).
+
+module.exports = router;
