@@ -36,7 +36,7 @@ router.post(
   imageUploadMiddleware,
   userController.uploadAvatar
 );
-router.get("/activate/:link", authMiddleware, userController.activate);
+router.get("/activate/:link", userController.activate);
 router.get("/refresh", userController.refresh);
 
 module.exports = router;
