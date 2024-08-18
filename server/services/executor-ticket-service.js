@@ -29,7 +29,7 @@ class ExecutorTicketService {
     async closeTicket(ticketId) {
         const ticket = await ExecutorTicket.findByPk(ticketId);
         if (!ticket) {
-            throw new ApiError.BadRequest("ticket not found");
+            throw ApiError.BadRequest("ticket not found");
         }
 
         const hasAnotherClosedTicket = await ExecutorTicket.findOne({
@@ -42,6 +42,30 @@ class ExecutorTicketService {
         await ticket.save();
         const ticketData = new ExecutorTicketDto(ticket);
         return { ticket: ticketData };
+    }
+
+    async acceptVerification(ticketId) {
+        const ticket = await ExecutorTicket.findByPk(ticketId);
+        if (!ticket) {
+            throw ApiError.BadRequest("ticket not found");
+        }
+        if (ticket.closed || ticket.verified) {
+            throw ApiError.BadRequest("ticket already was closed or verified");
+        }
+        ticket.verified = true;
+        await ticket.save();
+        return { ticket: new ExecutorTicketDto(ticket) };
+    }
+
+    async rejectVerification(ticketId) {
+        const ticket = await ExecutorTicket.findByPk(ticketId);
+        if (!ticket) {
+            throw ApiError.BadRequest("ticket not found");
+        }
+        if (ticket.verified || ticket.closed) {
+            throw ApiError.BadRequest("ticket already was closed or verified");
+        }
+        return this.closeTicket(ticketId);
     }
 
     async removeTicket(ticketId) {

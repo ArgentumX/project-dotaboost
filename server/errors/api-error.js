@@ -23,8 +23,8 @@ class ApiError extends Error {
     static Forbidden(message) {
         return new ApiError(403, message);
     }
-    static ValidationError() {
-        return this.BadRequest("validation error");
+    static ValidationError(errors) {
+        return this.BadRequest("validation error", errors);
     }
 }
 

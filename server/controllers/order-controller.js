@@ -9,7 +9,7 @@ class OrderController {
             const userData = req.user;
             const valErrors = validationResult(req);
             if (!valErrors.isEmpty()) {
-                return next(ApiError.ValidationError());
+                return next(ApiError.ValidationError(valErrors));
             }
             const orderData = await orderService.createOrder(userData.id, req.body);
             return res.json(orderData);
@@ -24,7 +24,7 @@ class OrderController {
             console.log(1);
             const valErrors = validationResult(req);
             if (!valErrors.isEmpty()) {
-                return next(ApiError.BadRequest("wrong input format"));
+                return next(ApiError.ValidationError(valErrors));
             }
             const orderData = await orderService.getOrder(id);
             return res.json(orderData);
@@ -38,7 +38,7 @@ class OrderController {
             const { creatorId } = req.query;
             const valErrors = validationResult(req);
             if (!valErrors.isEmpty()) {
-                return next(ApiError.BadRequest("wrong input format"));
+                return next(ApiError.ValidationError(valErrors));
             }
             const ordersData = await orderService.getOrders(creatorId);
             return res.json(ordersData);

@@ -14,7 +14,7 @@ class ExecutorTicketController {
             const userData = req.user;
             const valErrors = validationResult(req);
             if (!valErrors.isEmpty()) {
-                return next(ApiError.ValidationError());
+                return next(ApiError.ValidationError(valErrors));
             }
             if (!testService.isTestPassed(answers)) {
                 return next(ApiError.BadRequest("test not passed"));

@@ -13,10 +13,10 @@ class UserController {
     async registration(req, res, next) {
         try {
             const { email, username, password } = req.body;
-            const errors = validationResult(req);
+            const valErrors = validationResult(req);
 
-            if (!errors.isEmpty()) {
-                return next(ApiError.BadRequest("validation error", errors));
+            if (!valErrors.isEmpty()) {
+                return next(ApiError.ValidationError(valErrors));
             }
             const userData = await userService.registration(email, username, password);
             res.cookie("refreshToken", userData.refreshToken, {
@@ -34,7 +34,7 @@ class UserController {
             const { email, password } = req.body;
             const valErrors = validationResult(req);
             if (!valErrors.isEmpty()) {
-                return next(ApiError.BadRequest("validation error"));
+                return next(ApiError.ValidationError(valErrors));
             }
             const userData = await userService.login(email, password);
             res.cookie("refreshToken", userData.refreshToken, {
