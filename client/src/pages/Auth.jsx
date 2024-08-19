@@ -1,12 +1,11 @@
 import React, { useContext, useState } from "react";
-import {registration, login} from "../http/userAPI"
 import { useLocation, useNavigate} from "react-router-dom";
 import { LOGIN_ROUTE, MAINPAGE_ROUTE } from "../utils/consts";
 import { observer } from "mobx-react-lite";
 import { Context } from "..";
 
 const Auth = observer(() => {
-    const {user} = useContext(Context)
+    const {store} = useContext(Context)
     const location = useLocation()
     const navigate = useNavigate();
     const isLogin = location.pathname === LOGIN_ROUTE
@@ -16,14 +15,12 @@ const Auth = observer(() => {
 
     const click = async () => {
         try {
-            let data;
             if (isLogin) {
-                data = await login(email, password)
+                store.login(email, password)
             } else if (password){
-                data = await registration(email, password, username)
+                store.registration(email, username, password)
             }
 
-            user.setIsAuth(true)
             navigate(MAINPAGE_ROUTE)
         } catch (e) {
             alert(e.response.data.message)         

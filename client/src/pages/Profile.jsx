@@ -1,33 +1,27 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Context } from "..";
-import { MAINPAGE_ROUTE } from "../utils/consts";
 import { observer } from "mobx-react-lite";
-import { useNavigate } from "react-router-dom";
+import ImageUpload from "../components/ImageUpload";
 
 const Profile = observer(() => {
-    const {user} = useContext(Context)
-    const navigate = useNavigate();
+    const {store} = useContext(Context)
 
-    const logOut = () => {
-        user.setIsAuth(false)
-        localStorage.clear()
-        navigate(MAINPAGE_ROUTE)
-    }
-
+    const [showImageUpload, setShowImageUpload] = useState(false);
     const uploadAvatar = () => {
-        alert()
+        setShowImageUpload(true)
         return false
     }
 
     return (<>
         <div className="profile">
             <img className="profilePageImg" src="src/assets/img/axe.png" alt=""/>
+            { showImageUpload ? <ImageUpload/> : null }
             <div className="profilePageInfo">
                 <img className="profilePageAvatar" src="src/assets/img/default_profile_icon.png" alt=""/>
                 <img className="profilePageEditIcon" role="button" onClick={uploadAvatar} src="src/assets/img/icon_edit.png"/>
-                <h1>{user.name}</h1>
-                <h4>Баланс: {user.balance.toFixed(2)} ₽</h4>
-                <button onClick={() => logOut()}>Выйти</button> 
+                <h1>{store.user.username}</h1>
+                <h4>Баланс: {store.user.balance.toFixed(2)} ₽</h4>
+                <button onClick={ () => store.logout() }>Выйти</button> 
             </div>
         </div>
     </>);
