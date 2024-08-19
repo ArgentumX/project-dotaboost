@@ -1,5 +1,6 @@
 const sequelize = require("../db.js");
 const { DataTypes } = require("sequelize");
+const { Role } = require("./role-model.js");
 
 const User = sequelize.define("user", {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -16,4 +17,21 @@ const User = sequelize.define("user", {
     },
 });
 
-module.exports = { User };
+const UserRole = sequelize.define("userRole", {
+    userId: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: User,
+            key: "id",
+        },
+    },
+    roleId: {
+        type: DataTypes.STRING(16),
+        references: {
+            model: Role,
+            key: "title",
+        },
+    },
+});
+
+module.exports = { User, UserRole };

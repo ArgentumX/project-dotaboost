@@ -2,7 +2,8 @@ const sequelize = require("../db.js");
 const { DataTypes } = require("sequelize");
 const { User } = require("./user-model.js");
 const { Role } = require("./role-model.js");
-const { UserRole } = require("./user-role-model.js");
+const { UserRole } = require("./user-model.js");
+const { ExecutorComment } = require("./comment-model.js");
 const roleService = require("../services/role-service.js");
 const config = require("../config");
 
@@ -40,16 +41,17 @@ const ExecutorTicket = sequelize.define("executorTicket", {
     closed: { type: DataTypes.BOOLEAN, defaultValue: false },
 });
 
-const Comment = sequelize.define("comment", {
-    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    text: { type: DataTypes.TEXT, allowNull: false },
-});
-
 User.hasMany(Order);
 Order.belongsTo(User);
 
+User.hasMany(ExecutorComment);
+ExecutorComment.belongsTo(User);
+
 User.hasOne(Executor);
 Executor.belongsTo(User);
+
+Executor.hasMany(ExecutorComment);
+ExecutorComment.belongsTo(Executor);
 
 Order.hasOne(Executor);
 Executor.belongsTo(Order);
@@ -64,14 +66,8 @@ User.afterCreate(async (user, options) => {
 User.hasMany(ExecutorTicket);
 ExecutorTicket.belongsTo(User);
 
-User.hasMany(Comment, { foreignKey: "authorId" });
-Comment.belongsTo(User, { foreignKey: "authorId" });
-
 User.hasOne(Token);
 Token.belongsTo(User);
-
-User.hasMany(Comment, { foreignKey: "targetId" });
-Comment.belongsTo(User, { foreignKey: "targetId" });
 
 module.exports = {
     Order,

@@ -38,4 +38,12 @@ router.get("/activate/:link", userController.activate);
 
 router.get("/refresh", userController.refresh);
 
+router.post(
+    "/comment-executor",
+    authMiddleware,
+    body("executorId").isNumeric(),
+    body("text").isString(),
+    userController.postExecutorComment
+);
+
 module.exports = router;

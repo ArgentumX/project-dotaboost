@@ -8,6 +8,7 @@ const { validationResult } = require("express-validator");
 const files = require("../utils/file-utils");
 const config = require("../config");
 const userService = require("../services/user-service");
+const commentService = require("../services/comment-service");
 
 class UserController {
     async registration(req, res, next) {
@@ -88,6 +89,21 @@ class UserController {
             const activationLink = req.params.activationLink;
             await userService.activate(activationLink);
             return res.redirect(process.env.CLIENT_URL);
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    async postExecutorComment(req, res, next) {
+        try {
+            const { executorId, text } = req.body;
+            const userId = req.user.id;
+            const valErrors = validationResult(req);
+            if (!valErrors.isEmpty()) {
+                return next(ApiError.ValidationError(valErrors));
+            }
+            const commentData = await commentService.postExecutorComment(userId, executorId, text);
+            return res.json(commentData);
         } catch (e) {
             next(e);
         }

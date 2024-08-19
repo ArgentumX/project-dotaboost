@@ -1,8 +1,7 @@
 const ApiError = require("../errors/api-error");
 const { Role } = require("../models/role-model");
 const config = require("../config");
-const { User } = require("../models/user-model");
-const { UserRole } = require("../models/user-role-model");
+const { User, UserRole } = require("../models/user-model");
 
 class RoleService {
     async initRoles() {
