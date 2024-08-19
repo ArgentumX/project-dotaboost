@@ -10,7 +10,7 @@ const config = require("../config");
 router.post(
     "/verify",
     authMiddleware,
-    checkRoleMiddleware(config.ROLES.admin.title),
+    checkRoleMiddleware(config.ROLES.LIST.admin.title),
     body("ticketId").isNumeric(),
     body("success").isBoolean(),
     adminController.verifyExecutorInfo
@@ -19,7 +19,7 @@ router.post(
 /*router.post(
     "/force-verify",
     authMiddleware,
-    checkRoleMiddleware(config.ROLES.admin.title),
+    checkRoleMiddleware(config.ROLES.LIST.admin.title),
     executorTicketController.
 );*/
 

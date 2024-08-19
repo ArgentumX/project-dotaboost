@@ -1,9 +1,12 @@
 module.exports = {
     ROLES: {
-        user: { title: "USER", display: false },
-        admin: { title: "ADMIN", display: false },
-        executor: { title: "EXECUTOR", display: true },
-        god: { title: "GOD", display: false },
+        LIST: {
+            user: { title: "USER", display: false },
+            admin: { title: "ADMIN", display: false },
+            executor: { title: "EXECUTOR", display: true },
+            god: { title: "GOD", display: false },
+        },
+        DEFAULT_ROLE_ID: "USER",
     },
     TEST: {
         ANSWERS: { 1: "ans1", 2: "ans2", 3: "ans3", 4: "ans4", 5: "ans5" },

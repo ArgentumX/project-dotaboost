@@ -1,5 +1,6 @@
 const ApiError = require("../errors/api-error");
-const { Order, User, ExecutorTicket, Role, UserRole } = require("../models/models");
+const { ExecutorTicket } = require("../models/models");
+const { User } = require("../models/user-model");
 const config = require("../config");
 const jwt = require("jsonwebtoken");
 const ExecutorTicketDto = require("../dtos/executor-ticket-dto");
