@@ -24,6 +24,10 @@ const Order = sequelize.define("order", {
     vk: { type: DataTypes.STRING(64) },
     telegram: { type: DataTypes.STRING(64) },
     paid: { type: DataTypes.BOOLEAN, defaultValue: false },
+    closed: { type: DataTypes.BOOLEAN, defaultValue: false },
+    startRating: { type: DataTypes.INTEGER, allowNull: false },
+    currentRating: { type: DataTypes.INTEGER },
+    endRating: { type: DataTypes.INTEGER, allowNull: false },
 });
 
 // Сreates upon special verification

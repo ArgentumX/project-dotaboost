@@ -24,16 +24,25 @@ class OrderService {
         return { username: order.steamUsername, password: order.steamPassword };
     }
 
-    async getOrders(creatorId) {
-        let orders;
-        if (!creatorId) {
-            orders = await Order.findAll();
-        }
-        if (creatorId) {
-            orders = await Order.findAll({ where: { userId: creatorId } });
-        }
+    async getOrders(options) {
+        const orders = await Order.findAll({
+            limit: config.DB_ORDER_SEARCH_LIMIT,
+            offset: options.offset,
+            where: this.createOrderFilter(options),
+        });
         const ordersData = orders.map((order) => new OrderDto(order));
         return { orders: ordersData };
+    }
+
+    // special filter generation for sequelize postgres db orders search
+    createOrderFilter(options) {
+        const filter = {};
+        for (const key of config.ALLOWED_ORDER_FILTERS) {
+            if (options[key]) {
+                filter[key] = options[key];
+            }
+        }
+        return filter;
     }
 
     async createOrder(userId, orderSettings) {
@@ -44,6 +53,8 @@ class OrderService {
             playTime = { NIGHT: true, MORNING: true, AFTERNOON: true, EVENING: true },
             steamUsername,
             steamPassword,
+            startRating,
+            endRating,
         } = orderSettings;
 
         const user = await User.findByPk(userId);
@@ -65,6 +76,8 @@ class OrderService {
             playTime,
             steamUsername,
             steamPassword,
+            startRating,
+            endRating,
         });
         await order.setUser(user);
         const orderData = new OrderDto(order);

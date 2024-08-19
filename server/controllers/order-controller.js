@@ -21,7 +21,6 @@ class OrderController {
     async getOrder(req, res, next) {
         try {
             const { id } = req.params;
-            console.log(1);
             const valErrors = validationResult(req);
             if (!valErrors.isEmpty()) {
                 return next(ApiError.ValidationError(valErrors));
@@ -35,12 +34,11 @@ class OrderController {
 
     async getOrders(req, res, next) {
         try {
-            const { creatorId } = req.query;
             const valErrors = validationResult(req);
             if (!valErrors.isEmpty()) {
                 return next(ApiError.ValidationError(valErrors));
             }
-            const ordersData = await orderService.getOrders(creatorId);
+            const ordersData = await orderService.getOrders(req.query);
             return res.json(ordersData);
         } catch (e) {
             next(e);

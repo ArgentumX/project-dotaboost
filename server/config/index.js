@@ -23,4 +23,6 @@ module.exports = {
     MAX_MB_AVATAR_FILESIZE: 1,
     MAX_MB_SCREEN_FILESIZE: 4,
     PLAY_TIME_KEYS: ["MORNING", "NIGHT", "AFTERNOON", "EVENING"],
+    ALLOWED_ORDER_FILTERS: ["userId", "closed", "steamGuard", "party", "priority"],
+    DB_ORDER_SEARCH_LIMIT: 2,
 };
