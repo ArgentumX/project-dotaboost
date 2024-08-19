@@ -235,14 +235,6 @@ button:active {
     bottom: 1em;
 }
 
-.ImageUploadContainer {
-    position: absolute;
-}
-
-.ImageUpload {
-    background-color: rgba(150, 150, 150, 0.95);
-}
-
 .ActivatePrompt {
     position: absolute;
     top: 300px;
@@ -256,4 +248,92 @@ button:active {
     padding: 50px 20px;
     margin: auto; 
     box-shadow: 0 5px 30px rgba(0,0,0,.30);
+}
+
+#ImageUpload {
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 400px;
+    padding: 50px;
+    box-shadow: 0 5px 30px rgba(0,0,0,.30);
+    border-radius: 25px;
+    background: rgb(45, 45, 45);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.5s;
+}
+
+#ImageUpload.active {
+    top: 37%;
+    visibility: visible;
+    opacity: 1;
+    transition: 0.5s;
+}
+
+.ImageUploadHeader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+    bottom: 3em;
+}
+
+.ImageUploadHeader .close {
+    position: absolute;
+    right: 0;
+    transition: 0.3s;
+}
+
+.ImageUploadHeader .close:hover {
+    cursor: pointer;
+    filter: brightness(70%);
+}
+
+.ImageUploadHeader h1 {
+}
+
+.HintImageContainer {
+    width: 77%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    height: 75%;
+    position: relative;
+    bottom: 2em;
+    border: solid;
+    border-color: rgb(25,25,25);
+    border-width: 2px;
+}
+
+.HintImageContainer h3 {
+    color: rgb(125, 125, 125);
+}
+
+.ImageUploadFooter {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.ImageUploadFooter .load {
+    background: #525252;
+    border-color: #525252;
+}
+
+.ImageUploadFooter .load:hover {
+    border-color: #424242;
+    background: #424242;
+}
+
+.ImageUploadFooter .load:active {
+    border-color: #727272;
 }

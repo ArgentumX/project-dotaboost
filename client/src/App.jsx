@@ -7,6 +7,7 @@ import { observer } from "mobx-react-lite";
 import { useContext, useEffect } from "react";
 import { Context } from ".";
 import ReactLoading from "react-loading";
+import ImageUpload, { toggleImageUpload } from "./components/ImageUpload";
 
 const App = observer(() => {
     const {store} = useContext(Context)
@@ -32,7 +33,8 @@ const App = observer(() => {
                 <AppRouter/>    
                 <Footer/>
             </div>
-            {store.isAuth && store.user.isActivated ? <ActivatePrompt/> : null}
+            {store.isAuth && !store.user.isActivated ? <ActivatePrompt/> : null}
+            <ImageUpload/>
         </BrowserRouter>
     );
 });
