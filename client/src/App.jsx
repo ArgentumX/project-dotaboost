@@ -32,7 +32,7 @@ const App = observer(() => {
                 <AppRouter/>    
                 <Footer/>
             </div>
-            {!store.user.isActivated && store.isAuth ? <ActivatePrompt/> : null}
+            {store.isAuth && store.user.isActivated ? <ActivatePrompt/> : null}
         </BrowserRouter>
     );
 });
