@@ -108,6 +108,21 @@ class UserController {
             next(e);
         }
     }
+
+    async getExecutorComments(req, res, next) {
+        try {
+            const { executorId } = req.params;
+            const valErrors = validationResult(req);
+
+            if (!valErrors.isEmpty()) {
+                return next(ApiError.ValidationError(valErrors));
+            }
+            const comments = await commentService.getExecutorComments(executorId);
+            return res.json(comments);
+        } catch (e) {
+            next(e);
+        }
+    }
 }
 
 module.exports = new UserController();

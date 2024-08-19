@@ -19,7 +19,7 @@ class CommentService {
         if (!isExecutorServiceUsed(user, executor)) {
             throw ApiError.BadRequest("unable to comment");
         }
-        if (this.isCommented(userId, executorId)) {
+        if (this.isExecutorCommented(userId, executorId)) {
             throw ApiError.BadRequest("unable to comment more one time");
         }
         const comment = await ExecutorComment.create({ userId, executorId, text });
@@ -27,9 +27,16 @@ class CommentService {
         return { comment: commentData };
     }
 
-    async isCommented(byUserId, executorId) {
+    // Checks if executor commented by specific user.
+    async isExecutorCommented(byUserId, executorId) {
         const comment = await ExecutorComment.findOne({ where: { userId: byUserId, executorId } });
         return comment != null && comment != undefined;
+    }
+
+    async getExecutorComments(executorId) {
+        const comments = await ExecutorComment.findAll({ where: { executorId } });
+        const commentsData = comments.map((comments) => new ExecutorCommentDto(comments));
+        return { comments: commentsData };
     }
 }
 

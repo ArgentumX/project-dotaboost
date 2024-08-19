@@ -2,7 +2,7 @@ const Router = require("express");
 const router = new Router();
 const userController = require("../controllers/user-controller");
 const authMiddleware = require("../middleware/auth-middleware");
-const { body } = require("express-validator");
+const { body, param } = require("express-validator");
 const config = require("../config");
 const imageUploadMiddleware = require("../middleware/image-upload-middleware");
 
@@ -44,6 +44,12 @@ router.post(
     body("executorId").isNumeric(),
     body("text").isString(),
     userController.postExecutorComment
+);
+
+router.get(
+    "/comment-executor/:executorId",
+    param("executorId").isNumeric(),
+    userController.getExecutorComments
 );
 
 module.exports = router;
