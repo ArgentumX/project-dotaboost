@@ -1,7 +1,8 @@
 const ApiError = require("../errors/api-error");
-const { Order, User, Executor, Role, UserRole } = require("../models/models");
+const { Executor } = require("../models/models");
+const { User } = require("../models/user-model");
 const config = require("../config");
-const roles = require("./role-service");
+const roleService = require("./role-service");
 const ExecutorDto = require("../dtos/executor-dto");
 
 class ExecutorService {
@@ -12,7 +13,7 @@ class ExecutorService {
         }
         const executor = await Executor.create({});
         await user.setExecutor(executor);
-        await roles.addUserRole(user, config.ROLES.LIST.executor.title);
+        await roleService.addUserRole(user, config.ROLES.LIST.executor.title);
         const executorData = new ExecutorDto(executor);
         return { executor: executorData };
     }

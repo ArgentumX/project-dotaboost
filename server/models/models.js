@@ -1,23 +1,9 @@
-const config = require("../config/index.js");
 const sequelize = require("../db.js");
 const { DataTypes } = require("sequelize");
-const roleService = require("../services/role-service.js");
+const { User } = require("./user-model.js");
+const { Role } = require("./role-model.js");
 
-const User = sequelize.define("user", {
-    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    email: { type: DataTypes.STRING, unique: true, allowNull: false },
-    username: { type: DataTypes.STRING, unique: true, allowNull: false },
-    password: { type: DataTypes.STRING, allowNull: false },
-    balance: { type: DataTypes.FLOAT, defaultValue: 0.0 },
-    avatar: { type: DataTypes.STRING },
-    isActivated: { type: DataTypes.BOOLEAN, defaultValue: false },
-    activationLink: {
-        type: DataTypes.STRING(64),
-        allowNull: false,
-        defaultValue: false,
-    },
-});
-
+// TODO rework models.js
 const Token = sequelize.define("token", {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     refreshToken: { type: DataTypes.STRING(400), allowNull: false },
@@ -40,11 +26,6 @@ const Order = sequelize.define("order", {
 const Executor = sequelize.define("executor", {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     completedOrders: { type: DataTypes.INTEGER, defaultValue: 0 },
-});
-
-const Role = sequelize.define("role", {
-    title: { type: DataTypes.STRING(16), primaryKey: true, allowNull: false },
-    display: { type: DataTypes.BOOLEAN, defaultValue: true },
 });
 
 const UserRole = sequelize.define("userRole", {
@@ -89,11 +70,10 @@ Executor.belongsTo(Order);
 
 User.belongsToMany(Role, { through: UserRole });
 Role.belongsToMany(User, { through: UserRole, foreignKey: "roleId" });
-
 // Set up of user default role;
-User.afterCreate(async (user, options) => {
+/*User.afterCreate(async (user, options) => {
     roleService.addUserRole(user, config.ROLES.DEFAULT_ROLE_ID);
-});
+});*/
 
 User.hasMany(ExecutorTicket);
 ExecutorTicket.belongsTo(User);
@@ -108,10 +88,8 @@ User.hasMany(Comment, { foreignKey: "targetId" });
 Comment.belongsTo(User, { foreignKey: "targetId" });
 
 module.exports = {
-    User,
     Order,
     Executor,
-    Role,
     UserRole,
     Token,
     ExecutorTicket,

@@ -1,4 +1,4 @@
-const { User, Role, UserRole } = require("../models/models");
+const { User } = require("../models/user-model");
 const config = require("../config");
 const mailService = require("./mail-service");
 const uuid = require("uuid");
@@ -78,7 +78,17 @@ class UserService {
         return { ...tokens, user: userDto };
     }
 
-    async getUser() {}
+    //
+    async getUser(userId) {
+        const user = await User.findByPk(userId, {
+            include: [
+                {
+                    model: Role,
+                },
+            ],
+        });
+        console.log(await user.getRoles());
+    }
     async getUsers() {}
 
     async uploadAvatar(userId, image) {

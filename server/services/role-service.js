@@ -1,5 +1,5 @@
 const ApiError = require("../errors/api-error");
-const { Order, User, Executor, Role, UserRole } = require("../models/models");
+const { Role } = require("../models/role-model");
 const config = require("../config");
 
 class RoleService {
