@@ -4,7 +4,7 @@ const config = require("../config");
 
 class RoleService {
     async initRoles() {
-        const roles = config.ROLES;
+        const roles = config.ROLES.LIST;
         for (const key in roles) {
             if (roles.hasOwnProperty(key)) {
                 const alreadyExists = await Role.findOne({

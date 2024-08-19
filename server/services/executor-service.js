@@ -12,7 +12,7 @@ class ExecutorService {
         }
         const executor = await Executor.create({});
         await user.setExecutor(executor);
-        await roles.addUserRole(user, config.ROLES.executor.title);
+        await roles.addUserRole(user, config.ROLES.LIST.executor.title);
         const executorData = new ExecutorDto(executor);
         return { executor: executorData };
     }

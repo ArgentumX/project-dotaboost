@@ -1,5 +1,7 @@
+const config = require("../config/index.js");
 const sequelize = require("../db.js");
 const { DataTypes } = require("sequelize");
+const roleService = require("../services/role-service.js");
 
 const User = sequelize.define("user", {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -87,6 +89,11 @@ Executor.belongsTo(Order);
 
 User.belongsToMany(Role, { through: UserRole });
 Role.belongsToMany(User, { through: UserRole, foreignKey: "roleId" });
+
+// Set up of user default role;
+User.afterCreate(async (user, options) => {
+    roleService.addUserRole(user, config.ROLES.DEFAULT_ROLE_ID);
+});
 
 User.hasMany(ExecutorTicket);
 ExecutorTicket.belongsTo(User);
