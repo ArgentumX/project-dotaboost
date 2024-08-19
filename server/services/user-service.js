@@ -4,6 +4,7 @@ const mailService = require("./mail-service");
 const uuid = require("uuid");
 const bcrypt = require("bcrypt");
 const tokenService = require("./token-service");
+const roleService = require("./role-service");
 const UserDto = require("../dtos/user-dto");
 const ApiError = require("../errors/api-error");
 const fileUtils = require("../utils/file-utils");
@@ -33,7 +34,9 @@ class UserService {
             email,
             `${process.env.API_URL}/api/user/activate/${activationLink}`
         );
-        const userDto = new UserDto(user);
+
+        const roles = await roleService.getUserRoles(user.id);
+        const userDto = new UserDto(user, roles);
         const tokens = tokenService.generateTokens({ ...userDto });
         await tokenService.saveToken(userDto.id, tokens.refreshToken);
 
@@ -49,7 +52,8 @@ class UserService {
         if (!isRightPassword) {
             throw ApiError.BadRequest("Wrong email or password");
         }
-        const userDto = new UserDto(user);
+        const roles = await roleService.getUserRoles(user.id);
+        const userDto = new UserDto(user, roles);
         const tokens = tokenService.generateTokens({ ...userDto });
         await tokenService.saveToken(userDto.id, tokens.refreshToken);
         return { ...tokens, user: userDto };
@@ -78,17 +82,7 @@ class UserService {
         return { ...tokens, user: userDto };
     }
 
-    //
-    async getUser(userId) {
-        const user = await User.findByPk(userId, {
-            include: [
-                {
-                    model: Role,
-                },
-            ],
-        });
-        console.log(await user.getRoles());
-    }
+    async getUser(userId) {}
     async getUsers() {}
 
     async uploadAvatar(userId, image) {

@@ -1,6 +1,8 @@
 const ApiError = require("../errors/api-error");
 const { Role } = require("../models/role-model");
 const config = require("../config");
+const { User } = require("../models/user-model");
+const { UserRole } = require("../models/user-role-model");
 
 class RoleService {
     async initRoles() {
@@ -26,6 +28,18 @@ class RoleService {
         if (!(await user.hasRole(role))) {
             await user.addRole(role);
         }
+    }
+
+    async getUserRoles(userId) {
+        const userRolesData = await UserRole.findAll({ where: { userId } });
+        if (userRolesData == []) {
+            throw ApiError.Internal("roles cant be empty");
+        }
+        const roles = [];
+        for (const roleData of userRolesData) {
+            roles.push(roleData.roleId);
+        }
+        return roles;
     }
 }
 

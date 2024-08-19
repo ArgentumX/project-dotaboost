@@ -2,6 +2,9 @@ const sequelize = require("../db.js");
 const { DataTypes } = require("sequelize");
 const { User } = require("./user-model.js");
 const { Role } = require("./role-model.js");
+const { UserRole } = require("./user-role-model.js");
+const roleService = require("../services/role-service.js");
+const config = require("../config");
 
 // TODO rework models.js
 const Token = sequelize.define("token", {
@@ -26,23 +29,6 @@ const Order = sequelize.define("order", {
 const Executor = sequelize.define("executor", {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     completedOrders: { type: DataTypes.INTEGER, defaultValue: 0 },
-});
-
-const UserRole = sequelize.define("userRole", {
-    userId: {
-        type: DataTypes.INTEGER,
-        references: {
-            model: User,
-            key: "id",
-        },
-    },
-    roleId: {
-        type: DataTypes.STRING(16),
-        references: {
-            model: Role,
-            key: "title",
-        },
-    },
 });
 
 const ExecutorTicket = sequelize.define("executorTicket", {
@@ -71,9 +57,9 @@ Executor.belongsTo(Order);
 User.belongsToMany(Role, { through: UserRole });
 Role.belongsToMany(User, { through: UserRole, foreignKey: "roleId" });
 // Set up of user default role;
-/*User.afterCreate(async (user, options) => {
+User.afterCreate(async (user, options) => {
     roleService.addUserRole(user, config.ROLES.DEFAULT_ROLE_ID);
-});*/
+});
 
 User.hasMany(ExecutorTicket);
 ExecutorTicket.belongsTo(User);
@@ -90,7 +76,6 @@ Comment.belongsTo(User, { foreignKey: "targetId" });
 module.exports = {
     Order,
     Executor,
-    UserRole,
     Token,
     ExecutorTicket,
 };
