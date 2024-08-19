@@ -24,5 +24,7 @@ module.exports = {
     MAX_MB_SCREEN_FILESIZE: 4,
     PLAY_TIME_KEYS: ["MORNING", "NIGHT", "AFTERNOON", "EVENING"],
     ALLOWED_ORDER_FILTERS: ["userId", "closed", "steamGuard", "party", "priority"],
+    ALLOWED_TICKET_FILTERS: ["userId", "closed", "verified"],
+    DB_TICKET_SEARCH_LIMIT: 2,
     DB_ORDER_SEARCH_LIMIT: 2,
 };

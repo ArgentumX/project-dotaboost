@@ -22,6 +22,33 @@ class AdminController {
             next(e);
         }
     }
+    async getExecutorTicket(req, res, next) {
+        try {
+            const { id } = req.params;
+            const valErrors = validationResult(req);
+            if (!valErrors.isEmpty()) {
+                return next(ApiError.ValidationError(valErrors));
+            }
+            const ticketData = await executorTicketService.getTicket(id);
+            return res.json(ticketData);
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    async getExecutorTickets(req, res, next) {
+        try {
+            const options = req.query;
+            const valErrors = validationResult(req);
+            if (!valErrors.isEmpty()) {
+                return next(ApiError.ValidationError(valErrors));
+            }
+            const ticketData = await executorTicketService.getTickets(options);
+            return res.json(ticketData);
+        } catch (e) {
+            next(e);
+        }
+    }
 }
 
 module.exports = new AdminController();

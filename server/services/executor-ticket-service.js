@@ -5,6 +5,7 @@ const config = require("../config");
 const jwt = require("jsonwebtoken");
 const ExecutorTicketDto = require("../dtos/executor-ticket-dto");
 const fileUtils = require("../utils/file-utils");
+const { createFilter } = require("../utils/db-utils");
 
 class ExecutorTicketService {
     async createTicket(userId) {
@@ -67,6 +68,25 @@ class ExecutorTicketService {
             throw ApiError.BadRequest("ticket already was closed or verified");
         }
         return this.closeTicket(ticketId);
+    }
+
+    async getTicket(ticketId) {
+        const ticket = await ExecutorTicket.findByPk(ticketId);
+        if (!ticket) {
+            throw ApiError.BadRequest("Ticket not found");
+        }
+        const ticketData = new ExecutorTicketDto(ticket);
+        return { ticket: ticketData };
+    }
+
+    async getTickets(options) {
+        const tickets = await ExecutorTicket.findAll({
+            limit: config.DB_TICKET_SEARCH_LIMIT,
+            offset: options.offset,
+            where: createFilter(options, config.ALLOWED_TICKET_FILTERS),
+        });
+        const ticketsData = tickets.map((ticket) => new ExecutorTicketDto(ticket));
+        return { tickets: ticketsData };
     }
 
     async removeTicket(ticketId) {

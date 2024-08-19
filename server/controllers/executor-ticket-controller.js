@@ -35,6 +35,22 @@ class ExecutorTicketController {
             next(e);
         }
     }
+    async getExecutorTicket(req, res, next) {
+        try {
+            const { id } = req.params;
+            const valErrors = validationResult(req);
+            if (!valErrors.isEmpty()) {
+                return next(ApiError.ValidationError(valErrors));
+            }
+            const ticketData = await executorTicketService.getTicket(id);
+            if (ticketData.ticket.userId !== req.user.id) {
+                throw next(ApiError.NoPermissions());
+            }
+            return res.json(ticketData);
+        } catch (e) {
+            next(e);
+        }
+    }
 }
 
 module.exports = new ExecutorTicketController();

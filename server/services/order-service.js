@@ -4,6 +4,7 @@ const { User } = require("../models/user-model");
 const config = require("../config");
 const jwt = require("jsonwebtoken");
 const OrderDto = require("../dtos/order-dto");
+const { createFilter } = require("../utils/db-utils");
 
 class OrderService {
     async getOrder(orderId) {
@@ -28,21 +29,10 @@ class OrderService {
         const orders = await Order.findAll({
             limit: config.DB_ORDER_SEARCH_LIMIT,
             offset: options.offset,
-            where: this.createOrderFilter(options),
+            where: createFilter(options, config.ALLOWED_ORDER_FILTERS),
         });
         const ordersData = orders.map((order) => new OrderDto(order));
         return { orders: ordersData };
-    }
-
-    // special filter generation for sequelize postgres db orders search
-    createOrderFilter(options) {
-        const filter = {};
-        for (const key of config.ALLOWED_ORDER_FILTERS) {
-            if (options[key]) {
-                filter[key] = options[key];
-            }
-        }
-        return filter;
     }
 
     async createOrder(userId, orderSettings) {

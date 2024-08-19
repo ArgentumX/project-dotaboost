@@ -5,6 +5,7 @@ module.exports = class ExecutorTicketDto {
     verified;
     paid;
     closed;
+    userId;
 
     constructor(model) {
         this.id = model.id;
@@ -13,5 +14,6 @@ module.exports = class ExecutorTicketDto {
         this.verified = model.verified;
         this.paid = model.paid;
         this.closed = model.closed;
+        this.userId = model.userId;
     }
 };
