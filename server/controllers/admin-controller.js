@@ -1,6 +1,5 @@
 const { validationResult } = require("express-validator");
 const ApiError = require("../errors/api-error");
-const { VerifyExecutorTicket } = require("../models/models");
 const executorTicketService = require("../services/executor-ticket-service");
 
 class AdminController {

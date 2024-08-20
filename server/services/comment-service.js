@@ -16,10 +16,12 @@ class CommentService {
         if (!executor) {
             throw ApiError.BadRequest("executor not found");
         }
-        if (!isExecutorServiceUsed(user, executor)) {
-            throw ApiError.BadRequest("unable to comment");
+        const usedService = await batchServices.isExecutorServiceUsed(user, executor);
+        if (!usedService) {
+            throw ApiError.NoPermissions();
         }
-        if (this.isExecutorCommented(userId, executorId)) {
+        const commentedBefore = await this.isExecutorCommented(userId, executorId);
+        if (commentedBefore) {
             throw ApiError.BadRequest("unable to comment more one time");
         }
         const comment = await ExecutorComment.create({ userId, executorId, text });
@@ -30,7 +32,7 @@ class CommentService {
     // Checks if executor commented by specific user.
     async isExecutorCommented(byUserId, executorId) {
         const comment = await ExecutorComment.findOne({ where: { userId: byUserId, executorId } });
-        return comment != null && comment != undefined;
+        return comment != null;
     }
 
     async getExecutorComments(executorId) {

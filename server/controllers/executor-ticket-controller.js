@@ -1,8 +1,6 @@
 const ApiError = require("../errors/api-error");
-const { VerifyExecutorTicket, User } = require("../models/models");
 const executors = require("../services/executor-service");
 const config = require("../config");
-const files = require("../utils/file-utils");
 const testService = require("../services/test-service");
 const executorTicketService = require("../services/executor-ticket-service");
 const { validationResult } = require("express-validator");
