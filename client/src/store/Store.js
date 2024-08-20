@@ -2,13 +2,14 @@ import { makeAutoObservable } from "mobx"
 import AuthService from "../service/AuthService"
 import axios from "axios"
 import { API_URL } from "../http"
+import UserService from "../service/UserService";
 
 export default class Store {
-    user = {};
-    isAuth = false;
-    isLoading = false;
 
     constructor() {
+        this.user = {};
+        this.isAuth = false;
+        this.isLoading = false;
         makeAutoObservable(this)
     }
 
@@ -61,15 +62,25 @@ export default class Store {
         this.setLoading(true);
 
         try {
-            const response = await axios.get(`${API_URL}/user/refresh`, {withCredentials: true})
+            const response = await axios.get(`${API_URL}api/user/refresh`, {withCredentials: true})
         
             localStorage.setItem('token', response.data.accessToken);
             this.setAuth(true);
             this.setUser(response.data.user);
+            this.user.avatar = API_URL + this.user.avatar
         } catch(e) {
             console.log(e.response?.data?.message)
         } finally {
             this.setLoading(false);
+        }
+    }
+
+    async uploadAvatar(avatar) {
+        try {
+            const response = await UserService.uploadAvatar(avatar);
+            this.user.avatar = API_URL + response.data.avatar
+        } catch (e) {
+            console.log(e.response?.data?.message)
         }
     }
 }
