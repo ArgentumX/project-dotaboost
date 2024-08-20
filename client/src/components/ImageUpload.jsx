@@ -1,14 +1,21 @@
 import { useContext, useState } from "react";
 import { toggleBlur } from "./ActivatePrompt";
-import ReactCrop from "react-image-crop";
+import ReactCrop, { defaultCrop } from "react-image-crop";
 import 'react-image-crop/dist/ReactCrop.css'
 import { useDropzone } from "react-dropzone";
-import { Context } from "..";
-import { observer } from "mobx-react-lite";
+import { Context } from ".."
 
 function ImageUpload() {
     const [selectedImage, setSelectedImage] = useState(null);
-    const [crop, setCrop] = useState();
+    
+    const defaultCrop = {
+        unit: '%', 
+        x: 25,
+        y: 25,
+        width: 50,
+        height: 50
+    }
+    const [crop, setCrop] = useState(defaultCrop);
     const formData = new FormData();
 
     const {store} = useContext(Context);
@@ -35,7 +42,7 @@ function ImageUpload() {
     }
 
     const uploadFile = (file) => {
-        setCrop(null);
+        setCrop(defaultCrop);
         if (fileValidation(file)) {
             setSelectedImage(file);
         }
@@ -105,7 +112,7 @@ function ImageUpload() {
             </div>
             <div className={isDragActive ? "ImageContainer drag" : "ImageContainer"} {...getRootProps()}> 
                 {selectedImage && (
-                    <ReactCrop crop={crop} onChange={c => setCrop(c)} circularCrop={true} aspect={1}>
+                    <ReactCrop crop={crop} onChange={c => setCrop(c)} circularCrop={true} aspect={1} keepSelection={true}>
                         <img id="image" src={URL.createObjectURL(selectedImage)}/>
                     </ReactCrop>
                 )}
