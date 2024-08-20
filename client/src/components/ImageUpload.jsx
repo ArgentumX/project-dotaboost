@@ -35,6 +35,7 @@ function ImageUpload() {
     }
 
     const uploadFile = (file) => {
+        setCrop(null);
         if (fileValidation(file)) {
             setSelectedImage(file);
         }
@@ -122,6 +123,8 @@ function ImageUpload() {
                         (
                             formData.append('image', createImageFromCrop()),
                             store.uploadAvatar(formData),
+                            setCrop(null),
+                            setSelectedImage(null),
                             toggleImageUpload()
                         )
                         : null 
