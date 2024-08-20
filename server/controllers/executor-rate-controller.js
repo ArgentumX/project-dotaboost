@@ -1,48 +1,49 @@
 const ApiError = require("../errors/api-error");
-const orderService = require("../services/order-service");
+const rateService = require("../services/rate-service");
 const { validationResult } = require("express-validator");
 
-class OrderController {
-    async createOrder(req, res, next) {
+class ExecutorRateController {
+    async addRate(req, res, next) {
         try {
-            const userData = req.user;
+            const { executorId, isLike } = req.body;
+            const userId = req.user.id;
             const valErrors = validationResult(req);
             if (!valErrors.isEmpty()) {
                 return next(ApiError.ValidationError(valErrors));
             }
-            const orderData = await orderService.createOrder(userData.id, req.body);
-            return res.json(orderData);
+            const rate = await rateService.addExecutorRate(userId, executorId, isLike);
+            return res.json(rate);
         } catch (e) {
             next(e);
         }
     }
-
-    async getOrder(req, res, next) {
+    async removeRate(req, res, next) {
         try {
-            const { id } = req.params;
+            const { executorId } = req.body;
+            const userId = req.user.id;
             const valErrors = validationResult(req);
             if (!valErrors.isEmpty()) {
                 return next(ApiError.ValidationError(valErrors));
             }
-            const orderData = await orderService.getOrder(id);
-            return res.json(orderData);
+            const result = await rateService.removeExecutorRate(userId, executorId);
+            return res.json(result);
         } catch (e) {
             next(e);
         }
     }
-
-    async getOrders(req, res, next) {
+    async getRates(req, res, next) {
         try {
+            const { userId, executorId } = req.body;
             const valErrors = validationResult(req);
             if (!valErrors.isEmpty()) {
                 return next(ApiError.ValidationError(valErrors));
             }
-            const ordersData = await orderService.getOrders(req.query);
-            return res.json(ordersData);
+            const ratesData = await rateService.getExecutorRates(userId, executorId);
+            return res.json(ratesData);
         } catch (e) {
             next(e);
         }
     }
 }
 
-module.exports = new OrderController();
+module.exports = new ExecutorRateController();
