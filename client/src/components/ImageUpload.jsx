@@ -9,6 +9,7 @@ function ImageUpload() {
     const [selectedImage, setSelectedImage] = useState(null);
     const [crop, setCrop] = useState();
     const [isImageLoaded, setIsImageLoaded] = useState(false);
+    const [file, setFile] = useState();
     const formData = new FormData();
 
     const {store} = useContext(Context);
@@ -34,14 +35,18 @@ function ImageUpload() {
         return true;
     }
 
-    const uploadFile = (file) => {
+    const uploadFile = (selectedFile) => {
         setIsImageLoaded(false)
-        if (fileValidation(file)) {
-            setSelectedImage(file);
+        if (fileValidation(selectedFile)) {
+            setSelectedImage(selectedFile);
         }
     }
 
-    const onDrop = (acceptedFiles) => {uploadFile(acceptedFiles[0])};
+    const onDrop = (acceptedFiles) => {
+        const selectedFile = acceptedFiles[0];
+        setFile(selectedFile);
+        uploadFile(selectedFile); 
+    };
 
     const {acceptedFiles, getRootProps, getInputProps, isDragActive} = useDropzone({
         onDrop,
@@ -93,25 +98,23 @@ function ImageUpload() {
     }
 
     function onImageLoad(e) {
-        const { naturalWidth: width, naturalHeight: height } = e.currentTarget
+        const { width, height } = e.currentTarget
 
-        const crop = centerCrop(
-            makeAspectCrop(
-                {
-                    unit: '%',
-                    width: 20,
-                },
-                1,
-                width,
-                height
-            ),
+        const crop = makeAspectCrop(
+            {
+                unit: "px",
+                width: 50,
+            },
+            1,
             width,
             height
-        )
-        console.log("a")
-        setIsImageLoaded(true)
-        setCrop(crop)
+        );
+            
+        const centeredCrop = centerCrop(crop, width, height);
+        setIsImageLoaded(true);
+        setCrop(centeredCrop);
     }
+
 
     return (
         <div id="ImageUpload">
@@ -144,9 +147,11 @@ function ImageUpload() {
                         (
                             formData.append('image', createImageFromCrop()),
                             store.uploadAvatar(formData),
-                            setCrop(null),
-                            setSelectedImage(null),
-                            toggleImageUpload()
+                            setCrop(),
+                            setSelectedImage(),
+                            toggleImageUpload(),
+                            document.getElementById('avatar').value = null,
+                            setFile()
                         )
                         : null 
                         }}>Сохранить</button>

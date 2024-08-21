@@ -30,12 +30,11 @@ img {
 .NavBar li a {
     color: rgba(255, 255, 255, 0.75); 
     text-decoration: none;
-    transition: 
-        color 0.5s;
+    transition: 0.5s; 
 }
 
 .NavBar li a:hover {
-    color: rgba(255, 150, 150, 0.95);
+    color: rgba(255, 100, 100, 0.85);
     text-decoration: none;
 }
 
@@ -54,6 +53,8 @@ img {
     float: left;
     text-align: center;
     padding: 10px 10px;
+    transition: 0.5s;
+    border-radius: 10px;
 }
 
 .NavBar .NavBarProfile {
@@ -305,7 +306,7 @@ button:active {
 }
 
 .ImageContainer {
-    width: 80%;
+    width: fit-content;
     display: flex;
     justify-content: center;
     align-items: center;
