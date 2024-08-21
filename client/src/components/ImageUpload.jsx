@@ -1,21 +1,14 @@
 import { useContext, useState } from "react";
 import { toggleBlur } from "./ActivatePrompt";
-import ReactCrop, { defaultCrop } from "react-image-crop";
+import ReactCrop, { centerCrop, makeAspectCrop } from "react-image-crop";
 import 'react-image-crop/dist/ReactCrop.css'
 import { useDropzone } from "react-dropzone";
 import { Context } from ".."
 
 function ImageUpload() {
     const [selectedImage, setSelectedImage] = useState(null);
-    
-    const defaultCrop = {
-        unit: '%', 
-        x: 25,
-        y: 25,
-        width: 50,
-        height: 50
-    }
-    const [crop, setCrop] = useState(defaultCrop);
+    const [crop, setCrop] = useState();
+    const [isImageLoaded, setIsImageLoaded] = useState(false);
     const formData = new FormData();
 
     const {store} = useContext(Context);
@@ -42,7 +35,7 @@ function ImageUpload() {
     }
 
     const uploadFile = (file) => {
-        setCrop(defaultCrop);
+        setIsImageLoaded(false)
         if (fileValidation(file)) {
             setSelectedImage(file);
         }
@@ -99,6 +92,27 @@ function ImageUpload() {
         return outputImage;
     }
 
+    function onImageLoad(e) {
+        const { naturalWidth: width, naturalHeight: height } = e.currentTarget
+
+        const crop = centerCrop(
+            makeAspectCrop(
+                {
+                    unit: '%',
+                    width: 20,
+                },
+                1,
+                width,
+                height
+            ),
+            width,
+            height
+        )
+        console.log("a")
+        setIsImageLoaded(true)
+        setCrop(crop)
+    }
+
     return (
         <div id="ImageUpload">
             <div className="ImageUploadHeader">
@@ -113,7 +127,7 @@ function ImageUpload() {
             <div className={isDragActive ? "ImageContainer drag" : "ImageContainer"} {...getRootProps()}> 
                 {selectedImage && (
                     <ReactCrop crop={crop} onChange={c => setCrop(c)} circularCrop={true} aspect={1} keepSelection={true}>
-                        <img id="image" src={URL.createObjectURL(selectedImage)}/>
+                        <img id="image" src={URL.createObjectURL(selectedImage)} onLoad={!isImageLoaded ? onImageLoad : null} />
                     </ReactCrop>
                 )}
                 {!selectedImage && (
