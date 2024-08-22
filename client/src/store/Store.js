@@ -31,6 +31,7 @@ export default class Store {
             localStorage.setItem('token', response.data.accessToken);
             this.setAuth(true);
             this.setUser(response.data.user);
+            this.user.avatar = API_URL + this.user.avatar
         } catch (e) {
             console.log(e.response?.data?.message)
         }
