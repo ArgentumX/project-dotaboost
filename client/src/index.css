@@ -30,12 +30,11 @@ img {
 .NavBar li a {
     color: rgba(255, 255, 255, 0.75); 
     text-decoration: none;
-    transition: 
-        color 0.5s;
+    transition: 0.5s; 
 }
 
 .NavBar li a:hover {
-    color: rgba(255, 150, 150, 0.95);
+    color: rgba(255, 100, 100, 0.85);
     text-decoration: none;
 }
 
@@ -54,6 +53,8 @@ img {
     float: left;
     text-align: center;
     padding: 10px 10px;
+    transition: 0.5s;
+    border-radius: 10px;
 }
 
 .NavBar .NavBarProfile {
@@ -72,6 +73,10 @@ img {
     margin: 0px 10px;
     display: inline;
     float: left;
+    border-radius: 50%;
+    border: solid;
+    border-width: 2px;
+    border-color: rgb(175, 175, 175);
 }
 
 .NavBarProfile h3 {
@@ -201,8 +206,8 @@ button:active {
 .profilePageEditIcon {
     margin: 0;
     position: relative;
-    bottom: 8.3em;
-    left: 3em;
+    bottom: 9em;
+    left: 3.2em;
 }
 
 .profilePageEditIcon:hover {
@@ -212,6 +217,10 @@ button:active {
 .profilePageAvatar {
     width: 141.75px;
     display: block;
+    border-radius: 50%;
+    border: solid;
+    border-width: 3px;
+    border-color: rgb(175, 175, 175);
     margin: auto;
 }
 
@@ -256,8 +265,8 @@ button:active {
     left: 50%;
     transform: translate(-50%, -50%);
     width: 600px;
-    height: 400px;
-    padding: 50px;
+    height: fit-content;
+    padding: 35px;
     box-shadow: 0 5px 30px rgba(0,0,0,.30);
     border-radius: 25px;
     background: rgb(45, 45, 45);
@@ -270,7 +279,7 @@ button:active {
 }
 
 #ImageUpload.active {
-    top: 37%;
+    top: 50%;
     visibility: visible;
     opacity: 1;
     transition: 0.5s;
@@ -296,17 +305,14 @@ button:active {
     filter: brightness(70%);
 }
 
-.ImageUploadHeader h1 {
-}
-
-.HintImageContainer {
-    width: 77%;
+.ImageContainer {
+    width: fit-content;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     text-align: center;
-    height: 75%;
+    height: fit-content;
     position: relative;
     bottom: 2em;
     border: solid;
@@ -314,7 +320,16 @@ button:active {
     border-width: 2px;
 }
 
-.HintImageContainer h3 {
+.drag {
+    border-style: dashed;
+    border-color: rgb(125,125,125)
+}
+
+.hint {
+    padding: 5em;
+}
+
+.hint h3 {
     color: rgb(125, 125, 125);
 }
 
@@ -324,16 +339,33 @@ button:active {
     width: 100%;
 }
 
-.ImageUploadFooter .load {
+.ImageUploadFooter #load{
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    padding: 0.5rem 2rem;
+    border-radius: 1em;
+    border: solid;
+    border-width: 2px;
+    min-width: 2rem;
+    font-size: 1.3rem;
+    transition: 500ms;
     background: #525252;
     border-color: #525252;
 }
 
-.ImageUploadFooter .load:hover {
+.ImageUploadFooter #load:hover{
+    cursor: pointer;
+    transition: 300ms;
     border-color: #424242;
     background: #424242;
 }
 
-.ImageUploadFooter .load:active {
+.ImageUploadFooter #load:active {
     border-color: #727272;
 }
+
+.ImageUploadFooter #avatar {
+    visibility: hidden;
+    position: absolute;
+}
+

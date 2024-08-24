@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { ABOUTUS_ROUTE, BOOST_ROUTE, BOOSTER_ROUTE, MAINPAGE_ROUTE, LOGIN_ROUTE, REGISTER_ROUTE, PROFILE_ROUTE} from "../utils/consts";
 import { Context } from "..";
 import { NavLink } from "react-router-dom";

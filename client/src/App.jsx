@@ -7,7 +7,7 @@ import { observer } from "mobx-react-lite";
 import { useContext, useEffect } from "react";
 import { Context } from ".";
 import ReactLoading from "react-loading";
-import ImageUpload, { toggleImageUpload } from "./components/ImageUpload";
+import ImageUpload from "./components/ImageUpload";
 
 const App = observer(() => {
     const {store} = useContext(Context)

@@ -10,7 +10,7 @@ const Profile = observer(() => {
         <div className="profile">
             <img className="profilePageImg" src="src/assets/img/axe.png" alt=""/>
             <div className="profilePageInfo">
-                <img className="profilePageAvatar" src="src/assets/img/default_profile_icon.png" alt=""/>
+                <img className="profilePageAvatar" src={store.user.avatar ? store.user.avatar : "src/assets/img/default_profile_icon.png"} alt=""/>
                 <img className="profilePageEditIcon" role="button" onClick={() => {
                     toggleImageUpload();
                     return false;
