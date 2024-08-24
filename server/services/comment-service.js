@@ -4,7 +4,7 @@ const { User } = require("../models/user-model");
 const { Executor } = require("../models/models");
 const { ExecutorComment } = require("../models/comment-model");
 const ExecutorCommentDto = require("../dtos/executor-comment-dto");
-const { isExecutorServiceUsed } = require("./batch-services");
+const batchServices = require("./batch-services");
 
 class CommentService {
     async postExecutorComment(userId, executorId, text) {

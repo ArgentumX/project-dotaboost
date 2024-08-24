@@ -5,6 +5,7 @@ const { Role } = require("./role-model.js");
 const { UserRole } = require("./user-model.js");
 const { ExecutorComment } = require("./comment-model.js");
 const { ExecutorRate } = require("./rate-model.js");
+const { Batch } = require("./batch-model.js");
 const roleService = require("../services/role-service.js");
 const config = require("../config");
 
@@ -61,11 +62,17 @@ ExecutorRate.belongsTo(User);
 Executor.hasMany(ExecutorComment);
 ExecutorComment.belongsTo(Executor);
 
+Executor.hasMany(Batch);
+Batch.belongsTo(Executor);
+
 Executor.hasMany(ExecutorRate);
 ExecutorRate.belongsTo(Executor);
 
 Order.hasOne(Executor);
 Executor.belongsTo(Order);
+
+Order.hasMany(Batch);
+Batch.belongsTo(Order);
 
 User.belongsToMany(Role, { through: UserRole });
 Role.belongsToMany(User, { through: UserRole, foreignKey: "roleId" });

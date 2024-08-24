@@ -1,5 +1,5 @@
 const ApiError = require("../errors/api-error");
-const { Order } = require("../models/models");
+const { Order, Executor } = require("../models/models");
 const { User } = require("../models/user-model");
 const config = require("../config");
 const jwt = require("jsonwebtoken");
@@ -74,6 +74,11 @@ class OrderService {
         orderData.steamUsername = steamUsername;
         orderData.steamPassword = steamPassword;
         return { order: orderData };
+    }
+
+    async isOrderBelongsToExecutor(orderId, executorId) {
+        const order = await Executor.findOne({ where: { id: executorId, orderId } });
+        return order != null;
     }
 }
 

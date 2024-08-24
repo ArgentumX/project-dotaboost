@@ -17,5 +17,12 @@ class ExecutorService {
         const executorData = new ExecutorDto(executor);
         return { executor: executorData };
     }
+    async getExecutorId(userId) {
+        const executor = await Executor.findOne({ where: userId });
+        if (!executor) {
+            throw ApiError.BadRequest("executor not found");
+        }
+        return executor.id;
+    }
 }
 module.exports = new ExecutorService();

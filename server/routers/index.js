@@ -5,11 +5,13 @@ const orderRouter = require("./order-router");
 const adminRouter = require("./admin-router");
 const executorRouter = require("./executor-router");
 const executorTicketRouter = require("./executor-ticket-router");
+const batchRouter = require("./batch-router");
 
 router.use("/user", userRouter);
 router.use("/order", orderRouter);
 router.use("/admin", adminRouter);
 router.use("/executor-ticket", executorTicketRouter);
 router.use("/executor", executorRouter);
+router.use("/batch", batchRouter);
 
 module.exports = router;

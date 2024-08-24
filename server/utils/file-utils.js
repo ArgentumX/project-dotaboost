@@ -7,7 +7,7 @@ const fs = require("fs");
 
 class Files {
     createStaticImage(imageFile, prefix) {
-        let imageName = prefix + Uuid.v4() + ".jpg";
+        const imageName = `${prefix + Uuid.v4()}.jpg`;
         imageFile.mv(path.resolve(__dirname, "..", "static", imageName));
         return imageName;
     }
