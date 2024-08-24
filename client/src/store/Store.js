@@ -69,7 +69,7 @@ export default class Store {
             localStorage.setItem('token', response.data.accessToken);
             this.setAuth(true);
             this.setUser(response.data.user);
-            this.user.avatar = API_URL + this.user.avatar
+            this.user.avatar = this.user.avatar ? API_URL + this.user.avatar : null;
         } catch (e) {
             console.log(e.response?.data?.message)
         } finally {
