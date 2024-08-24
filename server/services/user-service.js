@@ -99,12 +99,13 @@ class UserService {
     }
 
     async activate(activationLink) {
-        const user = await User.findOne({ activationLink });
+        const user = await User.findOne({ where: { activationLink } });
         if (!user) {
             throw ApiError.BadRequest("wrong activation link");
         }
         user.isActivated = true;
         await user.save();
+        return { message: "success" };
     }
 }
 
