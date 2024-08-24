@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { ABOUTUS_ROUTE, BOOST_ROUTE, BOOSTER_ROUTE, MAINPAGE_ROUTE, LOGIN_ROUTE, REGISTER_ROUTE, PROFILE_ROUTE} from "../utils/consts";
+import { ABOUTUS_ROUTE, ORDER_ROUTE, BOOSTER_ROUTE, MAINPAGE_ROUTE, LOGIN_ROUTE, REGISTER_ROUTE, PROFILE_ROUTE} from "../utils/consts";
 import { Context } from "..";
 import { NavLink } from "react-router-dom";
 import { observer } from "mobx-react-lite";
@@ -46,7 +46,7 @@ function NavBar() {
         <ul className="NavBar">
             <NavBarItem text="Главная" link={MAINPAGE_ROUTE}/>
             <NavBarItem text="О нас" link={ABOUTUS_ROUTE}/>
-            <NavBarItem text="Заказать буст" link={BOOST_ROUTE}/>
+            <NavBarItem text="Заказать буст" link={ORDER_ROUTE}/>
             <NavBarItem text="Стать бустером" link={BOOSTER_ROUTE}/>
             <NavBarProfile/>
         </ul>

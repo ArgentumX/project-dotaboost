@@ -33,8 +33,10 @@ const App = observer(() => {
                 <AppRouter/>    
                 <Footer/>
             </div>
-            {store.isAuth && !store.user.isActivated ? <ActivatePrompt/> : null}
-            <ImageUpload/>
+            <div id="popup">
+                {store.isAuth && !store.user.isActivated ? <ActivatePrompt/> : null}
+                <ImageUpload/>
+            </div>
         </BrowserRouter>
     );
 });

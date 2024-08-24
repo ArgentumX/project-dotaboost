@@ -1,7 +1,7 @@
-import { ABOUTUS_ROUTE, BOOST_ROUTE, BOOSTER_ROUTE, LOGIN_ROUTE, MAINPAGE_ROUTE, PROFILE_ROUTE, REGISTER_ROUTE } from "./utils/consts";
+import { ABOUTUS_ROUTE, ORDER_ROUTE, BOOSTER_ROUTE, LOGIN_ROUTE, MAINPAGE_ROUTE, PROFILE_ROUTE, REGISTER_ROUTE } from "./utils/consts";
 import MainPage from './pages/MainPage';
 import AboutUs from './pages/AboutUs';
-import GetBoosted from './pages/GetBoosted';
+import Order from './pages/Order';
 import BecomeABooster from './pages/BecomeABooster';
 import Auth from './pages/Auth';
 import Profile from "./pages/Profile";
@@ -24,8 +24,8 @@ export const publicRoutes = [
     },
 
     {
-        path: BOOST_ROUTE,
-        Component: GetBoosted
+        path: ORDER_ROUTE,
+        Component: Order 
     },
 
     {
