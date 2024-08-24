@@ -1,7 +1,7 @@
 const ApiError = require("../errors/api-error");
 const config = require("../config");
 const { User } = require("../models/user-model");
-const { Executor } = require("../models/models");
+const { Executor, Order } = require("../models/models");
 const { ExecutorComment } = require("../models/comment-model");
 const ExecutorCommentDto = require("../dtos/executor-comment-dto");
 const { Batch } = require("../models/batch-model");
@@ -9,11 +9,21 @@ const orderService = require("./order-service");
 const BatchDto = require("../dtos/batch-dto");
 const { createFilter } = require("../utils/db-utils");
 const fileUtils = require("../utils/file-utils");
+const { Op } = require("sequelize");
 
 class BatchService {
-    // TODO rework
-    async isExecutorServiceUsed(user, executor) {
-        return true;
+    async isExecutorServiceUsed(userId, executorId) {
+        const orders = await Order.findAll({ where: { userId } });
+        const orderIds = orders.map((order) => order.id);
+        const anyBatch = await Batch.findOne({
+            where: {
+                orderId: {
+                    [Op.in]: orderIds,
+                },
+                executorId,
+            },
+        });
+        return anyBatch != null;
     }
 
     async createBatch(executorId, orderId, receivedMMR, isWin) {

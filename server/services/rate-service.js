@@ -19,7 +19,7 @@ class GradeService {
         if (!executor) {
             throw ApiError.BadRequest("executor not found");
         }
-        const usedService = await batchServices.isExecutorServiceUsed(user, executor);
+        const usedService = await batchServices.isExecutorServiceUsed(userId, executorId);
         if (!usedService) {
             throw ApiError.NoPermissions();
         }
