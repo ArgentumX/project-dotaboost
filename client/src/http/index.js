@@ -1,5 +1,4 @@
 import axios from "axios";
-import { responsivePropType } from "react-bootstrap/esm/createUtilityClasses";
 
 export const API_URL = "http://localhost:7000/"
 

@@ -11,6 +11,11 @@ export const authRoutes = [
         path: PROFILE_ROUTE,
         Component: Profile
     },
+
+    {
+        path: ORDER_ROUTE,
+        Component: Order 
+    },
 ] 
 export const publicRoutes = [
     {
@@ -21,11 +26,6 @@ export const publicRoutes = [
     {
         path: ABOUTUS_ROUTE,
         Component: AboutUs
-    },
-
-    {
-        path: ORDER_ROUTE,
-        Component: Order 
     },
 
     {
