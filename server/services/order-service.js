@@ -70,9 +70,7 @@ class OrderService {
             endRating,
         });
         await order.setUser(user);
-        const orderData = new OrderDto(order);
-        orderData.steamUsername = steamUsername;
-        orderData.steamPassword = steamPassword;
+        const orderData = new OrderDto(order, false);
         return { order: orderData };
     }
 

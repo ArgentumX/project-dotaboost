@@ -29,6 +29,9 @@ router.post(
     orderController.createOrder
 );
 router.get("/:id", param("id").isNumeric(), orderController.getOrder); // Returns order by id.
+router.post("/:id/take", authMiddleware, param("id").isNumeric(), orderController.takeOrder);
+router.post("/refuse", authMiddleware, orderController.refuseOrder);
+
 router.get(
     "/",
     query(["party", "priority", "steamGuard", "closed"]).optional({ values: null }).isBoolean(),
