@@ -21,7 +21,7 @@ class UserService {
             throw ApiError.BadRequest("email is already in use");
         }
 
-        const hashPassword = await getPasswordHash(password);
+        const hashPassword = await this.getPasswordHash(password);
         const activationLink = uuid.v4();
 
         const user = await User.create({
@@ -34,13 +34,7 @@ class UserService {
             email,
             `${process.env.API_URL}/api/user/activate/${activationLink}`
         );
-
-        const roles = await roleService.getUserRoles(user.id);
-        const userDto = new UserDto(user, roles);
-        const tokens = tokenService.generateTokens({ ...userDto });
-        await tokenService.saveToken(userDto.id, tokens.refreshToken);
-
-        return { ...tokens, user: userDto };
+        return await this.createUserTokens(user);
     }
 
     async getPasswordHash(password) {

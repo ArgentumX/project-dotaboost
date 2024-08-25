@@ -56,7 +56,7 @@ class OrderService {
             where: { paid: false, userId },
         });
         if (hasNoPaidOrder) {
-            throw ApiError.BadRequest("unable to create new orders before other not paided");
+            throw ApiError.BadRequest("unable to create new orders before other not payed");
         }
 
         const order = await Order.create({
