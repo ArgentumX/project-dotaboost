@@ -1,3 +1,5 @@
+const ApiError = require("../errors/api-error");
+
 module.exports = class UserDto {
     id;
     email;
@@ -7,7 +9,10 @@ module.exports = class UserDto {
     avatar;
     roles;
 
-    constructor(model, roles = []) {
+    constructor(model, roles) {
+        if (!roles) {
+            throw ApiError.Internal("user roles cant be undefined");
+        }
         this.id = model.id;
         this.email = model.email;
         this.isActivated = model.isActivated;

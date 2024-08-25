@@ -47,6 +47,10 @@ class TokenService {
         await Token.destroy({ where: { refreshToken } });
         return { message: "success" };
     }
+    async removeUserTokens(userId) {
+        await Token.destroy({ where: { userId } });
+        return { message: "success" };
+    }
     async findToken(refreshToken) {
         const tokenData = await Token.findOne({ where: { refreshToken } });
         return tokenData;

@@ -22,6 +22,16 @@ router.post(
 );
 
 router.post(
+    "/change-password",
+    authMiddleware,
+    body("newPassword").isLength({
+        min: config.USERNAME_MIN_LENGTH,
+        max: config.USERNAME_MAX_LENGTH,
+    }),
+    userController.changePassword
+);
+
+router.post(
     "/login",
     body("email").isEmail(),
     body("password").isLength({

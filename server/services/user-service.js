@@ -21,7 +21,7 @@ class UserService {
             throw ApiError.BadRequest("email is already in use");
         }
 
-        const hashPassword = await bcrypt.hash(password, Number(process.env.HASH_REPEAT));
+        const hashPassword = await getPasswordHash(password);
         const activationLink = uuid.v4();
 
         const user = await User.create({
@@ -43,6 +43,10 @@ class UserService {
         return { ...tokens, user: userDto };
     }
 
+    async getPasswordHash(password) {
+        return bcrypt.hash(password, Number(process.env.HASH_REPEAT));
+    }
+
     async login(email, password) {
         const user = await User.findOne({ email });
         if (!user) {
@@ -52,6 +56,10 @@ class UserService {
         if (!isRightPassword) {
             throw ApiError.BadRequest("Wrong email or password");
         }
+        return await this.createUserTokens(user);
+    }
+
+    async createUserTokens(user) {
         const roles = await roleService.getUserRoles(user.id);
         const userDto = new UserDto(user, roles);
         const tokens = tokenService.generateTokens({ ...userDto });
@@ -66,6 +74,13 @@ class UserService {
         return await tokenService.removeToken(refreshToken);
     }
 
+    async logoutById(userId) {
+        if (!userId) {
+            throw ApiError.ValidationError();
+        }
+        return await tokenService.removeUserTokens(userId);
+    }
+
     async refresh(refreshToken) {
         if (!refreshToken) {
             throw ApiError.UnauthorizedError();
@@ -76,10 +91,7 @@ class UserService {
             throw ApiError.UnauthorizedError();
         }
         const user = await User.findByPk(userData.id);
-        const userDto = new UserDto(user);
-        const tokens = tokenService.generateTokens({ ...userDto });
-        await tokenService.saveToken(userDto.id, tokens.refreshToken);
-        return { ...tokens, user: userDto };
+        return await this.createUserTokens(user);
     }
 
     async getUser(userId) {}
@@ -106,6 +118,22 @@ class UserService {
         user.isActivated = true;
         await user.save();
         return { message: "success" };
+    }
+
+    async changePassword(userId, oldPassword, newPassword) {
+        const user = await User.findByPk(userId);
+        if (!user) {
+            throw ApiError.BadRequest("user not found");
+        }
+        const isRightPassword = await bcrypt.compare(oldPassword, user.password);
+        if (!isRightPassword) {
+            throw ApiError.BadRequest("Wrong email or password");
+        }
+        const newPasswordHash = await this.getPasswordHash(newPassword);
+        user.password = newPasswordHash;
+        await user.save();
+        await this.logoutById(userId);
+        return await this.createUserTokens(user);
     }
 }
 

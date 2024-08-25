@@ -123,6 +123,24 @@ class UserController {
             next(e);
         }
     }
+    async changePassword(req, res, next) {
+        try {
+            const { oldPassword, newPassword } = req.body;
+            const valErrors = validationResult(req);
+            if (!valErrors.isEmpty()) {
+                throw ApiError.ValidationError(valErrors);
+            }
+            const userId = req.user.id;
+            const userData = await userService.changePassword(userId, oldPassword, newPassword);
+            res.cookie("refreshToken", userData.refreshToken, {
+                maxAge: config.REFRESH_TOKEN_DAY_LIFETIME * 24 * 60 * 60 * 1000,
+                httpOnly: true,
+            });
+            return res.json(userData);
+        } catch (e) {
+            next(e);
+        }
+    }
 }
 
 module.exports = new UserController();
