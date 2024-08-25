@@ -174,7 +174,7 @@ button:focus {
 
 .AuthBox button {
     position: relative;
-    bottom: 1rem;
+    bottom: 2rem;
 }
 
 .AuthBox {
@@ -392,7 +392,7 @@ button:focus {
     align-items: center;
     flex-direction: column;
     padding: 4em;
-    width: fit-content; 
+    width: fit-content;
     background-color: rgba(69, 69, 69, 0.5);
     border-radius: 10px;
     position: relative;
@@ -482,3 +482,24 @@ button:focus {
     color: rgba(255, 255, 255, 0.87);
 }
 
+.password-icon {
+    position: relative;
+    width: 24px;
+    height: 24px;
+    transition: 200ms;
+}
+
+.password-icon:hover {
+    cursor: pointer;
+    filter: brightness(90%);
+}
+
+.steam-credentials .password-icon {
+    bottom: 4.75em;
+    left: 35em;
+}
+
+.AuthBox .password-icon {
+   bottom: 3.65em; 
+   left: 12em;
+}

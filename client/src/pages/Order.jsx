@@ -6,6 +6,9 @@ import { Context } from "..";
 import swal from 'sweetalert';
 
 function Order() {
+    const openedEye = "src/assets/img/view.png";
+    const closedEye = "src/assets/img/hide.png";
+
     const [startMMR, setStartMMR] = useState(0);
     const [endMMR, setEndMMR] = useState(2000);
     const [party, setParty] = useState(false);
@@ -16,6 +19,7 @@ function Order() {
     const [steamLogin, setSteamLogin] = useState();
     const [steamPassword, setSteamPassword] = useState();
     const [cost, setCost] = useState(0);
+    const [passwordIcon, setPasswordIcon] = useState(openedEye);
 
     const { store } = useContext(Context);
 
@@ -100,6 +104,10 @@ function Order() {
         };
 
         store.createOrder(startMMR, endMMR, party, priority, steamguard, playtimeObject, steamLogin, steamPassword);
+    }
+
+    const handlePasswordIconClick = () => {
+        setPasswordIcon(passwordIcon == openedEye ? closedEye : openedEye);
     }
 
     return (
@@ -277,10 +285,11 @@ function Order() {
                     <input
                         className="textbox"
                         placeholder="Пароль"
-                        type="password"
+                        type={passwordIcon == openedEye ? "password" : "text"}
                         value={steamPassword}
                         onChange={e => setSteamPassword(e.target.value)}
                     />
+                    <img className="password-icon" src={passwordIcon} alt="" onClick={handlePasswordIconClick} />
                 </div>
                 <h2>Рассчетная стоимость: <b>{cost}₽</b></h2>
                 <button className="button" onClick={submit}>Подтвердить заказ</button>
