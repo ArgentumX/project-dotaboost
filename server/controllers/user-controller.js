@@ -141,6 +141,20 @@ class UserController {
             next(e);
         }
     }
+
+    async getUser(req, res, next) {
+        try {
+            const { id } = req.params;
+            const valErrors = validationResult(req);
+            if (!valErrors.isEmpty()) {
+                throw ApiError.ValidationError(valErrors);
+            }
+            const userData = await userService.getUser(id);
+            return res.json(userData);
+        } catch (e) {
+            next(e);
+        }
+    }
 }
 
 module.exports = new UserController();

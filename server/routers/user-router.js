@@ -49,6 +49,8 @@ router.get("/activate/:link", userController.activate);
 
 router.get("/refresh", userController.refresh);
 
+router.get("/:id", param("id").isNumeric(), userController.getUser);
+
 router.post(
     "/comment-executor",
     authMiddleware,

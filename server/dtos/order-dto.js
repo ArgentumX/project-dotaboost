@@ -10,7 +10,7 @@ module.exports = class OrderDto {
     startRating;
     currentRating;
     endRating;
-    // Set hideSecretData to true for anybody and false for executors of this order
+
     constructor(model, hideSecretData = true) {
         this.id = model.id;
         this.party = model.party;

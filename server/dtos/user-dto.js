@@ -9,16 +9,15 @@ module.exports = class UserDto {
     avatar;
     roles;
 
-    constructor(model, roles) {
-        if (!roles) {
-            throw ApiError.Internal("user roles cant be undefined");
-        }
+    constructor(model, roles, hideSecretData = true) {
         this.id = model.id;
-        this.email = model.email;
-        this.isActivated = model.isActivated;
         this.avatar = model.avatar;
-        this.balance = model.balance;
         this.username = model.username;
         this.roles = roles;
+        if (!hideSecretData) {
+            this.email = model.email;
+            this.isActivated = model.isActivated;
+            this.balance = model.balance;
+        }
     }
 };

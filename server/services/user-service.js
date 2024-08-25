@@ -55,7 +55,7 @@ class UserService {
 
     async createUserTokens(user) {
         const roles = await roleService.getUserRoles(user.id);
-        const userDto = new UserDto(user, roles);
+        const userDto = new UserDto(user, roles, false);
         const tokens = tokenService.generateTokens({ ...userDto });
         await tokenService.saveToken(userDto.id, tokens.refreshToken);
         return { ...tokens, user: userDto };
@@ -88,8 +88,14 @@ class UserService {
         return await this.createUserTokens(user);
     }
 
-    async getUser(userId) {}
-    async getUsers() {}
+    async getUser(userId) {
+        const user = await User.findByPk(userId);
+        if (!user) {
+            throw ApiError.BadRequest("user not found");
+        }
+        const userData = new UserDto(user);
+        return { user: userData };
+    }
 
     async uploadAvatar(userId, image) {
         const user = await User.findOne({ where: { id: userId } });
@@ -129,6 +135,8 @@ class UserService {
         await this.logoutById(userId);
         return await this.createUserTokens(user);
     }
+
+    async restorePassword() {}
 }
 
 module.exports = new UserService();
