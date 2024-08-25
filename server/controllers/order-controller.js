@@ -45,6 +45,34 @@ class OrderController {
             next(e);
         }
     }
+
+    async takeOrder(req, res, next) {
+        try {
+            const valErrors = validationResult(req);
+            if (!valErrors.isEmpty()) {
+                return next(ApiError.ValidationError(valErrors));
+            }
+            const { id } = req.params;
+            const userId = req.user.id;
+            const result = await executorService.takeOrder(userId, id);
+            return res.json(result);
+        } catch (e) {
+            next(e);
+        }
+    }
+    async refuseOrder(req, res, next) {
+        try {
+            const valErrors = validationResult(req);
+            if (!valErrors.isEmpty()) {
+                return next(ApiError.ValidationError(valErrors));
+            }
+            const userId = req.user.id;
+            const result = await executorService.refuseOrder(userId);
+            return res.json(result);
+        } catch (e) {
+            next(e);
+        }
+    }
 }
 
 module.exports = new OrderController();

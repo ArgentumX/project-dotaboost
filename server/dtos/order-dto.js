@@ -10,8 +10,8 @@ module.exports = class OrderDto {
     startRating;
     currentRating;
     endRating;
-    // Set hideExecutorInfo to true for anybody and false for executors of this order
-    constructor(model) {
+    // Set hideSecretData to true for anybody and false for executors of this order
+    constructor(model, hideSecretData = true) {
         this.id = model.id;
         this.party = model.party;
         this.priority = model.priority;
@@ -21,5 +21,9 @@ module.exports = class OrderDto {
         this.closed = model.closed;
         this.endRating = model.endRating;
         this.currentRating = model.currentRating;
+        if (!hideSecretData) {
+            this.steamUsername = model.steamUsername;
+            this.steamPassword = model.steamPassword;
+        }
     }
 };
