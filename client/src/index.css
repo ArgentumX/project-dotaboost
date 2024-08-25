@@ -63,6 +63,7 @@ img {
 }
 
 .NavBar .NavBarItem {
+    display: flex;
     float: left;
     text-align: center;
     padding: 10px 10px;
@@ -503,8 +504,8 @@ button:focus {
 }
 
 .AuthBox .password-icon {
-   bottom: 3.65em; 
-   left: 12em;
+    bottom: 3.65em;
+    left: 12em;
 }
 
 .mmr-input {

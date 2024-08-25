@@ -48,20 +48,22 @@ function NavBarItem(props) {
         }
     }
 
-    return (
-        <li className='NavBarItem' onClick={handleClick}><NavLink to={props.link}>{props.text}</NavLink></li>
-    );
+    return (<>
+        <li className='NavBarItem' onClick={handleClick}>
+            <NavLink to={props.link}>{props.text}</NavLink>
+        </li>
+    </>);
 }
 
 function NavBar() {
     const { store } = useContext(Context)
-    const roles = store.user.roles ? [...store.user.roles] : [] 
+    const roles = store.user.roles ? [...store.user.roles] : []
     return (
         <ul className="NavBar">
             <NavBarItem text="Главная" link={MAINPAGE_ROUTE} />
             <NavBarItem text="О нас" link={ABOUTUS_ROUTE} />
             <NavBarItem text="Профиль" link={PROFILE_ROUTE} />
-            {!roles.includes("EXECUTOR") && 
+            {!roles.includes("EXECUTOR") &&
                 <NavBarItem text="Заказать буст" link={ORDER_ROUTE} />}
             <NavBarProfile />
         </ul>
