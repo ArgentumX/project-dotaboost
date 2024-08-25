@@ -389,7 +389,7 @@ button:focus {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    padding: 4em;
+    padding: 3em 4em 0em 4em;
     width: fit-content;
     background-color: rgba(69, 69, 69, 0.5);
     border-radius: 10px;
@@ -411,13 +411,18 @@ button:focus {
     font-size: 1.35em;
     font-weight: 600;
     position: relative;
-    bottom: 1.5em;
+    bottom: 2.5em;
     margin: 0;
 }
 
 .order h2 b {
     color: rgba(20, 195, 20, 0.7);
     font-weight: 700;
+}
+
+.order button {
+    position: relative;
+    bottom: 1.5em;
 }
 
 .calculator {
@@ -440,7 +445,7 @@ button:focus {
 
 .steam-credentials h3 {
     margin: 0.5em;
-    font-weight: 600;
+    font-weight: 400;
     position: relative;
     bottom: 2em;
 }
