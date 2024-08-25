@@ -157,11 +157,6 @@ button {
     transition: 500ms;
 }
 
-.AuthBox button {
-    position: relative;
-    bottom: 1rem;
-}
-
 button:hover {
     cursor: pointer;
     background-color: #99221a;
@@ -171,6 +166,15 @@ button:hover {
 
 button:active {
     border-color: grey;
+}
+
+button:focus {
+    outline: none;
+}
+
+.AuthBox button {
+    position: relative;
+    bottom: 1rem;
 }
 
 .AuthBox {
@@ -446,3 +450,35 @@ button:active {
 .steam-credentials .textbox {
     width: 27em;
 }
+
+.swal-button--confirm {
+    background-color: hsl(0, 83%, 58%);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    transition: 500ms;
+}
+
+.swal-button--confirm:hover {
+    cursor: pointer;
+    background-color: hsl(0, 70%, 52%) !important;
+    transition: 300ms;
+}
+
+.swal-button--confirm:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+.swal-modal {
+    background-color: #323232;
+}
+
+.swal-title {
+    color: rgba(255, 255, 255, 0.87);
+}
+
+.swal-text {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.87);
+}
+

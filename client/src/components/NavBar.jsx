@@ -40,7 +40,11 @@ function NavBarItem(props) {
 
     const handleClick = () => {
         if (props.link === ORDER_ROUTE && !store.isAuth) {
-            alert("Для того чтобы оформить заказ необходимо авторизоваться.")
+            swal({
+                title: "Ошибка",
+                text: "Для того чтобы оформить заказ необходимо авторизоваться.",
+                icon: "error"
+            })
         }
     }
 

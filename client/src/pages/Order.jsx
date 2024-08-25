@@ -3,6 +3,7 @@ import Slider from '@mui/material/Slider';
 import { Checkbox, FormControlLabel, Typography } from "@mui/material";
 import Calculator from "../components/Calculator";
 import { Context } from "..";
+import swal from 'sweetalert';
 
 function Order() {
     const [startMMR, setStartMMR] = useState(0);
@@ -56,22 +57,38 @@ function Order() {
 
     const submit = () => {
         if (startMMR > endMMR) {
-            alert("Ошибка: начальный рейтинг выше конечного.");
+            swal({
+                title: "Ошибка",
+                text: "Начальный рейтинг ниже конечного.",
+                icon: "error",
+            })
             return;
         }
 
         if (cost == 0) {
-            alert("Ошибка: неверное заполнение формы.");
+            swal({
+                title: "Ошибка",
+                text: "Неверное заполнение формы.",
+                icon: "error",
+            })
             return;
         }
 
         if (endMMR - startMMR < 100) {
-            alert("Ошибка: конечный рейтинг слишком мало отличается от начального. Минимальная разница - 100.")
+            swal({
+                title: "Ошибка",
+                text: "Конечный рейтинг слишком мало отличается от начального. Минимальная разница - 100.",
+                icon: "error"
+            })
             return;
         }
 
         if (isTime && time.every(el => el === false)) {
-            alert("Ошибка: выберите хотя бы один промежуток времени или закройте «Выбрать время».")
+            swal({
+                title: "Ошибка",
+                text: "Выберите хотя бы один промежуток времени или закройте «Выбрать время».",
+                icon: "error"
+            })
             return;
         }
 

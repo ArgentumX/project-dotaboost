@@ -34,7 +34,11 @@ export default class Store {
             this.setUser(response.data.user);
             this.user.avatar = this.user.avatar ? API_URL + this.user.avatar : null;
         } catch (e) {
-            console.log(e.response?.data?.message)
+            swal({
+                title: "Ошибка",
+                text: e.response?.data?.message,
+                icon: "error"
+            })
         }
     }
 
@@ -45,7 +49,11 @@ export default class Store {
             this.setAuth(true);
             this.setUser(response.data.user);
         } catch (e) {
-            console.log(e.response?.data?.message)
+            swal({
+                title: "Ошибка",
+                text: e.response?.data?.message,
+                icon: "error"
+            })
         }
     }
 
@@ -56,7 +64,11 @@ export default class Store {
             this.setAuth(false);
             this.setUser({});
         } catch (e) {
-            console.log(e.response?.data?.message)
+            swal({
+                title: "Ошибка",
+                text: e.response?.data?.message,
+                icon: "error"
+            })
         }
     }
 
@@ -73,7 +85,11 @@ export default class Store {
             this.setUser(response.data.user);
             this.user.avatar = this.user.avatar ? API_URL + this.user.avatar : null;
         } catch (e) {
-            console.log(e.response?.data?.message)
+            swal({
+                title: "Ошибка",
+                text: e.response?.data?.message,
+                icon: "error"
+            })
         } finally {
             this.setLoading(false);
         }
@@ -84,7 +100,11 @@ export default class Store {
             const response = await UserService.uploadAvatar(avatar);
             this.user.avatar = API_URL + response.data.avatar
         } catch (e) {
-            console.log(e.response?.data?.message)
+            swal({
+                title: "Ошибка",
+                text: e.response?.data?.message,
+                icon: "error"
+            })
         }
     }
 
@@ -92,7 +112,11 @@ export default class Store {
         try {
             const response = await OrderService.createOrder(startMMR, endMMR, party, priority, steamguard, playtime, steamUsername, steamPassword);
         } catch (e) {
-            console.log(e.response?.data?.message)
+            swal({
+                title: "Ошибка",
+                text: e.response?.data?.message,
+                icon: "error"
+            })
         }
     }
 }
