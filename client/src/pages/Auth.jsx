@@ -1,17 +1,31 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { LOGIN_ROUTE, MAINPAGE_ROUTE } from "../utils/consts";
 import { observer } from "mobx-react-lite";
 import { Context } from "..";
 
 const Auth = observer(() => {
-    const { store } = useContext(Context)
-    const location = useLocation()
+    const openedEye = "src/assets/img/view.png";
+    const closedEye = "src/assets/img/hide.png";
+
+    const { store } = useContext(Context);
+    const location = useLocation();
     const navigate = useNavigate();
-    const isLogin = location.pathname === LOGIN_ROUTE
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [username, setUsername] = useState('')
+    const isLogin = location.pathname === LOGIN_ROUTE;
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [username, setUsername] = useState('');
+    const [passwordIcon, setPasswordIcon] = useState(openedEye);
+
+    useEffect(() => {
+        if (store.isAuth) {
+            navigate(MAINPAGE_ROUTE);
+        }
+    }, [store.isAuth])
+
+    const handlePasswordIconClick = () => {
+        setPasswordIcon(passwordIcon == openedEye ? closedEye : openedEye);
+    }
 
     const click = async () => {
         try {
@@ -20,10 +34,12 @@ const Auth = observer(() => {
             } else if (password) {
                 store.registration(email, username, password)
             }
-
-            navigate(MAINPAGE_ROUTE)
         } catch (e) {
-            alert(e.response.data.message)
+            swal({
+                title: "Ошибка",
+                text: e.response.data.message,
+                icon: "error"
+            })
         }
     }
 
@@ -52,10 +68,11 @@ const Auth = observer(() => {
                 <input
                     className="textbox"
                     placeholder="Пароль"
-                    type="password"
+                    type={passwordIcon == openedEye ? "password" : "text"}
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                 />
+                <img className="password-icon" src={passwordIcon} alt="" onClick={handlePasswordIconClick} />
                 <button
                     type="submit"
                     onClick={click}>

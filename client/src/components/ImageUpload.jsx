@@ -19,16 +19,28 @@ function ImageUpload() {
             /(\.jpg|\.jpeg|\.png|\.gif)$/i;
 
         if (!allowedExtensions.exec(file.path)) {
-            alert("Данный тип файла не поддерживается.")
+            swal({
+                title: "Ошибка",
+                text: "Данный тип файла не поддерживается.",
+                icon: "error"
+            })
             return false;
         }
 
         if (file.size >= 1000000) {
-            alert("Изображение слишком велико. Максимальный размер: 1Мб.");
+            swal({
+                title: "Ошибка",
+                text: "Изображение слишком велико. Максимальный размер: 1Мб.",
+                icon: "error"
+            })
             return false;
         }
         if (file.size <= 15000){
-            alert("Изображение слишком маленькое.");
+            swal({
+                title: "Ошибка",
+                text: "Изображение слишком маленькое.",
+                icon: "error"
+            })
             return false;
         }
 

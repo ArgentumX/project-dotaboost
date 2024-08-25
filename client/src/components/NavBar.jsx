@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { ABOUTUS_ROUTE, ORDER_ROUTE, BOOSTER_ROUTE, MAINPAGE_ROUTE, LOGIN_ROUTE, REGISTER_ROUTE, PROFILE_ROUTE } from "../utils/consts";
+import { ABOUTUS_ROUTE, ORDER_ROUTE, MAINPAGE_ROUTE, LOGIN_ROUTE, REGISTER_ROUTE, PROFILE_ROUTE } from "../utils/consts";
 import { Context } from "..";
 import { NavLink } from "react-router-dom";
 import { observer } from "mobx-react-lite";
@@ -40,7 +40,11 @@ function NavBarItem(props) {
 
     const handleClick = () => {
         if (props.link === ORDER_ROUTE && !store.isAuth) {
-            alert("Для того чтобы оформить заказ необходимо авторизоваться.")
+            swal({
+                title: "Ошибка",
+                text: "Для того чтобы оформить заказ необходимо авторизоваться.",
+                icon: "error"
+            })
         }
     }
 
@@ -50,12 +54,15 @@ function NavBarItem(props) {
 }
 
 function NavBar() {
+    const { store } = useContext(Context)
+    const roles = store.user.roles ? [...store.user.roles] : [] 
     return (
         <ul className="NavBar">
             <NavBarItem text="Главная" link={MAINPAGE_ROUTE} />
             <NavBarItem text="О нас" link={ABOUTUS_ROUTE} />
-            <NavBarItem text="Заказать буст" link={ORDER_ROUTE} />
-            <NavBarItem text="Стать бустером" link={BOOSTER_ROUTE} />
+            <NavBarItem text="Профиль" link={PROFILE_ROUTE} />
+            {!roles.includes("EXECUTOR") && 
+                <NavBarItem text="Заказать буст" link={ORDER_ROUTE} />}
             <NavBarProfile />
         </ul>
     );
