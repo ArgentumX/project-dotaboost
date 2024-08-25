@@ -28,7 +28,7 @@ function Order() {
     }, [startMMR, endMMR, party, priority, steamguard, time])
 
     const sliderStyle = {
-        color: 'rgb(226, 44, 33)',
+        color: 'rgb(196, 44, 33)',
         width: 600,
         '& .MuiSlider-thumb': {
             '&:hover, &.Mui-focusVisible': {
@@ -110,12 +110,30 @@ function Order() {
         setPasswordIcon(passwordIcon == openedEye ? closedEye : openedEye);
     }
 
+    const handleStartMMRInput = (MMR) => {
+        if (isNaN(MMR) || Number(MMR) >= 7900) {
+            return false;
+        }
+
+        setStartMMR(Number(MMR));
+    }
+
+    const handleEndMMRInput = (MMR) => {
+        if (isNaN(MMR) || Number(MMR) >= 7900) {
+            return false;
+        }
+
+        setEndMMR(Number(MMR));
+    }
+
     return (
         <div className="center">
             <div className="order">
                 <h1>Форма заказа</h1>
                 <div className="calculator">
-                    <h3>Начальный MMR: {startMMR}</h3>
+                    <h3>Начальный MMR:
+                        <input type="text" className="mmr-input" value={startMMR} onChange={(e) => handleStartMMRInput(e.target.value)} />
+                    </h3>
                     <Slider
                         value={startMMR}
                         onChange={(event, value) => setStartMMR(value)}
@@ -124,7 +142,9 @@ function Order() {
                         max={7900}
                         sx={sliderStyle}
                     />
-                    <h3>Желаемый MMR: {endMMR}</h3>
+                    <h3>Желаемый MMR:
+                        <input type="text" className="mmr-input" value={endMMR} onChange={(e) => handleEndMMRInput(e.target.value)} />
+                    </h3>
                     <Slider
                         value={endMMR}
                         onChange={(event, value) => setEndMMR(value)}
