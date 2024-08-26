@@ -40,35 +40,45 @@ img {
     -ms-user-select: none;
 }
 
-.NavBar li a {
+a {
     color: rgba(255, 255, 255, 0.75);
     text-decoration: none;
     transition: 0.5s;
 }
 
-.NavBar li a:hover {
+a:hover {
     color: rgba(255, 100, 100, 0.85);
-    text-decoration: none;
 }
 
 .NavBar {
     list-style-type: none;
-    overflow: hidden;
     background-color: rgba(69, 69, 69, 0.5);
-    padding: 10px 15px;
+    overflow: hidden;
     margin: 0px;
+    padding: 0;
     border-radius: 10px;
     font-family: 'Nunito', sans-serif;
     font-size: 1.3em;
 }
 
 .NavBar .NavBarItem {
+    color: rgba(255, 255, 255, 0.75);
+    text-decoration: none;
     display: flex;
     float: left;
     text-align: center;
-    padding: 10px 10px;
+    padding: 15px 10px;
     transition: 0.5s;
-    border-radius: 10px;
+}
+
+.NavBar .NavBarItem:hover {
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.65);
+    background-color: rgba(50, 50, 50, 1.0);
+}
+
+.NavBarItem:first-child {
+    padding-left: 1.5em;
 }
 
 .NavBar .NavBarProfile {
@@ -78,7 +88,7 @@ img {
     display: inline;
     position: relative;
     margin: 0px 15px;
-    top: 0px;
+    top: 0.2em;
 }
 
 .NavBarProfile img {

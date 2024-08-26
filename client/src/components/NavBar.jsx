@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { ABOUTUS_ROUTE, ORDER_ROUTE, MAINPAGE_ROUTE, LOGIN_ROUTE, REGISTER_ROUTE, PROFILE_ROUTE } from "../utils/consts";
 import { Context } from "..";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 
 const NavBarProfile = observer(() => {
@@ -37,20 +37,23 @@ const NavBarProfile = observer(() => {
 
 function NavBarItem(props) {
     const { store } = useContext(Context)
+    const navigate = useNavigate();
 
     const handleClick = () => {
-        if (props.link === ORDER_ROUTE && !store.isAuth) {
+        if (props.link == ORDER_ROUTE && !store.isAuth) {
             swal({
                 title: "Ошибка",
                 text: "Для того чтобы оформить заказ необходимо авторизоваться.",
                 icon: "error"
             })
         }
+
+        navigate(props.link);
     }
 
     return (<>
         <li className='NavBarItem' onClick={handleClick}>
-            <NavLink to={props.link}>{props.text}</NavLink>
+            {props.text}
         </li>
     </>);
 }
@@ -58,6 +61,7 @@ function NavBarItem(props) {
 function NavBar() {
     const { store } = useContext(Context)
     const roles = store.user.roles ? [...store.user.roles] : []
+
     return (
         <ul className="NavBar">
             <NavBarItem text="Главная" link={MAINPAGE_ROUTE} />
