@@ -18,11 +18,27 @@ class MailService {
         await this.transporter.sendMail({
             from: process.env.SMTP_USER,
             to: targetEmail,
-            subject: "Account activation " + process.env.API_URL,
+            subject: "Account activation " + process.env.CLIENT_URL,
             text: "",
             html: `
       <div>
           <h1>Для активации перейдите по ссылке</h1>
+          <a href="${link}">${link}</a>
+      </div>
+      `,
+        });
+    }
+
+    // TODO add normal html to activation mail
+    async sendRecoverMail(targetEmail, link) {
+        await this.transporter.sendMail({
+            from: process.env.SMTP_USER,
+            to: targetEmail,
+            subject: "Account access recover " + process.env.CLIENT_URL,
+            text: "",
+            html: `
+      <div>
+          <h1>Для восстановления доступа перейдите по ссылке</h1>
           <a href="${link}">${link}</a>
       </div>
       `,

@@ -51,6 +51,18 @@ router.get("/refresh", userController.refresh);
 
 router.get("/:id", param("id").isNumeric(), userController.getUser);
 
+router.post("/send-recover-mail", body("email").isEmail(), userController.sendRecoverMail);
+
+router.post(
+    "/recover-access",
+    body("recoverToken").isString(),
+    body("newPassword").isLength({
+        min: config.PASSWORD_MIN_LENGTH,
+        max: config.PASSWORD_MAX_LENGTH,
+    }),
+    userController.recoverAccess
+);
+
 router.post(
     "/comment-executor",
     authMiddleware,

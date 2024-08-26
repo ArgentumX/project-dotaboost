@@ -42,7 +42,7 @@ class UserService {
     }
 
     async login(email, password) {
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ where: { email } });
         if (!user) {
             throw ApiError.BadRequest("Wrong email or password");
         }
@@ -56,8 +56,8 @@ class UserService {
     async createUserTokens(user) {
         const roles = await roleService.getUserRoles(user.id);
         const userDto = new UserDto(user, roles, false);
-        const tokens = tokenService.generateTokens({ ...userDto });
-        await tokenService.saveToken(userDto.id, tokens.refreshToken);
+        const tokens = tokenService.generateAuthTokens({ ...userDto });
+        await tokenService.saveToken(userDto.id, tokens.refreshToken, config.TOKENS.TYPE.REFRESH);
         return { ...tokens, user: userDto };
     }
 
@@ -120,6 +120,17 @@ class UserService {
         return { message: "success" };
     }
 
+    async getRecoverLink(email) {
+        const user = await User.findOne({ where: { email } });
+        if (!user) {
+            throw ApiError.BadRequest("user not found");
+        }
+        const userData = new UserDto(user, undefined, false);
+        const recoverToken = tokenService.generateRecoverToken({ ...userData });
+        await tokenService.saveToken(user.id, recoverToken, config.TOKENS.TYPE.RECOVER);
+        return `${process.env.CLIENT_URL}/password_reset/${recoverToken}`;
+    }
+
     async changePassword(userId, oldPassword, newPassword) {
         const user = await User.findByPk(userId);
         if (!user) {
@@ -129,14 +140,30 @@ class UserService {
         if (!isRightPassword) {
             throw ApiError.BadRequest("Wrong email or password");
         }
-        const newPasswordHash = await this.getPasswordHash(newPassword);
-        user.password = newPasswordHash;
-        await user.save();
-        await this.logoutById(userId);
-        return await this.createUserTokens(user);
+        return await this.setPassword(user, newPassword);
     }
 
-    async restorePassword() {}
+    async recoverAccess(token, newPassword) {
+        const tokenData = tokenService.validateRecoverToken(token);
+        const tokenFromDb = await tokenService.findToken(token);
+        if (!tokenData || !tokenFromDb) {
+            throw ApiError.BadRequest("wrong token or expired");
+        }
+        const user = await User.findByPk(tokenData.id);
+        if (!user) {
+            throw ApiError.BadRequest(config.MESSAGES.USER_NOT_FOUND);
+        }
+        return await this.setPassword(user, newPassword);
+    }
+
+    // Do not call this from any controller (only for internal using);
+    async setPassword(user, password) {
+        const passwordHash = await this.getPasswordHash(password);
+        user.password = passwordHash;
+        await user.save();
+        await this.logoutById(user.id);
+        return await this.createUserTokens(user);
+    }
 }
 
 module.exports = new UserService();

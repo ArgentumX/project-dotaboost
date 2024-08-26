@@ -9,6 +9,7 @@ const files = require("../utils/file-utils");
 const config = require("../config");
 const userService = require("../services/user-service");
 const commentService = require("../services/comment-service");
+const mailService = require("../services/mail-service");
 
 class UserController {
     async registration(req, res, next) {
@@ -151,6 +152,39 @@ class UserController {
             }
             const userData = await userService.getUser(id);
             return res.json(userData);
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    async recoverAccess(req, res, next) {
+        try {
+            const { recoverToken, newPassword } = req.body;
+            const valErrors = validationResult(req);
+            if (!valErrors.isEmpty()) {
+                throw ApiError.ValidationError(valErrors);
+            }
+            const userData = await userService.recoverAccess(recoverToken, newPassword);
+            res.cookie("refreshToken", userData.refreshToken, {
+                maxAge: config.REFRESH_TOKEN_DAY_LIFETIME * 24 * 60 * 60 * 1000,
+                httpOnly: true,
+            });
+            return res.json(userData);
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    async sendRecoverMail(req, res, next) {
+        try {
+            const { email } = req.body;
+            const valErrors = validationResult(req);
+            if (!valErrors.isEmpty()) {
+                throw ApiError.ValidationError(valErrors);
+            }
+            const recoverLink = await userService.getRecoverLink(email);
+            await mailService.sendRecoverMail(email, recoverLink);
+            return res.json({ message: "success" });
         } catch (e) {
             next(e);
         }

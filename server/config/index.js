@@ -12,10 +12,20 @@ module.exports = {
         ANSWERS: { 1: "ans1", 2: "ans2", 3: "ans3", 4: "ans4", 5: "ans5" },
         REQUIRED_POINTS: 5,
     },
+    TOKENS: {
+        TYPE: {
+            REFRESH: "REFRESH",
+            RECOVER: "RECOVER",
+        },
+    },
+    MESSAGES: {
+        USER_NOT_FOUND: "User not found",
+    },
     AVATAR_FILE_PREFIX: "AVATAR_",
     SCREEN_FILE_PREFIX: "SCREEN_",
     REFRESH_TOKEN_DAY_LIFETIME: 30,
     ACCESS_TOKEN_MIN_LIFETIME: 18000,
+    RECOVER_TOKEN_MIN_LIFETIME: 5,
     PASSWORD_MIN_LENGTH: 6,
     PASSWORD_MAX_LENGTH: 32,
     USERNAME_MIN_LENGTH: 4,
