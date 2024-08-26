@@ -1,7 +1,7 @@
 const ApiError = require("../errors/api-error");
-const { Token } = require("../models/models");
 const config = require("../config");
 const jwt = require("jsonwebtoken");
+const { Token } = require("../models/token-model");
 
 class TokenService {
     generateTokens(payload) {
@@ -34,25 +34,25 @@ class TokenService {
             return null;
         }
     }
-    async saveToken(userId, refreshToken) {
+    async saveToken(userId, token) {
         const tokenData = await Token.findOne({ where: { userId } });
         if (tokenData) {
-            tokenData.refreshToken = refreshToken;
+            tokenData.token = token;
             return tokenData.save();
         }
-        return await Token.create({ refreshToken, userId });
+        return await Token.create({ token, userId });
     }
 
-    async removeToken(refreshToken) {
-        await Token.destroy({ where: { refreshToken } });
+    async removeToken(token) {
+        await Token.destroy({ where: { token } });
         return { message: "success" };
     }
     async removeUserTokens(userId) {
         await Token.destroy({ where: { userId } });
         return { message: "success" };
     }
-    async findToken(refreshToken) {
-        const tokenData = await Token.findOne({ where: { refreshToken } });
+    async findToken(token) {
+        const tokenData = await Token.findOne({ where: { token } });
         return tokenData;
     }
 }
