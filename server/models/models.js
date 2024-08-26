@@ -1,20 +1,19 @@
 const sequelize = require("../db.js");
 const { DataTypes } = require("sequelize");
-const { User } = require("./user-model.js");
+const { User, UserChat } = require("./user-model.js");
 const { Role } = require("./role-model.js");
 const { UserRole } = require("./user-model.js");
 const { ExecutorComment } = require("./comment-model.js");
 const { ExecutorRate } = require("./rate-model.js");
 const { Batch } = require("./batch-model.js");
+const { Message } = require("./message-model.js");
+const { Chat } = require("./chat-model.js");
+
 const roleService = require("../services/role-service.js");
 const config = require("../config");
+const { Token } = require("./token-model.js");
 
 // TODO rework models.js
-const Token = sequelize.define("token", {
-    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    refreshToken: { type: DataTypes.STRING(400), allowNull: false },
-});
-
 const Order = sequelize.define("order", {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     party: { type: DataTypes.BOOLEAN, defaultValue: false },
@@ -53,6 +52,15 @@ Order.belongsTo(User);
 User.hasMany(ExecutorComment);
 ExecutorComment.belongsTo(User);
 
+User.belongsToMany(Chat, { through: UserChat });
+Chat.belongsToMany(User, { through: UserChat });
+
+Chat.hasMany(Message);
+Message.belongsTo(Chat);
+
+User.hasMany(Message);
+Message.belongsTo(User);
+
 User.hasOne(Executor);
 Executor.belongsTo(User);
 
@@ -84,12 +92,11 @@ User.afterCreate(async (user, options) => {
 User.hasMany(ExecutorTicket);
 ExecutorTicket.belongsTo(User);
 
-User.hasOne(Token);
+User.hasMany(Token);
 Token.belongsTo(User);
 
 module.exports = {
     Order,
     Executor,
-    Token,
     ExecutorTicket,
 };
