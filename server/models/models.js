@@ -12,6 +12,7 @@ const { Chat } = require("./chat-model.js");
 const roleService = require("../services/role-service.js");
 const config = require("../config");
 const { Token } = require("./token-model.js");
+const { RecordModel, Record } = require("./record-model.js");
 
 // TODO rework models.js
 const Order = sequelize.define("order", {
@@ -69,6 +70,12 @@ ExecutorRate.belongsTo(User);
 
 Executor.hasMany(ExecutorComment);
 ExecutorComment.belongsTo(Executor);
+
+Executor.hasMany(Record);
+Record.belongsTo(Executor);
+
+Order.hasMany(Record);
+Record.belongsTo(Order);
 
 Executor.hasMany(Batch);
 Batch.belongsTo(Executor);

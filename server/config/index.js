@@ -20,6 +20,14 @@ module.exports = {
     },
     MESSAGES: {
         USER_NOT_FOUND: "User not found",
+        EXECUTOR_TAKE_ORDER: `{0} взялся за заказ`,
+        EXECUTOR_REFUSE_ORDER: `{0} отказался от заказа`,
+    },
+    RECORDS: {
+        TYPE: {
+            TAKE_ORDER: "TAKE_ORDER",
+            REFUSE_ORDER: "REFUSE_ORDER",
+        },
     },
     AVATAR_FILE_PREFIX: "AVATAR_",
     SCREEN_FILE_PREFIX: "SCREEN_",
