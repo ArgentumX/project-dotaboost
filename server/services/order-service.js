@@ -5,6 +5,7 @@ const config = require("../config");
 const jwt = require("jsonwebtoken");
 const OrderDto = require("../dtos/order-dto");
 const { createFilter } = require("../utils/db-utils");
+const priceCalculator = require("../../global/prices/price-calculator");
 
 class OrderService {
     async getOrder(orderId) {
