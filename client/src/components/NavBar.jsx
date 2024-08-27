@@ -3,6 +3,7 @@ import { ABOUTUS_ROUTE, ORDER_ROUTE, MAINPAGE_ROUTE, LOGIN_ROUTE, REGISTER_ROUTE
 import { Context } from "..";
 import { NavLink, useNavigate } from "react-router-dom";
 import { observer } from "mobx-react-lite";
+import NavItem from "./NavItem";
 
 const NavBarProfile = observer(() => {
     const { store } = useContext(Context)
@@ -35,40 +36,17 @@ const NavBarProfile = observer(() => {
     }
 });
 
-function NavBarItem(props) {
-    const { store } = useContext(Context)
-    const navigate = useNavigate();
-
-    const handleClick = () => {
-        if (props.link == ORDER_ROUTE && !store.isAuth) {
-            swal({
-                title: "Ошибка",
-                text: "Для того чтобы оформить заказ необходимо авторизоваться.",
-                icon: "error"
-            })
-        }
-
-        navigate(props.link);
-    }
-
-    return (<>
-        <li className='NavBarItem' onClick={handleClick}>
-            {props.text}
-        </li>
-    </>);
-}
-
 function NavBar() {
     const { store } = useContext(Context)
     const roles = store.user.roles ? [...store.user.roles] : []
 
     return (
         <ul className="NavBar">
-            <NavBarItem text="Главная" link={MAINPAGE_ROUTE} />
-            <NavBarItem text="О нас" link={ABOUTUS_ROUTE} />
-            <NavBarItem text="Профиль" link={PROFILE_ROUTE} />
+            <NavItem text="Главная" link={MAINPAGE_ROUTE} />
+            <NavItem text="О нас" link={ABOUTUS_ROUTE} />
+            <NavItem text="Профиль" link={PROFILE_ROUTE} />
             {!roles.includes("EXECUTOR") &&
-                <NavBarItem text="Заказать буст" link={ORDER_ROUTE} />}
+                <NavItem text="Заказать буст" link={ORDER_ROUTE} />}
             <NavBarProfile />
         </ul>
     );

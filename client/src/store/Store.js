@@ -84,6 +84,7 @@ export default class Store {
             this.setAuth(true);
             this.setUser(response.data.user);
             this.user.avatar = this.user.avatar ? API_URL + this.user.avatar : null;
+        } catch (e) {
         } finally {
             this.setLoading(false);
         }
