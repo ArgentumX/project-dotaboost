@@ -1,4 +1,4 @@
-import { ABOUTUS_ROUTE, ORDER_ROUTE, BOOSTER_ROUTE, LOGIN_ROUTE, MAINPAGE_ROUTE, PROFILE_ROUTE, REGISTER_ROUTE, VERIFICATION_ROUTE } from "./utils/consts";
+import { ABOUTUS_ROUTE, ORDER_ROUTE, BOOSTER_ROUTE, LOGIN_ROUTE, MAINPAGE_ROUTE, PROFILE_ROUTE, REGISTER_ROUTE, VERIFICATION_ROUTE, PASSWORD_RESET_ROUTE } from "./utils/consts";
 import MainPage from './pages/MainPage';
 import AboutUs from './pages/AboutUs';
 import Order from './pages/Order';
@@ -6,6 +6,7 @@ import BecomeABooster from './pages/BecomeABooster';
 import Auth from './pages/Auth';
 import Profile from "./pages/Profile";
 import Verification from "./pages/Verification";
+import PasswordReset from "./pages/PasswordReset";
 
 export const authRoutes = [
     {
@@ -17,6 +18,16 @@ export const authRoutes = [
         path: ORDER_ROUTE,
         Component: Order 
     },
+
+    {
+        path: VERIFICATION_ROUTE,
+        Component: Verification 
+    },
+
+    {
+        path: PASSWORD_RESET_ROUTE,
+        Component: PasswordReset
+    }
 ] 
 
 export const publicRoutes = [
@@ -44,9 +55,4 @@ export const publicRoutes = [
         path: REGISTER_ROUTE,
         Component: Auth
     },
-
-    {
-        path: VERIFICATION_ROUTE,
-        Component: Verification 
-    }
 ]
