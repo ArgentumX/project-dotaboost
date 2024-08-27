@@ -5,6 +5,7 @@ const config = require("../config");
 const roleService = require("./role-service");
 const ExecutorDto = require("../dtos/executor-dto");
 const OrderDto = require("../dtos/order-dto");
+const recordService = require("./record-service");
 
 class ExecutorService {
     async createExecutor(userId) {
@@ -39,6 +40,12 @@ class ExecutorService {
             throw ApiError.BadRequest("order not found");
         }
         await order.setExecutor(executor);
+        await recordService.createOrderRecord(
+            order,
+            executor,
+            config.MESSAGES.EXECUTOR_TAKE_ORDER,
+            config.RECORDS.TYPE.TAKE_ORDER
+        );
         const orderData = new OrderDto(order, false);
         return { order: orderData };
     }
@@ -51,6 +58,16 @@ class ExecutorService {
         if (!executor.orderId) {
             throw ApiError.BadRequest("executor has not any taken order");
         }
+        const order = await Order.findByPk(executor.orderId);
+        if (!order) {
+            throw ApiError.BadRequest("order not found");
+        }
+        await recordService.createOrderRecord(
+            order,
+            executor,
+            config.MESSAGES.EXECUTOR_REFUSE_ORDER,
+            config.RECORDS.TYPE.REFUSE_ORDER
+        );
         await executor.setOrder(null);
         return { message: "success" };
     }

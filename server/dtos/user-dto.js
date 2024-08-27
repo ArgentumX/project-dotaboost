@@ -1,5 +1,3 @@
-const ApiError = require("../errors/api-error");
-
 module.exports = class UserDto {
     id;
     email;
