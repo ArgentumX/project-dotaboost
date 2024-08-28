@@ -6,24 +6,16 @@ const jwt = require("jsonwebtoken");
 const OrderDto = require("../dtos/order-dto");
 const { createFilter } = require("../utils/db-utils");
 const priceCalculator = require("../../global/prices/price-calculator");
+const userService = require("./user-service");
 
 class OrderService {
-    async getOrder(orderId) {
+    async getOrder(orderId, hideSecretData = true) {
         const order = await Order.findByPk(orderId);
         if (!order) {
             throw ApiError.BadRequest("Order not found");
         }
-        const orderData = new OrderDto(order);
+        const orderData = new OrderDto(order, hideSecretData);
         return { order: orderData };
-    }
-
-    // spited with getOrder for more security
-    async getSteamAccountInfo(orderId) {
-        const order = await Order.findByPk(orderId);
-        if (!order) {
-            throw ApiError.BadRequest("Order not found");
-        }
-        return { username: order.steamUsername, password: order.steamPassword };
     }
 
     async getOrders(options) {
@@ -53,6 +45,10 @@ class OrderService {
             return next(ApiError.BadRequest("user not found"));
         }
 
+        if (userService.isExecutor(userId)) {
+            throw ApiError.BadRequest("Executor cant create orders");
+        }
+
         const hasNoPaidOrder = await Order.findOne({
             where: { paid: false, userId },
         });
@@ -78,6 +74,11 @@ class OrderService {
     async isOrderBelongsToExecutor(orderId, executorId) {
         const order = await Executor.findOne({ where: { id: executorId, orderId } });
         return order != null;
+    }
+
+    async isOrderTaken(orderId) {
+        const executor = await Executor.findOne({ where: { orderId } });
+        return executor != null;
     }
 }
 
