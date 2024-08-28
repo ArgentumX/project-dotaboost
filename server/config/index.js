@@ -44,7 +44,9 @@ module.exports = {
     ALLOWED_ORDER_FILTERS: ["userId", "closed", "steamGuard", "party", "priority"],
     ALLOWED_TICKET_FILTERS: ["userId", "closed", "verified"],
     ALLOWED_BATCH_FILTERS: ["executorId", "orderId"],
+    ALLOWED_RECORD_FILTERS: ["executorId", "orderId", "recordType"],
     DB_TICKET_SEARCH_LIMIT: 2,
     DB_ORDER_SEARCH_LIMIT: 2,
     DB_BATCH_SEARCH_LIMIT: 2,
+    DB_RECORD_SEARCH_LIMIT: 2,
 };

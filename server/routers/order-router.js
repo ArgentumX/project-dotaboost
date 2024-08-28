@@ -28,6 +28,13 @@ router.post(
     body(["startRating", "endRating"]).isNumeric(),
     orderController.createOrder
 );
+router.get(
+    "/record",
+    query(["executorId", "orderId"]).optional({ values: null }).isNumeric(),
+    query("offset").optional({ values: null }).isNumeric().custom(isNonNegative),
+    query("recordType").optional({ values: null }).isIn(Object.values(config.RECORDS.TYPE)),
+    orderController.getOrderRecords
+);
 router.get("/:id", param("id").isNumeric(), orderController.getOrder); // Returns order by id.
 router.post("/:id/take", authMiddleware, param("id").isNumeric(), orderController.takeOrder);
 router.post("/refuse", authMiddleware, orderController.refuseOrder);
