@@ -12,11 +12,13 @@ router.post(
     authMiddleware,
     body("isWin").isBoolean(),
     body(["receivedMMR", "orderId"]).isNumeric(),
+    imageUploadMiddleware(config.MAX_MB_SCREEN_FILESIZE),
     batchController.createBatch
 );
 router.post(
     "/screen",
     authMiddleware,
+    body("batchId").isNumeric(),
     imageUploadMiddleware(config.MAX_MB_SCREEN_FILESIZE),
     batchController.loadScreen
 );

@@ -6,24 +6,22 @@ const jwt = require("jsonwebtoken");
 const OrderDto = require("../dtos/order-dto");
 const { createFilter } = require("../utils/db-utils");
 const priceCalculator = require("../../global/prices/price-calculator");
+const userService = require("./user-service");
+const { Model } = require("sequelize");
+const executorService = require("./executor-service");
 
 class OrderService {
-    async getOrder(orderId) {
-        const order = await Order.findByPk(orderId);
-        if (!order) {
-            throw ApiError.BadRequest("Order not found");
-        }
-        const orderData = new OrderDto(order);
+    async getOrder(orderId, hideSecretData = true) {
+        const order = await this.getOrderModel(orderId);
+        const orderData = new OrderDto(order, hideSecretData);
         return { order: orderData };
     }
-
-    // spited with getOrder for more security
-    async getSteamAccountInfo(orderId) {
+    async getOrderModel(orderId) {
         const order = await Order.findByPk(orderId);
         if (!order) {
             throw ApiError.BadRequest("Order not found");
         }
-        return { username: order.steamUsername, password: order.steamPassword };
+        return order;
     }
 
     async getOrders(options) {
@@ -53,6 +51,10 @@ class OrderService {
             return next(ApiError.BadRequest("user not found"));
         }
 
+        if (userService.isExecutor(userId)) {
+            throw ApiError.BadRequest("Executor cant create orders");
+        }
+
         const hasNoPaidOrder = await Order.findOne({
             where: { paid: false, userId },
         });
@@ -68,6 +70,7 @@ class OrderService {
             steamUsername,
             steamPassword,
             startRating,
+            currentRating: startRating,
             endRating,
         });
         await order.setUser(user);
@@ -76,8 +79,40 @@ class OrderService {
     }
 
     async isOrderBelongsToExecutor(orderId, executorId) {
-        const order = await Executor.findOne({ where: { id: executorId, orderId } });
-        return order != null;
+        const executorModel = await this.getOrderExecutorModel(orderId);
+        return executorModel.id === executorId;
+    }
+
+    async isOrderTaken(orderId) {
+        try {
+            const executorModel = await this.getOrderExecutorModel(orderId);
+            return executorModel != null;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    async getOrderExecutorModel(orderId) {
+        const executor = await Executor.findOne({ where: { orderId } });
+        if (!executor) {
+            throw ApiError.BadRequest("Executor of this order not found");
+        }
+        return executor;
+    }
+    async closeOrder(orderModel) {
+        orderModel.closed = true;
+        await orderModel.save();
+        const executorModel = await this.getOrderExecutorModel(orderModel.id);
+        await executorService.refuseOrder(executorModel.userId);
+        return { message: "success" };
+    }
+    async addRatingPoints(orderModel, points) {
+        orderModel.currentRating += points;
+        await orderModel.save();
+        if (orderModel.endRating <= orderModel.currentRating) {
+            this.closeOrder(orderModel);
+        }
+        return { message: "success" };
     }
 }
 

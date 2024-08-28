@@ -7,6 +7,7 @@ const ExecutorDto = require("../dtos/executor-dto");
 const OrderDto = require("../dtos/order-dto");
 const recordService = require("./record-service");
 const userService = require("./user-service");
+const orderService = require("./order-service");
 
 class ExecutorService {
     async createExecutor(userId) {
@@ -50,6 +51,12 @@ class ExecutorService {
         const order = await Order.findByPk(orderId);
         if (!order) {
             throw ApiError.BadRequest("order not found");
+        }
+        if (order.closed) {
+            throw ApiError.BadRequest("order was closed");
+        }
+        if (await orderService.isOrderTaken(orderId)) {
+            throw ApiError.BadRequest("Order is already taken");
         }
         await order.setExecutor(executor);
         await recordService.createOrderRecord(

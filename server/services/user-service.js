@@ -8,6 +8,7 @@ const roleService = require("./role-service");
 const UserDto = require("../dtos/user-dto");
 const ApiError = require("../errors/api-error");
 const fileUtils = require("../utils/file-utils");
+const { Executor } = require("../models/models");
 
 async function setPassword(user, password) {
     const passwordHash = await this.getPasswordHash(password);
@@ -171,6 +172,11 @@ class UserService {
             throw ApiError.BadRequest(config.MESSAGES.USER_NOT_FOUND);
         }
         return await setPassword(user, newPassword);
+    }
+
+    async isExecutor(userId) {
+        const executor = await Executor.findOne({ where: { userId } });
+        return executor != null;
     }
 }
 

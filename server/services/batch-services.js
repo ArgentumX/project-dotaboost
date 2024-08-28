@@ -26,7 +26,7 @@ class BatchService {
         return anyBatch != null;
     }
 
-    async createBatch(executorId, orderId, receivedMMR, isWin) {
+    async createBatch(executorId, orderId, receivedMMR, isWin, screen) {
         const uncompletedBatch = await this.getAnyUncompletedBatch(executorId);
         if (uncompletedBatch != null) {
             throw ApiError.BadRequest(
@@ -36,7 +36,20 @@ class BatchService {
         if (!(await orderService.isOrderBelongsToExecutor(orderId, executorId))) {
             throw ApiError.NoPermissions();
         }
-        const batch = await Batch.create({ executorId, orderId, receivedMMR, isWin });
+        const orderModel = await orderService.getOrderModel(orderId);
+        if (orderModel.closed) {
+            throw ApiError.BadRequest("order was closed");
+        }
+        receivedMMR *= isWin ? 1 : -1;
+        await orderService.addRatingPoints(orderModel, receivedMMR);
+        const screenPath = fileUtils.createStaticImage(screen, config.SCREEN_FILE_PREFIX);
+        const batch = await Batch.create({
+            executorId,
+            orderId,
+            receivedMMR,
+            isWin,
+            screen: screenPath,
+        });
         const batchData = new BatchDto(batch);
         return { batch: batchData };
     }
