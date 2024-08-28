@@ -4,6 +4,7 @@ import { Checkbox, FormControlLabel, Typography } from "@mui/material";
 import Calculator from "../components/Calculator";
 import { Context } from "..";
 import swal from 'sweetalert';
+import { checkboxChildrenStyle, checkboxStyle, sliderStyle, textStyle } from "../utils/mui_styles";
 
 function Order() {
     const openedEye = "src/assets/img/view.png";
@@ -26,38 +27,6 @@ function Order() {
     useEffect(() => {
         setCost(Calculator(startMMR, endMMR, party, priority, steamguard, time))
     }, [startMMR, endMMR, party, priority, steamguard, time])
-
-    const sliderStyle = {
-        color: 'rgb(196, 44, 33)',
-        width: 600,
-        '& .MuiSlider-thumb': {
-            '&:hover, &.Mui-focusVisible': {
-                boxShadow: `0px 0px 0px 8px rgba(255, 100, 100, 0.1)`,
-            },
-            '&.Mui-active': {
-                boxShadow: `0px 0px 0px 14px rgba(255, 100, 100, 0.1)`,
-            },
-        },
-    }
-
-    const checkboxStyle = {
-        color: 'rgb(99,99,99)',
-        '&.Mui-checked': {
-            color: 'rgba(230, 50, 50, 1.0)',
-        },
-    }
-
-    const checkboxChildrenStyle = {
-        position: 'relative',
-        left: '1.5em',
-    }
-
-    const textStyle = {
-        fontFamily: 'Nunito',
-        fontWeight: 500,
-        fontSize: "1.07em",
-        color: 'rgba(255, 255, 255, 0.87)',
-    }
 
     const submit = () => {
         if (startMMR > endMMR) {
