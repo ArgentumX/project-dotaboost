@@ -56,37 +56,37 @@ ExecutorComment.belongsTo(User);
 User.belongsToMany(Chat, { through: UserChat });
 Chat.belongsToMany(User, { through: UserChat });
 
-Chat.hasMany(Message);
+Chat.hasMany(Message, { onDelete: "CASCADE" });
 Message.belongsTo(Chat);
 
 User.hasMany(Message);
 Message.belongsTo(User);
 
-User.hasOne(Executor);
+User.hasOne(Executor, { onDelete: "CASCADE" });
 Executor.belongsTo(User);
 
 User.hasMany(ExecutorRate);
 ExecutorRate.belongsTo(User);
 
-Executor.hasMany(ExecutorComment);
+Executor.hasMany(ExecutorComment, { onDelete: "CASCADE" });
 ExecutorComment.belongsTo(Executor);
 
 Executor.hasMany(Record);
 Record.belongsTo(Executor);
 
-Order.hasMany(Record);
+Order.hasMany(Record, { onDelete: "CASCADE" });
 Record.belongsTo(Order);
 
 Executor.hasMany(Batch);
 Batch.belongsTo(Executor);
 
-Executor.hasMany(ExecutorRate);
+Executor.hasMany(ExecutorRate, { onDelete: "CASCADE" });
 ExecutorRate.belongsTo(Executor);
 
-Order.hasOne(Executor);
+Order.hasOne(Executor, { onDelete: "SET_NULL" });
 Executor.belongsTo(Order);
 
-Order.hasMany(Batch);
+Order.hasMany(Batch, { onDelete: "CASCADE" });
 Batch.belongsTo(Order);
 
 User.belongsToMany(Role, { through: UserRole });
@@ -99,7 +99,7 @@ User.afterCreate(async (user, options) => {
 User.hasMany(ExecutorTicket);
 ExecutorTicket.belongsTo(User);
 
-User.hasMany(Token);
+User.hasMany(Token, { onDelete: "CASCADE" });
 Token.belongsTo(User);
 
 module.exports = {

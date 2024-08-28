@@ -19,12 +19,17 @@ class ExecutorService {
         const executorData = new ExecutorDto(executor);
         return { executor: executorData };
     }
-    async getExecutorId(userId) {
-        const executor = await Executor.findOne({ where: userId });
+    async getExecutorModelByUserId(userId) {
+        const executor = await Executor.findOne({ where: { userId } });
         if (!executor) {
             throw ApiError.BadRequest("executor not found");
         }
-        return executor.id;
+        return executor;
+    }
+
+    async getExecutorByUserId(userId) {
+        const executor = await this.getExecutorModelByUserId(userId);
+        return { executor: new ExecutorDto(executor) };
     }
 
     async takeOrder(userId, orderId) {

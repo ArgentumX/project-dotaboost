@@ -49,8 +49,6 @@ router.get("/activate/:link", userController.activate);
 
 router.get("/refresh", userController.refresh);
 
-router.get("/:id", param("id").isNumeric(), userController.getUser);
-
 router.post("/send-recover-mail", body("email").isEmail(), userController.sendRecoverMail);
 
 router.post(
@@ -76,5 +74,9 @@ router.get(
     param("executorId").isNumeric(),
     userController.getExecutorComments
 );
+
+router.get("/executor", body("userId").isNumeric(), userController.getExecutorByUserId);
+
+router.get("/:id", param("id").isNumeric(), userController.getUser);
 
 module.exports = router;

@@ -9,6 +9,14 @@ const UserDto = require("../dtos/user-dto");
 const ApiError = require("../errors/api-error");
 const fileUtils = require("../utils/file-utils");
 
+async function setPassword(user, password) {
+    const passwordHash = await this.getPasswordHash(password);
+    user.password = passwordHash;
+    await user.save();
+    await this.logoutById(user.id);
+    return await this.createUserTokens(user);
+}
+
 class UserService {
     async registration(email, username, password) {
         const candidateByUsername = await User.findOne({ where: { username } });
@@ -140,7 +148,7 @@ class UserService {
         if (!isRightPassword) {
             throw ApiError.BadRequest("Wrong email or password");
         }
-        return await this.setPassword(user, newPassword);
+        return await setPassword(user, newPassword);
     }
 
     async recoverAccess(token, newPassword) {
@@ -153,16 +161,7 @@ class UserService {
         if (!user) {
             throw ApiError.BadRequest(config.MESSAGES.USER_NOT_FOUND);
         }
-        return await this.setPassword(user, newPassword);
-    }
-
-    // Do not call this from any controller (only for internal using);
-    async setPassword(user, password) {
-        const passwordHash = await this.getPasswordHash(password);
-        user.password = passwordHash;
-        await user.save();
-        await this.logoutById(user.id);
-        return await this.createUserTokens(user);
+        return await setPassword(user, newPassword);
     }
 }
 
