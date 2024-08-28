@@ -40,6 +40,8 @@ class BatchService {
         if (orderModel.closed) {
             throw ApiError.BadRequest("order was closed");
         }
+        receivedMMR *= isWin ? 1 : -1;
+        await orderService.addRatingPoints(orderModel, receivedMMR);
         const batch = await Batch.create({ executorId, orderId, receivedMMR, isWin });
         const batchData = new BatchDto(batch);
         return { batch: batchData };
