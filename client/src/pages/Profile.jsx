@@ -4,7 +4,7 @@ import { observer } from "mobx-react-lite";
 import { toggleImageUpload } from "../components/ImageUpload";
 import NavHorizontal from "../components/NavHorizontal";
 import NavItem from "../components/NavItem";
-import { VERIFICATION_ROUTE } from "../utils/consts";
+import { PASSWORD_RESET_ROUTE, VERIFICATION_ROUTE } from "../utils/consts";
 
 const Profile = observer(() => {
     const { store } = useContext(Context)
@@ -21,7 +21,7 @@ const Profile = observer(() => {
                 <h1>{store.user.username}</h1>
                 <h4>Баланс: {store.user.balance.toFixed(2)} ₽</h4>
                 <NavHorizontal>
-                    <NavItem text="Смена пароля" link="#" />
+                    <NavItem text="Смена пароля" link={PASSWORD_RESET_ROUTE} />
                     <NavItem text="Смена почты" link="#" />
                     <NavItem text="Пройти верификацию бустера" link={VERIFICATION_ROUTE}/>
                 </NavHorizontal>
