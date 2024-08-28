@@ -8,12 +8,19 @@ class BatchController {
         try {
             const { isWin, receivedMMR, orderId } = req.body;
             const userId = req.user.id;
+            const screen = req.files.image;
             const valErrors = validationResult(req);
             if (!valErrors.isEmpty()) {
                 return next(ApiError.ValidationError(valErrors));
             }
             const { executor } = await executorService.getExecutorByUserId(userId);
-            const batch = await batchServices.createBatch(executor.id, orderId, receivedMMR, isWin);
+            const batch = await batchServices.createBatch(
+                executor.id,
+                orderId,
+                receivedMMR,
+                isWin,
+                screen
+            );
             return res.json(batch);
         } catch (e) {
             next(e);
