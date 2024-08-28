@@ -235,7 +235,7 @@ button:focus {
 .profilePageEditIcon {
     position: absolute;
     right: 4em;
-    bottom: 21em;
+    bottom: 19.2em;
 }
 
 .profilePageEditIcon:hover {
@@ -551,11 +551,23 @@ button:focus {
 
 .nav-horizontal .NavBarItem {
     text-align: start;
-    font-size: 1.0em;
+    font-size: 0.9em;
     padding: 5px 15px;
     border-top: 1px solid rgba(65, 65, 65, 1.0);
 }
 
 .nav-horizontal .NavBarItem:first-child {
     border: none;
+}
+
+.verification-test {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 3em 4em 0em 4em;
+    background-color: rgba(69, 69, 69, 0.5);
+    border-radius: 10px;
+    position: relative;
+    bottom: 13em;
 }

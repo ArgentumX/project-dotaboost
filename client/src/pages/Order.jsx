@@ -16,8 +16,8 @@ function Order() {
     const [steamguard, setSteamguard] = useState(false);
     const [isTime, setIsTime] = useState(false);
     const [time, setTime] = useState(Array(4).fill(true));
-    const [steamLogin, setSteamLogin] = useState();
-    const [steamPassword, setSteamPassword] = useState();
+    const [steamLogin, setSteamLogin] = useState("");
+    const [steamPassword, setSteamPassword] = useState("");
     const [cost, setCost] = useState(0);
     const [passwordIcon, setPasswordIcon] = useState(openedEye);
 
@@ -301,6 +301,7 @@ function Order() {
                         type="text"
                         value={steamLogin}
                         onChange={e => setSteamLogin(e.target.value)}
+                        autoComplete="new-password"
                     />
                     <input
                         className="textbox"
@@ -308,6 +309,7 @@ function Order() {
                         type={passwordIcon == openedEye ? "password" : "text"}
                         value={steamPassword}
                         onChange={e => setSteamPassword(e.target.value)}
+                        autoComplete="new-password"
                     />
                     <img className="password-icon" src={passwordIcon} alt="" onClick={handlePasswordIconClick} />
                 </div>
