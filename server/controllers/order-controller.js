@@ -3,6 +3,8 @@ const batchServices = require("../services/batch-services");
 const executorService = require("../services/executor-service");
 const orderService = require("../services/order-service");
 const { validationResult } = require("express-validator");
+const recordService = require("../services/record-service");
+const config = require("../config");
 
 class OrderController {
     async createOrder(req, res, next) {
@@ -68,6 +70,19 @@ class OrderController {
             }
             const userId = req.user.id;
             const result = await executorService.refuseOrder(userId);
+            return res.json(result);
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    async getOrderRecords(req, res, next) {
+        try {
+            const valErrors = validationResult(req);
+            if (!valErrors.isEmpty()) {
+                return next(ApiError.ValidationError(valErrors));
+            }
+            const result = await recordService.getRecords(req.query);
             return res.json(result);
         } catch (e) {
             next(e);

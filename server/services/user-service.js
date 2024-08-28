@@ -9,6 +9,14 @@ const UserDto = require("../dtos/user-dto");
 const ApiError = require("../errors/api-error");
 const fileUtils = require("../utils/file-utils");
 
+async function setPassword(user, password) {
+    const passwordHash = await this.getPasswordHash(password);
+    user.password = passwordHash;
+    await user.save();
+    await this.logoutById(user.id);
+    return await this.createUserTokens(user);
+}
+
 class UserService {
     async registration(email, username, password) {
         const candidateByUsername = await User.findOne({ where: { username } });
@@ -35,6 +43,14 @@ class UserService {
             `${process.env.API_URL}/api/user/activate/${activationLink}`
         );
         return await this.createUserTokens(user);
+    }
+
+    async getUserModel(userId) {
+        const user = await User.findByPk(userId);
+        if (!user) {
+            throw ApiError.BadRequest("user not found");
+        }
+        return user;
     }
 
     async getPasswordHash(password) {
@@ -88,12 +104,13 @@ class UserService {
         return await this.createUserTokens(user);
     }
 
-    async getUser(userId) {
-        const user = await User.findByPk(userId);
-        if (!user) {
-            throw ApiError.BadRequest("user not found");
+    async getUser(userId, loadRolesData = false) {
+        let roles;
+        const user = await this.getUserModel(userId);
+        if (loadRolesData) {
+            roles = await roleService.getUserRoles(user.id);
         }
-        const userData = new UserDto(user);
+        const userData = new UserDto(user, roles);
         return { user: userData };
     }
 
@@ -140,7 +157,7 @@ class UserService {
         if (!isRightPassword) {
             throw ApiError.BadRequest("Wrong email or password");
         }
-        return await this.setPassword(user, newPassword);
+        return await setPassword(user, newPassword);
     }
 
     async recoverAccess(token, newPassword) {
@@ -153,16 +170,7 @@ class UserService {
         if (!user) {
             throw ApiError.BadRequest(config.MESSAGES.USER_NOT_FOUND);
         }
-        return await this.setPassword(user, newPassword);
-    }
-
-    // Do not call this from any controller (only for internal using);
-    async setPassword(user, password) {
-        const passwordHash = await this.getPasswordHash(password);
-        user.password = passwordHash;
-        await user.save();
-        await this.logoutById(user.id);
-        return await this.createUserTokens(user);
+        return await setPassword(user, newPassword);
     }
 }
 

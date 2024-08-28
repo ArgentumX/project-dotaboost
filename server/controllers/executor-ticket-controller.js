@@ -33,6 +33,16 @@ class ExecutorTicketController {
             next(e);
         }
     }
+
+    async getUserOpenedTicket(req, res, next) {
+        try {
+            const userId = req.user.id;
+            const ticketData = await executorTicketService.getUserOpenedTicket(userId);
+            return res.json(ticketData);
+        } catch (e) {
+            next(e);
+        }
+    }
     async getExecutorTicket(req, res, next) {
         try {
             const { id } = req.params;

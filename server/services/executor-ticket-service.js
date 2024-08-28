@@ -79,6 +79,14 @@ class ExecutorTicketService {
         return { ticket: ticketData };
     }
 
+    async getUserOpenedTicket(userId) {
+        const ticket = await ExecutorTicket.findOne({ where: { userId, closed: false } });
+        if (!ticket) {
+            throw ApiError.BadRequest("open ticket not found");
+        }
+        return { ticket: new ExecutorTicketDto(ticket) };
+    }
+
     async getTickets(options) {
         const tickets = await ExecutorTicket.findAll({
             limit: config.DB_TICKET_SEARCH_LIMIT,

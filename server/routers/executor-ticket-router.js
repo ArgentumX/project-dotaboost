@@ -38,5 +38,6 @@ router.get(
     param("id").isNumeric(),
     executorTicketController.getExecutorTicket
 );
+router.get("/", authMiddleware, executorTicketController.getUserOpenedTicket);
 
 module.exports = router;

@@ -12,7 +12,7 @@ class BatchController {
             if (!valErrors.isEmpty()) {
                 return next(ApiError.ValidationError(valErrors));
             }
-            const executorId = await executorService.getExecutorId(userId);
+            const executorId = await executorService.getExecutorByUserId(userId).id;
             const batch = await batchServices.createBatch(executorId, orderId, receivedMMR, isWin);
             return res.json(batch);
         } catch (e) {
@@ -24,7 +24,7 @@ class BatchController {
             const image = req.files.image;
             const { batchId } = req.body;
             const userData = req.user;
-            const executorId = await executorService.getExecutorId(userData.id);
+            const executorId = await executorService.getExecutorByUserId(userData.id).id;
             const result = await batchServices.loadScreen(executorId, batchId, image);
             return res.json(result);
         } catch (e) {

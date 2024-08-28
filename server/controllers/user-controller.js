@@ -10,6 +10,7 @@ const config = require("../config");
 const userService = require("../services/user-service");
 const commentService = require("../services/comment-service");
 const mailService = require("../services/mail-service");
+const executorService = require("../services/executor-service");
 
 class UserController {
     async registration(req, res, next) {
@@ -152,6 +153,19 @@ class UserController {
             }
             const userData = await userService.getUser(id);
             return res.json(userData);
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    async getExecutorByUserId(req, res, next) {
+        try {
+            const { userId, loadUserData = false } = req.body;
+            const valErrors = validationResult(req);
+            if (!valErrors.isEmpty()) {
+                throw ApiError.ValidationError(valErrors);
+            }
+            return res.json(await executorService.getExecutorByUserId(userId, loadUserData));
         } catch (e) {
             next(e);
         }

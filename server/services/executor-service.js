@@ -6,6 +6,7 @@ const roleService = require("./role-service");
 const ExecutorDto = require("../dtos/executor-dto");
 const OrderDto = require("../dtos/order-dto");
 const recordService = require("./record-service");
+const userService = require("./user-service");
 
 class ExecutorService {
     async createExecutor(userId) {
@@ -19,12 +20,23 @@ class ExecutorService {
         const executorData = new ExecutorDto(executor);
         return { executor: executorData };
     }
-    async getExecutorId(userId) {
-        const executor = await Executor.findOne({ where: userId });
+    async getExecutorModelByUserId(userId) {
+        const executor = await Executor.findOne({ where: { userId } });
         if (!executor) {
             throw ApiError.BadRequest("executor not found");
         }
-        return executor.id;
+        return executor;
+    }
+
+    async getExecutorByUserId(userId, loadUserData = false) {
+        let result = {};
+        const executor = await this.getExecutorModelByUserId(userId);
+        if (loadUserData) {
+            const { user } = await userService.getUser(userId, true);
+            result.user = user;
+        }
+        result.executor = new ExecutorDto(executor);
+        return result;
     }
 
     async takeOrder(userId, orderId) {
