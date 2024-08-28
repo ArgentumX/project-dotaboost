@@ -160,12 +160,12 @@ class UserController {
 
     async getExecutorByUserId(req, res, next) {
         try {
-            const { userId } = req.body;
+            const { userId, loadUserData = false } = req.body;
             const valErrors = validationResult(req);
             if (!valErrors.isEmpty()) {
                 throw ApiError.ValidationError(valErrors);
             }
-            return res.json(await executorService.getExecutorByUserId(userId));
+            return res.json(await executorService.getExecutorByUserId(userId, loadUserData));
         } catch (e) {
             next(e);
         }

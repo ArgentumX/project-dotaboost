@@ -6,6 +6,7 @@ const roleService = require("./role-service");
 const ExecutorDto = require("../dtos/executor-dto");
 const OrderDto = require("../dtos/order-dto");
 const recordService = require("./record-service");
+const userService = require("./user-service");
 
 class ExecutorService {
     async createExecutor(userId) {
@@ -27,9 +28,15 @@ class ExecutorService {
         return executor;
     }
 
-    async getExecutorByUserId(userId) {
+    async getExecutorByUserId(userId, loadUserData = false) {
+        let result = {};
         const executor = await this.getExecutorModelByUserId(userId);
-        return { executor: new ExecutorDto(executor) };
+        if (loadUserData) {
+            const { user } = await userService.getUser(userId, true);
+            result.user = user;
+        }
+        result.executor = new ExecutorDto(executor);
+        return result;
     }
 
     async takeOrder(userId, orderId) {

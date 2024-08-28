@@ -75,7 +75,12 @@ router.get(
     userController.getExecutorComments
 );
 
-router.get("/executor", body("userId").isNumeric(), userController.getExecutorByUserId);
+router.get(
+    "/executor",
+    body("userId").isNumeric(),
+    body("loadUserData").optional({ values: null }).isBoolean(),
+    userController.getExecutorByUserId
+);
 
 router.get("/:id", param("id").isNumeric(), userController.getUser);
 

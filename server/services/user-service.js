@@ -45,6 +45,14 @@ class UserService {
         return await this.createUserTokens(user);
     }
 
+    async getUserModel(userId) {
+        const user = await User.findByPk(userId);
+        if (!user) {
+            throw ApiError.BadRequest("user not found");
+        }
+        return user;
+    }
+
     async getPasswordHash(password) {
         return bcrypt.hash(password, Number(process.env.HASH_REPEAT));
     }
@@ -96,12 +104,13 @@ class UserService {
         return await this.createUserTokens(user);
     }
 
-    async getUser(userId) {
-        const user = await User.findByPk(userId);
-        if (!user) {
-            throw ApiError.BadRequest("user not found");
+    async getUser(userId, loadRolesData = false) {
+        let roles;
+        const user = await this.getUserModel(userId);
+        if (loadRolesData) {
+            roles = await roleService.getUserRoles(user.id);
         }
-        const userData = new UserDto(user);
+        const userData = new UserDto(user, roles);
         return { user: userData };
     }
 
