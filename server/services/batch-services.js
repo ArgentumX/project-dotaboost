@@ -36,6 +36,10 @@ class BatchService {
         if (!(await orderService.isOrderBelongsToExecutor(orderId, executorId))) {
             throw ApiError.NoPermissions();
         }
+        const orderModel = await orderService.getOrderModel(orderId);
+        if (orderModel.closed) {
+            throw ApiError.BadRequest("order was closed");
+        }
         const batch = await Batch.create({ executorId, orderId, receivedMMR, isWin });
         const batchData = new BatchDto(batch);
         return { batch: batchData };

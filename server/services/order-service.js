@@ -10,12 +10,16 @@ const userService = require("./user-service");
 
 class OrderService {
     async getOrder(orderId, hideSecretData = true) {
+        const order = await this.getOrderModel(orderId);
+        const orderData = new OrderDto(order, hideSecretData);
+        return { order: orderData };
+    }
+    async getOrderModel(orderId) {
         const order = await Order.findByPk(orderId);
         if (!order) {
             throw ApiError.BadRequest("Order not found");
         }
-        const orderData = new OrderDto(order, hideSecretData);
-        return { order: orderData };
+        return order;
     }
 
     async getOrders(options) {
@@ -72,8 +76,10 @@ class OrderService {
     }
 
     async isOrderBelongsToExecutor(orderId, executorId) {
-        const order = await Executor.findOne({ where: { id: executorId, orderId } });
-        return order != null;
+        const executorOwnsThisOrder = await Executor.findOne({
+            where: { id: executorId, orderId },
+        });
+        return executorOwnsThisOrder != null;
     }
 
     async isOrderTaken(orderId) {
