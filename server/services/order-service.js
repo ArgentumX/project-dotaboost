@@ -53,7 +53,7 @@ class OrderService {
             return next(ApiError.BadRequest("user not found"));
         }
 
-        if (userService.isExecutor(userId)) {
+        if (await userService.isExecutor(userId)) {
             throw ApiError.BadRequest("Executor cant create orders");
         }
 
