@@ -85,7 +85,7 @@ Batch.belongsTo(Executor);
 Executor.hasMany(ExecutorRate, { onDelete: "CASCADE" });
 ExecutorRate.belongsTo(Executor);
 
-Order.hasOne(Executor, { onDelete: "SET_NULL" });
+Order.hasOne(Executor);
 Executor.belongsTo(Order);
 
 Order.hasMany(Batch, { onDelete: "CASCADE" });
