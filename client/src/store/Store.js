@@ -50,7 +50,7 @@ export default class Store {
             this.setUser(response.data.user);
             this.user.avatar = this.user.avatar ? API_URL + this.user.avatar : null;
         } catch (e) {
-            if (e.response?.data?.message == 'wrong email or password') {
+            if (e.response?.data?.message == 'Wrong email or password') {
                 swal({
                     title: "Oшибка",
                     text: "Неверный пароль или почта.",
