@@ -5,6 +5,7 @@ import Calculator from "../components/Calculator";
 import { Context } from "..";
 import swal from 'sweetalert';
 import { checkboxChildrenStyle, checkboxStyle, sliderStyle, textStyle } from "../utils/mui_styles";
+import { useNavigate } from "react-router-dom";
 
 function Order() {
     const openedEye = "src/assets/img/view.png";
@@ -24,6 +25,8 @@ function Order() {
     const firstRender = useRef(true);
 
     const { store } = useContext(Context);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         setCost(Calculator(startMMR, endMMR, party, priority, steamguard, time))
@@ -87,6 +90,7 @@ function Order() {
         };
 
         store.createOrder(startMMR, endMMR, party, priority, steamguard, playtimeObject, steamLogin, steamPassword);
+        navigate(MAINPAGE_ROUTE); 
     }
 
     const handlePasswordIconClick = () => {
