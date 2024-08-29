@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const ExecutorTicketDto = require("../dtos/executor-ticket-dto");
 const fileUtils = require("../utils/file-utils");
 const { createFilter } = require("../utils/db-utils");
+const { generateRandomString } = require("../utils/utils");
 
 class ExecutorTicketService {
     async createTicket(userId) {
@@ -20,7 +21,7 @@ class ExecutorTicketService {
             throw ApiError.BadRequest("user already has opened ticket");
         }
         const ticket = await ExecutorTicket.create({
-            requiredUsername: this.generateRequiredUsername(10),
+            requiredUsername: generateRandomString(10),
         });
         await user.addExecutorTicket(ticket);
         const ticketData = new ExecutorTicketDto(ticket);
@@ -112,15 +113,6 @@ class ExecutorTicketService {
         ticket.image = fileUtils.createStaticImage(image, config.SCREEN_FILE_PREFIX);
         await ticket.save();
         return { screen: ticket.image };
-    }
-    generateRequiredUsername(length) {
-        const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        let result = "";
-        for (let i = 0; i < length; i++) {
-            const randomIndex = Math.floor(Math.random() * alphabet.length);
-            result += alphabet[randomIndex];
-        }
-        return result;
     }
 }
 

@@ -8,6 +8,7 @@ const OrderDto = require("../dtos/order-dto");
 const recordService = require("./record-service");
 const userService = require("./user-service");
 const orderService = require("./order-service");
+const tgBotService = require("./tg-bot-service");
 
 class ExecutorService {
     async createExecutor(userId) {
@@ -38,57 +39,6 @@ class ExecutorService {
         }
         result.executor = new ExecutorDto(executor);
         return result;
-    }
-
-    async takeOrder(userId, orderId) {
-        const executor = await Executor.findOne({ where: { userId } });
-        if (!executor) {
-            throw ApiError.BadRequest("executor not found");
-        }
-        if (executor.orderId) {
-            throw ApiError.BadRequest("cant take more than one order simultaneously");
-        }
-        const order = await Order.findByPk(orderId);
-        if (!order) {
-            throw ApiError.BadRequest("order not found");
-        }
-        if (order.closed) {
-            throw ApiError.BadRequest("order was closed");
-        }
-        if (await orderService.isOrderTaken(orderId)) {
-            throw ApiError.BadRequest("Order is already taken");
-        }
-        await order.setExecutor(executor);
-        await recordService.createOrderRecord(
-            order,
-            executor,
-            config.MESSAGES.EXECUTOR_TAKE_ORDER,
-            config.RECORDS.TYPE.TAKE_ORDER
-        );
-        const orderData = new OrderDto(order, false);
-        return { order: orderData };
-    }
-
-    async refuseOrder(userId) {
-        const executor = await Executor.findOne({ where: { userId } });
-        if (!executor) {
-            throw ApiError.BadRequest("executor not found");
-        }
-        if (!executor.orderId) {
-            throw ApiError.BadRequest("executor has not any taken order");
-        }
-        const order = await Order.findByPk(executor.orderId);
-        if (!order) {
-            throw ApiError.BadRequest("order not found");
-        }
-        await recordService.createOrderRecord(
-            order,
-            executor,
-            config.MESSAGES.EXECUTOR_REFUSE_ORDER,
-            config.RECORDS.TYPE.REFUSE_ORDER
-        );
-        await executor.setOrder(null);
-        return { message: "success" };
     }
 }
 module.exports = new ExecutorService();

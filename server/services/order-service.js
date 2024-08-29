@@ -9,6 +9,8 @@ const priceCalculator = require("../../global/prices/price-calculator");
 const userService = require("./user-service");
 const { Model } = require("sequelize");
 const executorService = require("./executor-service");
+const tgBotService = require("./tg-bot-service");
+const recordService = require("./record-service");
 
 class OrderService {
     async getOrder(orderId, hideSecretData = true) {
@@ -103,7 +105,7 @@ class OrderService {
         orderModel.closed = true;
         await orderModel.save();
         const executorModel = await this.getOrderExecutorModel(orderModel.id);
-        await executorService.refuseOrder(executorModel.userId);
+        await this.refuseOrder(executorModel.userId);
         return { message: "success" };
     }
     async addRatingPoints(orderModel, points) {
@@ -112,6 +114,61 @@ class OrderService {
         if (orderModel.endRating <= orderModel.currentRating) {
             this.closeOrder(orderModel);
         }
+        return { message: "success" };
+    }
+
+    async takeOrder(userId, orderId) {
+        const executor = await Executor.findOne({ where: { userId } });
+        if (!executor) {
+            throw ApiError.BadRequest("executor not found");
+        }
+        if (executor.orderId) {
+            throw ApiError.BadRequest("cant take more than one order simultaneously");
+        }
+        const order = await Order.findByPk(orderId);
+        if (!order) {
+            throw ApiError.BadRequest("order not found");
+        }
+        if (order.closed) {
+            throw ApiError.BadRequest("order was closed");
+        }
+        if (await this.isOrderTaken(orderId)) {
+            throw ApiError.BadRequest("Order is already taken");
+        }
+        await order.setExecutor(executor);
+        await recordService.createOrderRecord(
+            order,
+            executor,
+            config.MESSAGES.EXECUTOR_TAKE_ORDER,
+            config.RECORDS.TYPE.TAKE_ORDER
+        );
+        tgBotService.sendMessageByUserId(
+            order.userId,
+            `заказ ${order.id} был взят новым исполнителем`
+        );
+        const orderData = new OrderDto(order, false);
+        return { order: orderData };
+    }
+
+    async refuseOrder(userId) {
+        const executor = await Executor.findOne({ where: { userId } });
+        if (!executor) {
+            throw ApiError.BadRequest("executor not found");
+        }
+        if (!executor.orderId) {
+            throw ApiError.BadRequest("executor has not any taken order");
+        }
+        const order = await Order.findByPk(executor.orderId);
+        if (!order) {
+            throw ApiError.BadRequest("order not found");
+        }
+        await recordService.createOrderRecord(
+            order,
+            executor,
+            config.MESSAGES.EXECUTOR_REFUSE_ORDER,
+            config.RECORDS.TYPE.REFUSE_ORDER
+        );
+        await executor.setOrder(null);
         return { message: "success" };
     }
 }

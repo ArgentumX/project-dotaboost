@@ -10,6 +10,7 @@ const BatchDto = require("../dtos/batch-dto");
 const { createFilter } = require("../utils/db-utils");
 const fileUtils = require("../utils/file-utils");
 const { Op } = require("sequelize");
+const tgBotService = require("./tg-bot-service");
 
 class BatchService {
     async isExecutorServiceUsed(userId, executorId) {
@@ -40,6 +41,7 @@ class BatchService {
         if (orderModel.closed) {
             throw ApiError.BadRequest("order was closed");
         }
+        isWin = isWin === "true";
         receivedMMR *= isWin ? 1 : -1;
         await orderService.addRatingPoints(orderModel, receivedMMR);
         const screenPath = fileUtils.createStaticImage(screen, config.SCREEN_FILE_PREFIX);
@@ -50,6 +52,10 @@ class BatchService {
             isWin,
             screen: screenPath,
         });
+        tgBotService.sendMessageByUserId(
+            orderModel.userId,
+            `заказ ${orderModel.id} изменение на: ${isWin ? "+" : ""}${receivedMMR} ммр`
+        );
         const batchData = new BatchDto(batch);
         return { batch: batchData };
     }

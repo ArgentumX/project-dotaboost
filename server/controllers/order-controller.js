@@ -56,7 +56,7 @@ class OrderController {
             }
             const { id } = req.params;
             const userId = req.user.id;
-            const result = await executorService.takeOrder(userId, id);
+            const result = await orderService.takeOrder(userId, id);
             return res.json(result);
         } catch (e) {
             next(e);
@@ -69,7 +69,7 @@ class OrderController {
                 return next(ApiError.ValidationError(valErrors));
             }
             const userId = req.user.id;
-            const result = await executorService.refuseOrder(userId);
+            const result = await orderService.refuseOrder(userId);
             return res.json(result);
         } catch (e) {
             next(e);

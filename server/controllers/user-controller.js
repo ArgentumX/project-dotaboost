@@ -11,6 +11,7 @@ const userService = require("../services/user-service");
 const commentService = require("../services/comment-service");
 const mailService = require("../services/mail-service");
 const executorService = require("../services/executor-service");
+const tgBotService = require("../services/tg-bot-service");
 
 class UserController {
     async registration(req, res, next) {
@@ -199,6 +200,21 @@ class UserController {
             const recoverLink = await userService.getRecoverLink(email);
             await mailService.sendRecoverMail(email, recoverLink);
             return res.json({ message: "success" });
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    async hookTelegram(req, res, next) {
+        try {
+            const { hookKey } = req.body;
+            const userId = req.user.id;
+            const valErrors = validationResult(req);
+            if (!valErrors.isEmpty()) {
+                throw ApiError.ValidationError(valErrors);
+            }
+            const result = await tgBotService.hookAccount(userId, hookKey);
+            return res.json(result);
         } catch (e) {
             next(e);
         }

@@ -11,6 +11,8 @@ const User = sequelize.define("user", {
     balance: { type: DataTypes.FLOAT, defaultValue: 0.0 },
     avatar: { type: DataTypes.STRING },
     isActivated: { type: DataTypes.BOOLEAN, defaultValue: false },
+    vk: { type: DataTypes.STRING(64) },
+    telegram: { type: DataTypes.STRING(64) },
     activationLink: {
         type: DataTypes.STRING(64),
         allowNull: false,

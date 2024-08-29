@@ -13,6 +13,7 @@ const roleService = require("../services/role-service.js");
 const config = require("../config");
 const { Token } = require("./token-model.js");
 const { RecordModel, Record } = require("./record-model.js");
+const { TgHook } = require("./tg-hook-model.js");
 
 // TODO rework models.js
 const Order = sequelize.define("order", {
@@ -23,8 +24,6 @@ const Order = sequelize.define("order", {
     playTime: { type: DataTypes.JSON },
     steamUsername: { type: DataTypes.STRING(32), allowNull: false },
     steamPassword: { type: DataTypes.STRING(64), allowNull: false },
-    vk: { type: DataTypes.STRING(64) },
-    telegram: { type: DataTypes.STRING(64) },
     paid: { type: DataTypes.BOOLEAN, defaultValue: false },
     closed: { type: DataTypes.BOOLEAN, defaultValue: false },
     startRating: { type: DataTypes.INTEGER, allowNull: false },
@@ -49,6 +48,9 @@ const ExecutorTicket = sequelize.define("executorTicket", {
 
 User.hasMany(Order);
 Order.belongsTo(User);
+
+User.hasOne(TgHook);
+TgHook.belongsTo(User);
 
 User.hasMany(ExecutorComment);
 ExecutorComment.belongsTo(User);
