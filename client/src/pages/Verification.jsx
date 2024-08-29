@@ -60,7 +60,6 @@ function Verification() {
                 button: "Продолжить верификацию.",
                 text: "Тест пройден.",
             })
-                .then((value))
         }
     }, [store.isTestPassed])
 

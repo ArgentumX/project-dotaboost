@@ -131,10 +131,27 @@ export default class Store {
                 return;
             }
             swal({
-                title: "Ошибка",
+                title: "Oшибка",
                 text: e.response?.message,
                 icon: "error"
             })
         }
     }
+
+    async getUserTicket() {
+        try {
+            const response = await ExecutorTicketService.getUsetTicket();
+            this.setTestPassed(true);
+        } catch (e) {
+            if (e.response?.data?.message == "open ticket not found") {
+                this.setTestPassed(false);
+                return; 
+            }
+            swal({
+                title: "Oшибка",
+                text: e.response?.message,
+                icon: "error"
+            })
+        }
+    } 
 }
