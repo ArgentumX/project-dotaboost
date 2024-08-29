@@ -52,6 +52,13 @@ router.get("/refresh", userController.refresh);
 router.post("/send-recover-mail", body("email").isEmail(), userController.sendRecoverMail);
 
 router.post(
+    "/hook-telegram",
+    authMiddleware,
+    body("hookKey").isString(),
+    userController.hookTelegram
+);
+
+router.post(
     "/recover-access",
     body("recoverToken").isString(),
     body("newPassword").isLength({

@@ -4,6 +4,7 @@ import axios from "axios"
 import { API_URL } from "../http"
 import UserService from "../service/UserService";
 import OrderService from "../service/OrderService";
+import ExecutorTicketService from "../service/ExecutorTicketService";
 
 export default class Store {
 
@@ -11,6 +12,7 @@ export default class Store {
         this.user = {};
         this.isAuth = false;
         this.isLoading = false;
+        this.isTestPassed = false;
         makeAutoObservable(this)
     }
 
@@ -24,6 +26,10 @@ export default class Store {
 
     setLoading(bool) {
         this.isLoading = bool;
+    }
+
+    setTestPassed(bool) {
+        this.isTestPassed = bool;
     }
 
     async login(email, password) {
@@ -114,4 +120,38 @@ export default class Store {
             })
         }
     }
+
+    async createTicket(answers) {
+        try {
+            const response = await ExecutorTicketService.create(answers);
+            this.setTestPassed(true);
+        } catch (e) {
+            if (e.response?.data?.message == "test not passed") {
+                this.setTestPassed(false);
+                return;
+            }
+            swal({
+                title: "Oшибка",
+                text: e.response?.message,
+                icon: "error"
+            })
+        }
+    }
+
+    async getUserTicket() {
+        try {
+            const response = await ExecutorTicketService.getUsetTicket();
+            this.setTestPassed(true);
+        } catch (e) {
+            if (e.response?.data?.message == "open ticket not found") {
+                this.setTestPassed(false);
+                return; 
+            }
+            swal({
+                title: "Oшибка",
+                text: e.response?.message,
+                icon: "error"
+            })
+        }
+    } 
 }
