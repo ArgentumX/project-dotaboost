@@ -492,6 +492,10 @@ button:focus {
     color: rgba(255, 255, 255, 0.87);
 }
 
+.swal-footer {
+  text-align: center;
+}
+
 .password-icon {
     position: relative;
     width: 24px;
@@ -563,11 +567,38 @@ button:focus {
 .verification-test {
     display: flex;
     justify-content: center;
-    align-items: center;
     flex-direction: column;
-    padding: 3em 4em 0em 4em;
+    padding: 2em 4em;
     background-color: rgba(69, 69, 69, 0.5);
     border-radius: 10px;
     position: relative;
     bottom: 13em;
+    width: 70%;
+}
+
+.verification-test .test-header {
+    text-align: center;
+    font-weight: 500;
+    margin-top: 0;
+} 
+
+.test-question {
+    border: 2px solid grey;
+    border-radius: 5px;
+    margin-bottom: 1em;
+}
+
+.test-question-title {
+    margin: 0em 1em;
+    margin-top: 0.25em;
+}
+
+.test-question-answers-list {
+    margin-left: 1.5em;
+}
+
+.test-footer {
+    display: flex;
+    justify-content: center;
+    align-self: center;
 }
