@@ -4,10 +4,12 @@ import { observer } from "mobx-react-lite";
 import { setImageUploadSettings, toggleImageUpload } from "../components/ImageUpload";
 import NavHorizontal from "../components/NavHorizontal";
 import NavItem from "../components/NavItem";
-import { PASSWORD_RESET_ROUTE, VERIFICATION_ROUTE } from "../utils/consts";
+import { MAINPAGE_ROUTE, PASSWORD_RESET_ROUTE, VERIFICATION_ROUTE } from "../utils/consts";
+import { useNavigate } from "react-router-dom";
 
-const Profile = observer(() => {    
+const Profile = observer(() => {
     const { store } = useContext(Context);
+    const navigate = useNavigate();
 
     setImageUploadSettings(1, true, store.uploadAvatar);
 
@@ -24,9 +26,12 @@ const Profile = observer(() => {
                 <h4>Баланс: {store.user.balance.toFixed(2)} ₽</h4>
                 <NavHorizontal>
                     <NavItem text="Смена пароля" link={PASSWORD_RESET_ROUTE} />
-                    <NavItem text="Пройти верификацию бустера" link={VERIFICATION_ROUTE}/>
+                    <NavItem text="Пройти верификацию бустера" link={VERIFICATION_ROUTE} />
                 </NavHorizontal>
-                <button onClick={() => store.logout()}>Выйти</button>
+                <button onClick={() => {
+                    navigate(MAINPAGE_ROUTE);
+                    store.logout();
+                }}>Выйти</button>
             </div>
         </div>
     </>);
