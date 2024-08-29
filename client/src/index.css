@@ -18,6 +18,14 @@
     user-select: none;
 }
 
+.yellow {
+    color: yellow;
+}
+
+.green {
+    color: green;
+}
+
 input {
     filter: none;
 }
@@ -314,12 +322,17 @@ button:focus {
     position: relative;
     width: 100%;
     bottom: 3em;
+    margin: 1em 0em;
 }
 
 .ImageUploadHeader .close {
     position: absolute;
     right: 0;
     transition: 0.3s;
+}
+
+.ImageUploadHeader h1 {
+    font-size: 1.5em;
 }
 
 .ImageUploadHeader .close:hover {
@@ -601,4 +614,28 @@ button:focus {
     display: flex;
     justify-content: center;
     align-self: center;
+}
+
+.verification-image-wrapper{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 2em 4em;
+    background-color: rgba(69, 69, 69, 0.5);
+    border-radius: 10px;
+    position: relative;
+    bottom: 13em;
+    width: 70%;
+}
+
+.verification-image-wrapper h2 {
+    text-align: center;
+}
+
+.verification-image-wrapper h3 {
+    margin: 0.2em;
+}
+
+.verification-example {
+   margin: 1em; 
 }

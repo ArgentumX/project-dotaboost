@@ -5,13 +5,26 @@ import { Context } from "..";
 import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
 import { MAINPAGE_ROUTE } from "../utils/consts";
+import { setImageUploadSettings, toggleImageUpload } from "../components/ImageUpload";
 
 function Verification() {
     const [answers, setAnswers] = useState({});
+    const [showImageVerification, setShowImageVerification] = useState(false);
+    const [testCompleted, setTestCompleted] = useState(false);
+    const [imageUploaded, setImageUploaded] = useState(false);
+
     const navigate = useNavigate();
+
     const { store } = useContext(Context);
+
     const firstRender = useRef(true);
+
     let question_index = 1;
+
+    setImageUploadSettings(4, false, (screen) => {
+        store.uploadScreenshot(screen);   
+        setImageUploaded(true);
+    });
 
     const handleAnswersChange = (id, value) => {
         setAnswers({ ...answers, [id]: value });
@@ -33,19 +46,26 @@ function Verification() {
                 "4": "ans4",
                 "5": "ans5"
             }
-            /// --- DEBUG ---
             store.createTicket(ans);
+            /// --- DEBUG ---
             //store.createTicket(answers);
+            setTestCompleted(true);
         }
     }
 
     useEffect(() => {
+        store.getUserTicket();
+
+        if (imageUploaded) {
+            return;
+        }
+
         if (firstRender.current) {
             firstRender.current = false;
             return;
         }
 
-        if (!store.isTestPassed) {
+        if (!store.executorTicket) {
             swal({
                 title: "Тест не пройден.",
                 text: "",
@@ -54,14 +74,48 @@ function Verification() {
                 .then((value) => {
                     navigate(MAINPAGE_ROUTE);
                 })
-        } else if (store.isTestPassed) {
+        } else if (store.executorTicket) {
             swal({
                 title: "Успех!",
                 button: "Продолжить верификацию.",
                 text: "Тест пройден.",
             })
         }
-    }, [store.isTestPassed])
+    }, [testCompleted, imageUploaded])
+
+
+    if ((store.executorTicketOpened && !store.executorTicket.image) || showImageVerification) {
+        return (
+            <div className="center">
+                <div className="verification-image-wrapper">
+                    <h2>Следуйте указаниям для завершения верификации.</h2>
+                    <h3>1. Вам присвоен уникальный никнейм: «<b>{store.executorTicket.requiredUsername}</b>». В настройках профиля в Вашем Steam аккаунте поставьте этот ник.</h3>
+                    <h3>2. Запустите Dota 2 и перейдите в историю игр.</h3>
+                    <h3>3. Сделайте скриншот всего экрана, как показано на примере ниже.</h3>
+                    <img src="src/assets/img/verification-image-example.png" alt="" className="verification-example" />
+                    <h3>4. Загрузите скриншот.</h3>
+                    <div className="test-footer">
+                        <button onClick={toggleImageUpload}>Загрузить</button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    if (store.executorTicket.image) {
+        return (
+            <div className="center">
+                <p>
+                    Вы уже отправили заявку на верификацию.
+                    Статус заявки:  {store.executorTicket.verified ?
+                        <b className="green">одобрен.</b>
+                        :
+                        <b className="yellow">на рассмотрении</b>
+                    }.
+                </p>
+            </div>
+        );
+    }
 
     return (
         <div className="center">

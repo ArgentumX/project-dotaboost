@@ -10,12 +10,12 @@ import ReactLoading from "react-loading";
 import ImageUpload from "./components/ImageUpload";
 
 const App = observer(() => {
-    const {store} = useContext(Context)
+    const { store } = useContext(Context)
 
     useEffect(() => {
         if (localStorage.getItem('token')) {
             store.checkAuth()
-        } 
+        }
     }, [])
 
     if (store.isLoading) {
@@ -25,17 +25,17 @@ const App = observer(() => {
             </div>
         );
     }
-    
+
     return (
         <BrowserRouter>
             <div id="container">
-                <NavBar/> 
-                <AppRouter/>    
-                <Footer/>
+                <NavBar />
+                <AppRouter />
+                <Footer />
             </div>
             <div id="popup">
-                {store.isAuth && !store.user.isActivated ? <ActivatePrompt/> : null}
-                <ImageUpload/>
+                {store.isAuth && !store.user.isActivated ? <ActivatePrompt /> : null}
+                <ImageUpload />
             </div>
         </BrowserRouter>
     );

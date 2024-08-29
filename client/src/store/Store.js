@@ -12,7 +12,9 @@ export default class Store {
         this.user = {};
         this.isAuth = false;
         this.isLoading = false;
-        this.isTestPassed = false;
+        this.executorTicket = {};
+        this.executorTicketOpened = false;
+        this.orders = {};
         makeAutoObservable(this)
     }
 
@@ -28,8 +30,16 @@ export default class Store {
         this.isLoading = bool;
     }
 
-    setTestPassed(bool) {
-        this.isTestPassed = bool;
+    setExecutorTicket(ticket) {
+        this.executorTicket = ticket;
+    }
+
+    setExecutorTicketOpened(bool) {
+        this.executorTicketOpened = bool;
+    }
+
+    setOrders(orders) {
+        this.orders = orders;
     }
 
     async login(email, password) {
@@ -40,6 +50,15 @@ export default class Store {
             this.setUser(response.data.user);
             this.user.avatar = this.user.avatar ? API_URL + this.user.avatar : null;
         } catch (e) {
+            if (e.response?.data?.message == 'wrong email or password') {
+                swal({
+                    title: "Oшибка",
+                    text: "Неверный пароль или почта.",
+                    icon: "error"
+                })
+
+                return;
+            }
             swal({
                 title: "Ошибка",
                 text: e.response?.data?.message,
@@ -55,6 +74,56 @@ export default class Store {
             this.setAuth(true);
             this.setUser(response.data.user);
         } catch (e) {
+            if (e.response?.data?.message == 'email is already in use') {
+                swal({
+                    title: "Oшибка",
+                    text: "Почта уже используется.",
+                    icon: "error"
+                })
+
+                return;
+            }
+
+            if (e.response?.data?.message == 'username is already in use') {
+                swal({
+                    title: "Oшибка",
+                    text: "Данное имя пользователя уже используется.",
+                    icon: "error"
+                })
+
+                return;
+            }
+
+            if (e.response?.data?.message == 'validation error') {
+                if (e.response.data.errors[0].path == 'username') {
+                    swal({
+                        title: "Ошибка",
+                        text: "Имя пользователя слишком длинное или слишком короткое.",
+                        icon: "error"
+                    })
+                    return;
+                }
+
+                if (e.response.data.errors[0].path == 'email') {
+                    swal({
+                        title: "Ошибка",
+                        text: "Неверная почта.",
+                        icon: "error"
+                    })
+                    return;
+                }
+
+                if (e.response.data.errors[0].path == 'password') {
+                    swal({
+                        title: "Ошибка",
+                        text: "Слишком слабый пароль.",
+                        icon: "error"
+                    })
+                    return;
+                }
+
+            }
+
             swal({
                 title: "Ошибка",
                 text: e.response?.data?.message,
@@ -99,7 +168,7 @@ export default class Store {
     async uploadAvatar(avatar) {
         try {
             const response = await UserService.uploadAvatar(avatar);
-            this.user.avatar = API_URL + response.data.avatar
+            this.user.avatar = API_URL + response.data.avatar;
         } catch (e) {
             swal({
                 title: "Ошибка",
@@ -112,7 +181,16 @@ export default class Store {
     async createOrder(startMMR, endMMR, party, priority, steamguard, playtime, steamUsername, steamPassword) {
         try {
             const response = await OrderService.createOrder(startMMR, endMMR, party, priority, steamguard, playtime, steamUsername, steamPassword);
+            this.setOrders(response.data.order);
         } catch (e) {
+            if (e.response?.data?.message == 'unable to create new orders before other not payed') {
+                swal({
+                    title: "Ошибка",
+                    text: "Вы не можете создать заказ, если у Вас есть действующие неоплаченные заказы.",
+                    icon: "error"
+                })
+                return;
+            }
             swal({
                 title: "Ошибка",
                 text: e.response?.data?.message,
@@ -124,15 +202,12 @@ export default class Store {
     async createTicket(answers) {
         try {
             const response = await ExecutorTicketService.create(answers);
-            this.setTestPassed(true);
+            this.setExecutorTicket(response.data.ticket);
+            this.setExecutorTicketOpened(true);
         } catch (e) {
-            if (e.response?.data?.message == "test not passed") {
-                this.setTestPassed(false);
-                return;
-            }
             swal({
                 title: "Oшибка",
-                text: e.response?.message,
+                text: e.response?.data?.message,
                 icon: "error"
             })
         }
@@ -140,18 +215,31 @@ export default class Store {
 
     async getUserTicket() {
         try {
-            const response = await ExecutorTicketService.getUsetTicket();
-            this.setTestPassed(true);
+            const response = await ExecutorTicketService.getUserTicket();
+            this.setExecutorTicket(response.data.ticket);
+            this.setExecutorTicketOpened(true);
         } catch (e) {
-            if (e.response?.data?.message == "open ticket not found") {
-                this.setTestPassed(false);
-                return; 
+            if (e.response?.data?.message == 'open ticket not found') {
+                return;
             }
+
+            swal({
+                title: "Oшибка",
+                text: e.response?.data?.message,
+                icon: "error"
+            })
+        }
+    }
+
+    async uploadScreenshot(screen) {
+        try {
+            const response = await ExecutorTicketService.uploadScreenshot(screen);
+        } catch (e) {
             swal({
                 title: "Oшибка",
                 text: e.response?.message,
                 icon: "error"
             })
         }
-    } 
+    }
 }

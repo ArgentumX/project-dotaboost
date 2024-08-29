@@ -5,17 +5,33 @@ import 'react-image-crop/dist/ReactCrop.css'
 import { useDropzone } from "react-dropzone";
 import { Context } from ".."
 
+export let maxSizeMB = 1;
+export let isCrop = true;
+export let onSubmit = {};
+
+const MB = 1000000;
+
+export function setImageUploadSettings(_maxSizeMB, _isCrop, _onSubmit) {
+    maxSizeMB = _maxSizeMB;
+    isCrop = _isCrop;
+    onSubmit = _onSubmit;
+}
+
+export function toggleImageUpload() {
+    toggleBlur();
+    document.getElementById('ImageUpload').classList.toggle('active');
+}
+
 function ImageUpload() {
+    const { store } = useContext(Context);
     const [selectedImage, setSelectedImage] = useState(null);
     const [crop, setCrop] = useState();
     const [isImageLoaded, setIsImageLoaded] = useState(false);
     const [file, setFile] = useState();
     const formData = new FormData();
 
-    const {store} = useContext(Context);
-
     const fileValidation = (file) => {
-        const allowedExtensions = 
+        const allowedExtensions =
             /(\.jpg|\.jpeg|\.png|\.gif)$/i;
 
         if (!allowedExtensions.exec(file.path)) {
@@ -27,15 +43,15 @@ function ImageUpload() {
             return false;
         }
 
-        if (file.size >= 1000000) {
+        if (file.size >= maxSizeMB * MB) {
             swal({
                 title: "Ошибка",
-                text: "Изображение слишком велико. Максимальный размер: 1Мб.",
+                text: `Изображение слишком велико. Максимальный размер: ${maxSizeMB}Мб.`,
                 icon: "error"
             })
             return false;
         }
-        if (file.size <= 15000){
+        if (file.size <= 15000) {
             swal({
                 title: "Ошибка",
                 text: "Изображение слишком маленькое.",
@@ -50,29 +66,30 @@ function ImageUpload() {
     const uploadFile = (selectedFile) => {
         setIsImageLoaded(false)
         if (fileValidation(selectedFile)) {
-            setSelectedImage(selectedFile);
+            const jpeg = new File([selectedFile], 'image.jpeg', {type: 'image/jpeg'});
+            setSelectedImage(jpeg);
         }
     }
 
     const onDrop = (acceptedFiles) => {
         const selectedFile = acceptedFiles[0];
         setFile(selectedFile);
-        uploadFile(selectedFile); 
+        uploadFile(selectedFile);
     };
 
-    const {acceptedFiles, getRootProps, getInputProps, isDragActive} = useDropzone({
+    const { acceptedFiles, getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
         noClick: true,
         noKeyboard: true,
     });
-    
+
     function dataURLtoFile(dataurl, filename) {
         var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
             bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-        while(n--){
+        while (n--) {
             u8arr[n] = bstr.charCodeAt(n);
         }
-        return new File([u8arr], filename, {type:mime});
+        return new File([u8arr], filename, { type: mime });
     }
 
     const createImageFromCrop = () => {
@@ -121,60 +138,79 @@ function ImageUpload() {
             width,
             height
         );
-            
+
         const centeredCrop = centerCrop(crop, width, height);
-        setIsImageLoaded(true);
         setCrop(centeredCrop);
+        setIsImageLoaded(true);
     }
 
+    const handleSubmitClick = () => {
+        onSubmit = onSubmit.bind(store);
+
+        if (isCrop && crop) {
+            formData.append('image', createImageFromCrop());
+            onSubmit(formData);
+            setCrop();
+            setSelectedImage();
+            toggleImageUpload();
+            document.getElementById('avatar').value = null;
+            setFile();
+            return;
+        }
+
+        if (!isCrop) {
+            formData.append('image', selectedImage);
+            onSubmit(formData);
+            setSelectedImage();
+            toggleImageUpload();
+            document.getElementById('avatar').value = null;
+            setFile();
+            return;
+        }
+    }
 
     return (
         <div id="ImageUpload">
             <div className="ImageUploadHeader">
-                <h1>Аватар</h1>
-                <img src="src/assets/img/close.png" alt="" className="close" role="button" onClick={()=> {
+                <h1>Загрузка изображения</h1>
+                <img src="src/assets/img/close.png" alt="" className="close" role="button" onClick={() => {
                     toggleImageUpload();
                     setTimeout(() => {
                         setSelectedImage(null);
                     }, 500)
-                }}/> 
+                }} />
             </div>
-            <div className={isDragActive ? "ImageContainer drag" : "ImageContainer"} {...getRootProps()}> 
+            <div className={isDragActive ? "ImageContainer drag" : "ImageContainer"} {...getRootProps()}>
                 {selectedImage && (
-                    <ReactCrop crop={crop} onChange={c => setCrop(c)} circularCrop={true} aspect={1} keepSelection={true}>
-                        <img id="image" src={URL.createObjectURL(selectedImage)} onLoad={!isImageLoaded ? onImageLoad : null} />
+                    <ReactCrop
+                        crop={isCrop ? crop : null}
+                        onChange={isCrop ? c => setCrop(c) : null}
+                        circularCrop={true}
+                        aspect={1}
+                        keepSelection={true}
+                        disabled={!isCrop}
+                    >
+                        <img
+                            id="image"
+                            src={URL.createObjectURL(selectedImage)}
+                            onLoad={!isImageLoaded ? onImageLoad : null}
+                        />
                     </ReactCrop>
                 )}
                 {!selectedImage && (
                     <div className="hint">
-                        <img src="src/assets/img/img.png" alt=""/>
-                        <h3>Переместите изображение сюда</h3>    
+                        <img src="src/assets/img/img.png" alt="" />
+                        <h3>Переместите изображение сюда</h3>
                     </div>
                 )}
-                <input type="file" id="avatar" {...getInputProps()}/>
+                <input type="file" id="avatar" {...getInputProps()} />
             </div>
             <div className="ImageUploadFooter">
-                <label htmlFor="avatar" id="load">Загрузить</label>
-                <button className="submit" onClick={() => { crop ? 
-                        (
-                            formData.append('image', createImageFromCrop()),
-                            store.uploadAvatar(formData),
-                            setCrop(),
-                            setSelectedImage(),
-                            toggleImageUpload(),
-                            document.getElementById('avatar').value = null,
-                            setFile()
-                        )
-                        : null 
-                        }}>Сохранить</button>
+                <label htmlFor="avatar" id="load">Выбрать</label>
+                <button className="submit" onClick={handleSubmitClick}>Сохранить</button>
             </div>
         </div>
     );
-}
-
-export function toggleImageUpload(){
-    toggleBlur();
-    document.getElementById('ImageUpload').classList.toggle('active');
 }
 
 export default ImageUpload;

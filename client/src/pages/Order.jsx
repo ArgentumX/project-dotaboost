@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Slider from '@mui/material/Slider';
 import { Checkbox, FormControlLabel, Typography } from "@mui/material";
 import Calculator from "../components/Calculator";
@@ -21,12 +21,26 @@ function Order() {
     const [steamPassword, setSteamPassword] = useState("");
     const [cost, setCost] = useState(0);
     const [passwordIcon, setPasswordIcon] = useState(openedEye);
+    const firstRender = useRef(true);
 
     const { store } = useContext(Context);
 
     useEffect(() => {
         setCost(Calculator(startMMR, endMMR, party, priority, steamguard, time))
     }, [startMMR, endMMR, party, priority, steamguard, time])
+
+
+    useEffect(() => {
+        if (firstRender.current) {
+            firstRender.current = false;
+            return;
+        }
+
+        swal({
+            title: "Поздравляем!",
+            text: "Ваш заказ успешно создан.",
+        })
+    }, [])
 
     const submit = () => {
         if (startMMR > endMMR) {

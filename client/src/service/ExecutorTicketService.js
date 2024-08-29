@@ -5,7 +5,11 @@ export default class ExecutorTicketService {
         return $api.post('api/executor-ticket/create', {answers});
     }
 
-    static async getUsetTicket() {
+    static async getUserTicket() {
         return $api.get('api/executor-ticket/')
+    }
+
+    static async uploadScreenshot(screen) {
+        return $api.post('api/executor-ticket/screen', screen);
     }
 }

@@ -7,7 +7,7 @@ import { observer } from "mobx-react-lite";
 const AppRouter = observer(() => {
     const { store } = useContext(Context)
     const roles = store.user.roles ? [...store.user.roles] : []
-
+ 
     return (
         <Routes>
             {publicRoutes.map(({ path, Component }) =>
@@ -19,11 +19,11 @@ const AppRouter = observer(() => {
             )}
 
             {roles.includes("EXECUTOR") ?
-                executorRoutes.map(({ path, Component }) =>
+                store.isAuth && executorRoutes.map(({ path, Component }) =>
                     <Route key={path} path={path} element={<Component />} exact />
                 )
                 :
-                userRoutes.map(({ path, Component }) =>
+                store.isAuth && userRoutes.map(({ path, Component }) =>
                     <Route key={path} path={path} element={<Component />} exact />
                 )
             }

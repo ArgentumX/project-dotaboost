@@ -1,13 +1,15 @@
 import React, { useContext, useState } from "react";
 import { Context } from "..";
 import { observer } from "mobx-react-lite";
-import { toggleImageUpload } from "../components/ImageUpload";
+import { setImageUploadSettings, toggleImageUpload } from "../components/ImageUpload";
 import NavHorizontal from "../components/NavHorizontal";
 import NavItem from "../components/NavItem";
 import { PASSWORD_RESET_ROUTE, VERIFICATION_ROUTE } from "../utils/consts";
 
-const Profile = observer(() => {
-    const { store } = useContext(Context)
+const Profile = observer(() => {    
+    const { store } = useContext(Context);
+
+    setImageUploadSettings(1, true, store.uploadAvatar);
 
     return (<>
         <div className="profile">
