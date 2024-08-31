@@ -5,7 +5,7 @@ const authMiddleware = require("../middleware/auth-middleware");
 const { body, param } = require("express-validator");
 const config = require("../config");
 const imageUploadMiddleware = require("../middleware/image-upload-middleware");
-const executorRateController = require("../controllers/executor-rate-controller");
+const executorRateController = require("../controllers/executor-controller");
 
 router.post(
     "/registration",
@@ -66,20 +66,6 @@ router.post(
         max: config.PASSWORD_MAX_LENGTH,
     }),
     userController.recoverAccess
-);
-
-router.post(
-    "/comment-executor",
-    authMiddleware,
-    body("executorId").isNumeric(),
-    body("text").isString(),
-    userController.postExecutorComment
-);
-
-router.get(
-    "/comment-executor/:executorId",
-    param("executorId").isNumeric(),
-    userController.getExecutorComments
 );
 
 router.get(
