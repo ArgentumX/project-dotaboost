@@ -31,6 +31,21 @@ router.get(
     param("id").isNumeric(),
     adminController.getExecutorTicket
 );
+
+router.delete(
+    "/order/:orderId",
+    authMiddleware,
+    checkRoleMiddleware(config.ROLES.LIST.admin.title),
+    param("orderId").isNumeric(),
+    adminController.removeOrder
+);
+router.patch(
+    "/order/:orderId/close",
+    authMiddleware,
+    checkRoleMiddleware(config.ROLES.LIST.admin.title),
+    param("orderId").isNumeric(),
+    adminController.closeOrder
+);
 // TODO rework
 /*router.post(
     "/force-verify",

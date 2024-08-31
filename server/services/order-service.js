@@ -11,6 +11,7 @@ const { Model } = require("sequelize");
 const executorService = require("./executor-service");
 const tgBotService = require("./tg-bot-service");
 const recordService = require("./record-service");
+const adminService = require("./admin-service");
 
 class OrderService {
     async getOrder(orderId, hideSecretData = true) {
@@ -101,7 +102,15 @@ class OrderService {
         }
         return executor;
     }
+
+    async closeOrderById(orderId) {
+        const order = await this.getOrderModel(orderId);
+        return this.closeOrder(order);
+    }
     async closeOrder(orderModel) {
+        if (orderModel.closed) {
+            throw ApiError.BadRequest("order was already closed");
+        }
         orderModel.closed = true;
         await orderModel.save();
         const executorModel = await this.getOrderExecutorModel(orderModel.id);
@@ -162,13 +171,27 @@ class OrderService {
         if (!order) {
             throw ApiError.BadRequest("order not found");
         }
+        await executor.setOrder(null);
         await recordService.createOrderRecord(
             order,
             executor,
             config.MESSAGES.EXECUTOR_REFUSE_ORDER,
             config.RECORDS.TYPE.REFUSE_ORDER
         );
-        await executor.setOrder(null);
+        return { message: "success" };
+    }
+
+    async removeOrder(userId, orderId, force = false) {
+        const order = await this.getOrderModel(orderId);
+        if (!force) {
+            if (order.userId !== userId && !(await adminService.isAdmin(userId))) {
+                throw ApiError.NoPermissions();
+            }
+        }
+        if (!order.closed) {
+            this.closeOrder(order);
+        }
+        await order.destroy();
         return { message: "success" };
     }
 }
