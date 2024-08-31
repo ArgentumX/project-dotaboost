@@ -18,14 +18,16 @@ class RoleService {
         }
     }
 
-    // "user" type is model from models/models.js
-    async addUserRole(user, roleTitle) {
+    async addUserRole(userModel, roleTitle) {
         const role = await Role.findByPk(roleTitle);
         if (!role) {
             throw ApiError.BadRequest("role not found");
         }
-        if (!(await user.hasRole(role))) {
-            await user.addRole(role);
+        if (!role.allowAdding) {
+            throw ApiError.NoPermissions();
+        }
+        if (!(await userModel.hasRole(role))) {
+            await userModel.addRole(role);
         }
     }
 
@@ -39,6 +41,10 @@ class RoleService {
             roles.push(roleData.roleId);
         }
         return roles;
+    }
+    async hasRole(userId, roleTittle) {
+        const role = await UserRole.findOne({ where: { userId, roleId: roleTittle } });
+        return role != null;
     }
 }
 

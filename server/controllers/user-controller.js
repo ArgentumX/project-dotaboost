@@ -96,36 +96,6 @@ class UserController {
             next(e);
         }
     }
-
-    async postExecutorComment(req, res, next) {
-        try {
-            const { executorId, text } = req.body;
-            const userId = req.user.id;
-            const valErrors = validationResult(req);
-            if (!valErrors.isEmpty()) {
-                return next(ApiError.ValidationError(valErrors));
-            }
-            const commentData = await commentService.postExecutorComment(userId, executorId, text);
-            return res.json(commentData);
-        } catch (e) {
-            next(e);
-        }
-    }
-
-    async getExecutorComments(req, res, next) {
-        try {
-            const { executorId } = req.params;
-            const valErrors = validationResult(req);
-
-            if (!valErrors.isEmpty()) {
-                return next(ApiError.ValidationError(valErrors));
-            }
-            const comments = await commentService.getExecutorComments(executorId);
-            return res.json(comments);
-        } catch (e) {
-            next(e);
-        }
-    }
     async changePassword(req, res, next) {
         try {
             const { oldPassword, newPassword } = req.body;

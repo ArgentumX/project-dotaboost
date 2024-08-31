@@ -1,10 +1,10 @@
 module.exports = {
     ROLES: {
         LIST: {
-            user: { title: "USER", display: false },
-            admin: { title: "ADMIN", display: false },
-            executor: { title: "EXECUTOR", display: true },
-            god: { title: "GOD", display: false },
+            user: { title: "USER", display: false, allowAdding: true },
+            admin: { title: "ADMIN", display: false, allowAdding: false },
+            executor: { title: "EXECUTOR", display: true, allowAdding: true },
+            god: { title: "GOD", display: false, allowAdding: false },
         },
         DEFAULT_ROLE_ID: "USER",
     },
@@ -22,6 +22,7 @@ module.exports = {
         USER_NOT_FOUND: "User not found",
         EXECUTOR_TAKE_ORDER: `{0} взялся за заказ`,
         EXECUTOR_REFUSE_ORDER: `{0} отказался от заказа`,
+        VALIDATION_FAILED_PLAYTIME: "Ошибка валидации выбранного игрового времени",
     },
     RECORDS: {
         TYPE: {

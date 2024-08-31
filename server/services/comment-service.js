@@ -5,8 +5,16 @@ const { Executor } = require("../models/models");
 const { ExecutorComment } = require("../models/comment-model");
 const ExecutorCommentDto = require("../dtos/executor-comment-dto");
 const batchServices = require("./batch-services");
+const adminService = require("./admin-service");
 
 class CommentService {
+    async getCommentModel(commentId) {
+        const comment = await ExecutorComment.findByPk(commentId);
+        if (!comment) {
+            throw ApiError.BadRequest("comment not found");
+        }
+        return comment;
+    }
     async postExecutorComment(userId, executorId, text) {
         const user = await User.findByPk(userId);
         if (!user) {
@@ -39,6 +47,16 @@ class CommentService {
         const comments = await ExecutorComment.findAll({ where: { executorId } });
         const commentsData = comments.map((comments) => new ExecutorCommentDto(comments));
         return { comments: commentsData };
+    }
+    async removeComment(userId, commentId, force = false) {
+        const comment = await this.getCommentModel(commentId);
+        if (!force) {
+            if (comment.userId !== userId && !(await adminService.isAdmin(userId))) {
+                throw ApiError.NoPermissions();
+            }
+        }
+        await comment.destroy({});
+        return { message: "success" };
     }
 }
 
