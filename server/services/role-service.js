@@ -24,6 +24,9 @@ class RoleService {
         if (!role) {
             throw ApiError.BadRequest("role not found");
         }
+        if (!role.allowAdding) {
+            throw ApiError.NoPermissions();
+        }
         if (!(await user.hasRole(role))) {
             await user.addRole(role);
         }

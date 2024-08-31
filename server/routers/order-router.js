@@ -9,12 +9,17 @@ const { isNonNegative } = require("../utils/validation-utils");
 function playTimeValidation(playTime) {
     const requiredKeys = config.PLAY_TIME_KEYS;
     if (requiredKeys.length !== Object.keys(playTime).length) {
-        throw new Error("playTime validation error");
+        throw new Error(config.MESSAGES.VALIDATION_FAILED_PLAYTIME);
     }
+    let falseAmount = 0;
     for (const key of requiredKeys) {
         if (!(key in playTime) || typeof playTime[key] !== "boolean") {
-            throw new Error("playTime validation error");
+            throw new Error(config.MESSAGES.VALIDATION_FAILED_PLAYTIME);
         }
+        falseAmount += playTime[key] ? 0 : 1;
+    }
+    if (falseAmount >= 4) {
+        throw new Error(config.MESSAGES.VALIDATION_FAILED_PLAYTIME);
     }
     return true;
 }
