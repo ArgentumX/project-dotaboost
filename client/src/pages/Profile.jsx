@@ -46,7 +46,7 @@ const Profile = observer(() => {
                 <h4>Баланс: {store.user.balance.toFixed(2)} ₽</h4>
                 <NavHorizontal>
                     <NavItem text="Смена пароля" link={PASSWORD_RESET_ROUTE} />
-                    <NavItem text={store.executorTicket.image ? "Статус верификации" : "Пройти верификацию бустера"} link={VERIFICATION_ROUTE} />
+                    <NavItem text={store.executorTicket?.image ? "Статус верификации" : "Пройти верификацию бустера"} link={VERIFICATION_ROUTE} />
                 </NavHorizontal>
                 <button onClick={() => {
                     navigate(MAINPAGE_ROUTE);
