@@ -33,6 +33,10 @@
     color: green;
 }
 
+.red {
+    color: red;
+}
+
 input {
     filter: none;
 }
@@ -721,6 +725,10 @@ button:focus {
     width: 10%;
 }
 
+.ticket b {
+    color: rgba(255, 255, 255, 0.87);
+}
+
 .ticket-closed {
     filter: blur(1px) opacity(15%);
 }
@@ -734,6 +742,7 @@ button:focus {
 .userid-input p {
     margin: 0;
 }
+
 .userid-input input {
     background-color: #303030;
     font-family: 'Nunito', sans-serif;

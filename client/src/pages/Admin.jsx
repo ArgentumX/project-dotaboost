@@ -105,7 +105,7 @@ const Admin = () => {
                     {tickets.map((ticket) => {
                         if (!showClosed && ticket.closed ||
                             !showVerified && ticket.verified ||
-                            !showPaid && ticket.paid || 
+                            !showPaid && ticket.paid ||
                             showUserId > 0 && ticket.userId != showUserId) {
                             return;
                         }
@@ -113,9 +113,21 @@ const Admin = () => {
                         return (
                             <div className="ticket" key={ticket.id} id={ticket.id}>
                                 <h4><b>ID: </b>{ticket.id}</h4>
-                                <h4><b>Verified: </b>{(ticket.verified ? "true" : "false")}</h4>
-                                <h4><b>Paid: </b>{(ticket.paid ? "true" : "false")}</h4>
-                                <h4><b>Closed: </b>{(ticket.closed ? "true" : "false")}</h4>
+                                {ticket.verified ?
+                                    <h4 className="green"><b>Verified: </b>true</h4>
+                                    :
+                                    <h4 className="red"><b>Verified: </b>false</h4>
+                                }
+                                {ticket.paid ?
+                                    <h4 className="green"><b>Paid: </b>true</h4>
+                                    :
+                                    <h4 className="red"><b>Paid: </b>false</h4>
+                                }
+                                {ticket.closed ?
+                                    <h4 className="green"><b>Closed: </b>true</h4>
+                                    :
+                                    <h4 className="red"><b>Closed: </b>false</h4>
+                                }
                                 <h4><b>UserID: </b>{ticket.userId}</h4>
                                 <h4><b>Required Username: </b>{ticket.requiredUsername}</h4>
                                 <h4
