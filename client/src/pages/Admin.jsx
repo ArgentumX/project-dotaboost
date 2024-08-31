@@ -12,6 +12,7 @@ const Admin = () => {
     const [showClosed, setShowClosed] = useState(true);
     const [showVerified, setShowVerified] = useState(true);
     const [showPaid, setShowPaid] = useState(true);
+    const [showUserId, setShowUserId] = useState(-1);
 
 
     useEffect(() => {
@@ -91,14 +92,24 @@ const Admin = () => {
                             <Typography sx={textStyle}>Show paid</Typography>
                         }
                     />
+                    <div className="userid-input">
+                        <p>Specifify user ID:</p>
+                        <input type="text" onChange={(e) => {
+                            if (!isNaN(e.target.value)) {
+                                setShowUserId(e.target.value)
+                            }
+                        }} />
+                    </div>
                 </div>
                 <div className="tickets">
                     {tickets.map((ticket) => {
                         if (!showClosed && ticket.closed ||
                             !showVerified && ticket.verified ||
-                            !showPaid && ticket.paid) {
+                            !showPaid && ticket.paid || 
+                            showUserId > 0 && ticket.userId != showUserId) {
                             return;
                         }
+
                         return (
                             <div className="ticket" key={ticket.id} id={ticket.id}>
                                 <h4><b>ID: </b>{ticket.id}</h4>

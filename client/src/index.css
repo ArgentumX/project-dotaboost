@@ -724,3 +724,27 @@ button:focus {
 .ticket-closed {
     filter: blur(1px) opacity(15%);
 }
+
+.userid-input {
+    display: flex;
+    flex-direction: row;
+    margin: 0.5em;
+}
+
+.userid-input p {
+    margin: 0;
+}
+.userid-input input {
+    background-color: #303030;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.0rem;
+    margin: 0em 0.5em;
+    border-radius: 5px;
+    width: 2.4em;
+    border: solid;
+    border-width: 1px;
+    border-color: #303030;
+    outline: none;
+    position: relative;
+    bottom: 0.1em;
+}
