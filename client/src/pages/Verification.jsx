@@ -86,6 +86,7 @@ function Verification() {
     useEffect(() => {
         window.scrollTo(0, 0);
 
+        setLoading(true);
         ExecutorTicketService.getUserTicket().catch((e) => {
             setLoading(false);
         }).then(data => {
