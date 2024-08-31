@@ -155,8 +155,7 @@ a:hover {
     position: relative;
     bottom: 2rem;
     outline: none;
-    transition:
-        border-color 500ms,
+    transition: 500ms;
 }
 
 .textbox:focus {
