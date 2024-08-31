@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Test from "../components/Test";
 import TestQuestion from "../components/TestQuestion";
 import { Context } from "..";
@@ -6,24 +6,24 @@ import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
 import { MAINPAGE_ROUTE } from "../utils/consts";
 import { setImageUploadSettings, toggleImageUpload } from "../components/ImageUpload";
+import ExecutorTicketService from "../service/ExecutorTicketService";
+import ReactLoading from "react-loading";
 
 function Verification() {
     const [answers, setAnswers] = useState({});
-    const [showImageVerification, setShowImageVerification] = useState(false);
     const [testCompleted, setTestCompleted] = useState(false);
-    const [imageUploaded, setImageUploaded] = useState(false);
+    const [imageSent, setImageSent] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const navigate = useNavigate();
 
     const { store } = useContext(Context);
 
-    const firstRender = useRef(true);
-
     let question_index = 1;
 
     setImageUploadSettings(4, false, (screen) => {
-        store.uploadScreenshot(screen);   
-        setImageUploaded(true);
+        store.uploadScreenshot(screen);
+        setImageSent(!imageSent);
     });
 
     const handleAnswersChange = (id, value) => {
@@ -46,45 +46,63 @@ function Verification() {
                 "4": "ans4",
                 "5": "ans5"
             }
-            store.createTicket(ans);
-            /// --- DEBUG ---
-            //store.createTicket(answers);
+            setAnswers(ans);
             setTestCompleted(true);
         }
     }
 
     useEffect(() => {
-        store.getUserTicket();
+        if (testCompleted) {
+            window.scrollTo(0, 0);
 
-        if (imageUploaded) {
-            return;
-        }
-
-        if (firstRender.current) {
-            firstRender.current = false;
-            return;
-        }
-
-        if (!store.executorTicket) {
-            swal({
-                title: "Тест не пройден.",
-                text: "",
-                icon: "error"
+            setLoading(true);
+            ExecutorTicketService.create(answers).catch((e) => {
+                setLoading(false);
+            }).then(data => {
+                store.setExecutorTicket(data?.ticket);
+                if (!store.executorTicket) {
+                    console.log(store.executorTicket)
+                    swal({
+                        title: "Тест не пройден.",
+                        text: "",
+                        icon: "error"
+                    })
+                        .then((value) => {
+                            navigate(MAINPAGE_ROUTE);
+                        })
+                } else if (store.executorTicket) {
+                    swal({
+                        title: "Успех!",
+                        button: "Продолжить верификацию.",
+                        text: "Тест пройден.",
+                    })
+                }
+                setLoading(false);
             })
-                .then((value) => {
-                    navigate(MAINPAGE_ROUTE);
-                })
-        } else if (store.executorTicket) {
-            swal({
-                title: "Успех!",
-                button: "Продолжить верификацию.",
-                text: "Тест пройден.",
-            })
+
         }
-    }, [testCompleted, imageUploaded])
+    }, [testCompleted])
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
 
-    if ((store.executorTicketOpened && !store.executorTicket.image) || showImageVerification) {
+        ExecutorTicketService.getUserTicket().catch((e) => {
+            setLoading(false);
+        }).then(data => {
+            store.setExecutorTicket(data?.ticket);
+            setLoading(false);
+        })
+    }, [imageSent])
+
+    if (loading) {
+        return (
+            <div >
+                <ReactLoading type="cylon" color="#696969" height={100} width={50} />
+            </div>
+        );
+    }
+
+    if (store.executorTicket?.requiredUsername && !store.executorTicket?.image) {
         return (
             <div className="center">
                 <div className="verification-image-wrapper">
@@ -102,7 +120,7 @@ function Verification() {
         );
     }
 
-    if (store.executorTicket.image) {
+    if (store.executorTicket?.image) {
         return (
             <div className="center">
                 <p>

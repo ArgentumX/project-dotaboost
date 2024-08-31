@@ -13,8 +13,6 @@ export default class Store {
         this.isAuth = false;
         this.isLoading = false;
         this.executorTicket = {};
-        this.executorTicketOpened = false;
-        this.orders = {};
         makeAutoObservable(this)
     }
 
@@ -29,17 +27,9 @@ export default class Store {
     setLoading(bool) {
         this.isLoading = bool;
     }
-
+    
     setExecutorTicket(ticket) {
         this.executorTicket = ticket;
-    }
-
-    setExecutorTicketOpened(bool) {
-        this.executorTicketOpened = bool;
-    }
-
-    setOrders(orders) {
-        this.orders = orders;
     }
 
     async login(email, password) {
@@ -181,7 +171,6 @@ export default class Store {
     async createOrder(startMMR, endMMR, party, priority, steamguard, playtime, steamUsername, steamPassword) {
         try {
             const response = await OrderService.createOrder(startMMR, endMMR, party, priority, steamguard, playtime, steamUsername, steamPassword);
-            this.setOrders(response.data.order);
         } catch (e) {
             if (e.response?.data?.message == 'unable to create new orders before other not payed') {
                 swal({
@@ -193,38 +182,6 @@ export default class Store {
             }
             swal({
                 title: "Ошибка",
-                text: e.response?.data?.message,
-                icon: "error"
-            })
-        }
-    }
-
-    async createTicket(answers) {
-        try {
-            const response = await ExecutorTicketService.create(answers);
-            this.setExecutorTicket(response.data.ticket);
-            this.setExecutorTicketOpened(true);
-        } catch (e) {
-            swal({
-                title: "Oшибка",
-                text: e.response?.data?.message,
-                icon: "error"
-            })
-        }
-    }
-
-    async getUserTicket() {
-        try {
-            const response = await ExecutorTicketService.getUserTicket();
-            this.setExecutorTicket(response.data.ticket);
-            this.setExecutorTicketOpened(true);
-        } catch (e) {
-            if (e.response?.data?.message == 'open ticket not found') {
-                return;
-            }
-
-            swal({
-                title: "Oшибка",
                 text: e.response?.data?.message,
                 icon: "error"
             })
