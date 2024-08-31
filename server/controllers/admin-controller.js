@@ -1,6 +1,7 @@
 const { validationResult } = require("express-validator");
 const ApiError = require("../errors/api-error");
 const executorTicketService = require("../services/executor-ticket-service");
+const orderService = require("../services/order-service");
 
 class AdminController {
     async verifyExecutorInfo(req, res, next) {
@@ -44,6 +45,35 @@ class AdminController {
             }
             const ticketData = await executorTicketService.getTickets(options);
             return res.json(ticketData);
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    async removeOrder(req, res, next) {
+        try {
+            const { orderId } = req.params;
+            const userId = req.user.id;
+            const valErrors = validationResult(req);
+            if (!valErrors.isEmpty()) {
+                return next(ApiError.ValidationError(valErrors));
+            }
+            const result = await orderService.removeOrder(userId, orderId);
+            return res.json(result);
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    async closeOrder(req, res, next) {
+        try {
+            const { orderId } = req.params;
+            const valErrors = validationResult(req);
+            if (!valErrors.isEmpty()) {
+                return next(ApiError.ValidationError(valErrors));
+            }
+            const result = await orderService.closeOrderById(orderId);
+            return res.json(result);
         } catch (e) {
             next(e);
         }
