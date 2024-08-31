@@ -1,13 +1,13 @@
 import React, { useContext } from "react";
 import { Routes, Route } from 'react-router-dom'
-import { authRoutes, executorRoutes, publicRoutes, userRoutes } from "../routes";
+import { adminRoutes, authRoutes, executorRoutes, publicRoutes, userRoutes } from "../routes";
 import { Context } from "..";
 import { observer } from "mobx-react-lite";
 
 const AppRouter = observer(() => {
     const { store } = useContext(Context)
     const roles = store.user.roles ? [...store.user.roles] : []
- 
+
     return (
         <Routes>
             {publicRoutes.map(({ path, Component }) =>
@@ -27,6 +27,10 @@ const AppRouter = observer(() => {
                     <Route key={path} path={path} element={<Component />} exact />
                 )
             }
+
+            {(roles.includes("ADMIN") || roles.includes("GOD")) && adminRoutes.map(({ path, Component }) =>
+                <Route key={path} path={path} element={<Component />} exact />
+            )}
         </Routes>
     );
 });

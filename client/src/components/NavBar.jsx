@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { ABOUTUS_ROUTE, ORDER_ROUTE, MAINPAGE_ROUTE, LOGIN_ROUTE, REGISTER_ROUTE, PROFILE_ROUTE } from "../utils/consts";
+import { ABOUTUS_ROUTE, ORDER_ROUTE, MAINPAGE_ROUTE, LOGIN_ROUTE, REGISTER_ROUTE, PROFILE_ROUTE, ADMIN_ROUTE } from "../utils/consts";
 import { Context } from "..";
 import { NavLink, useNavigate } from "react-router-dom";
 import { observer } from "mobx-react-lite";
@@ -47,6 +47,9 @@ function NavBar() {
             <NavItem text="Профиль" link={PROFILE_ROUTE} />
             {!roles.includes("EXECUTOR") &&
                 <NavItem text="Заказать буст" link={ORDER_ROUTE} />}
+            {(roles.includes("ADMIN") || roles.includes("GOD")) &&
+                <NavItem text="Admin" link={ADMIN_ROUTE}/>
+            }
             <NavBarProfile />
         </ul>
     );
