@@ -12,6 +12,7 @@ export default class Store {
         this.user = {};
         this.isAuth = false;
         this.isLoading = false;
+        this.order = {};
         this.executorTicket = {};
         makeAutoObservable(this)
     }
@@ -26,6 +27,10 @@ export default class Store {
 
     setLoading(bool) {
         this.isLoading = bool;
+    }
+
+    setOrder(order) {
+        this.order = order;
     }
     
     setExecutorTicket(ticket) {
@@ -171,6 +176,7 @@ export default class Store {
     async createOrder(startMMR, endMMR, party, priority, steamguard, playtime, steamUsername, steamPassword) {
         try {
             const response = await OrderService.createOrder(startMMR, endMMR, party, priority, steamguard, playtime, steamUsername, steamPassword);
+            this.setOrder(response.data.order);
         } catch (e) {
             if (e.response?.data?.message == 'unable to create new orders before other not payed') {
                 swal({

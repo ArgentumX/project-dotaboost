@@ -6,6 +6,7 @@ import { Context } from "..";
 import swal from 'sweetalert';
 import { checkboxChildrenStyle, checkboxStyle, sliderStyle, textStyle } from "../utils/mui_styles";
 import { useNavigate } from "react-router-dom";
+import { MAINPAGE_ROUTE } from "../utils/consts";
 
 function Order() {
     const openedEye = "src/assets/img/view.png";
@@ -16,12 +17,16 @@ function Order() {
     const [party, setParty] = useState(false);
     const [priority, setPriority] = useState(false);
     const [steamguard, setSteamguard] = useState(false);
-    const [isTime, setIsTime] = useState(false);
-    const [time, setTime] = useState(Array(4).fill(true));
+    const [playtime, setPlaytime] = useState({});
     const [steamLogin, setSteamLogin] = useState("");
     const [steamPassword, setSteamPassword] = useState("");
+
+    const [isTime, setIsTime] = useState(false);
+    const [time, setTime] = useState(Array(4).fill(true));
     const [cost, setCost] = useState(0);
     const [passwordIcon, setPasswordIcon] = useState(openedEye);
+    const [orderSubmit, setOrderSubmit] = useState(false);
+
     const firstRender = useRef(true);
 
     const { store } = useContext(Context);
@@ -39,11 +44,20 @@ function Order() {
             return;
         }
 
-        swal({
-            title: "Поздравляем!",
-            text: "Ваш заказ успешно создан.",
-        })
-    }, [])
+        store.createOrder(startMMR, endMMR, party, priority, steamguard, playtime, steamLogin, steamPassword);
+
+        if (store.order) {
+            swal({
+                title: "Поздравляем!",
+                text: "Ваш заказ успешно создан.",
+            })
+                .then(() => {
+                    navigate(MAINPAGE_ROUTE);
+                })
+        } else {
+            console.log(store.order);
+        }
+    }, [orderSubmit])
 
     const submit = () => {
         if (startMMR > endMMR) {
@@ -88,9 +102,9 @@ function Order() {
             "AFTERNOON": time[1],
             "EVENING": time[2],
         };
-
-        store.createOrder(startMMR, endMMR, party, priority, steamguard, playtimeObject, steamLogin, steamPassword);
-        navigate(MAINPAGE_ROUTE); 
+        
+        setPlaytime(playtimeObject);
+        setOrderSubmit(true);
     }
 
     const handlePasswordIconClick = () => {
