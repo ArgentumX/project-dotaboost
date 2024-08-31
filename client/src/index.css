@@ -110,6 +110,10 @@ a:hover {
     border-color: rgb(175, 175, 175);
 }
 
+.NavBarProfile img:hover {
+    cursor: pointer;
+}
+
 .NavBarProfile h3 {
     font-family: 'Nunito', sans-serif;
     font-size: 0.8em;

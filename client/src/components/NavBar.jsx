@@ -8,15 +8,15 @@ import NavItem from "./NavItem";
 const NavBarProfile = observer(() => {
     const { store } = useContext(Context)
 
+    const navigate = useNavigate();
+
     const defaultAvatar = "src/assets/img/default_profile_icon.png"
 
     if (store.isAuth) {
         return (
             <div>
                 <li className="NavBarProfile">
-                    <NavLink to={PROFILE_ROUTE}>
-                        <img src={store.user.avatar == null ? defaultAvatar : store.user.avatar} alt="" />
-                    </NavLink>
+                    <img src={store.user.avatar == null ? defaultAvatar : store.user.avatar} alt="" onClick={() => {navigate(MAINPAGE_ROUTE)}}/>
                     <h3><NavLink to={PROFILE_ROUTE}>{store.user.username}</NavLink></h3>
                     <h4><NavLink to="#">{store.user.balance.toFixed(2)} ₽</NavLink></h4>
                 </li>
