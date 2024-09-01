@@ -1,4 +1,4 @@
-import $api from "../http"
+import $api from "../http/axios"
 
 export default class AdminService {
     static async verify(id, success) {

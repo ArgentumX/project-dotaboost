@@ -1,7 +1,7 @@
 import { makeAutoObservable } from "mobx"
 import AuthService from "../service/AuthService"
 import axios from "axios"
-import { API_URL } from "../http"
+import { API_URL } from "../http/axios"
 import UserService from "../service/UserService";
 import OrderService from "../service/OrderService";
 import ExecutorTicketService from "../service/ExecutorTicketService";

@@ -1,4 +1,4 @@
-function Calculator(
+function order_calculator(
     startMMR,
     endMMR,
     party,
@@ -40,4 +40,4 @@ function Calculator(
     return cost.toFixed(2);
 }
 
-export default Calculator; 
+export default order_calculator; 

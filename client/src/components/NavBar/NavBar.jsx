@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { ABOUTUS_ROUTE, ORDER_ROUTE, MAINPAGE_ROUTE, LOGIN_ROUTE, REGISTER_ROUTE, PROFILE_ROUTE, ADMIN_ROUTE } from "../utils/consts";
-import { Context } from "..";
+import { ABOUTUS_ROUTE, ORDER_ROUTE, MAINPAGE_ROUTE, LOGIN_ROUTE, REGISTER_ROUTE, PROFILE_ROUTE, ADMIN_ROUTE } from "../../utils/consts";
+import { Context } from "../..";
 import { NavLink, useNavigate } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import NavItem from "./NavItem";

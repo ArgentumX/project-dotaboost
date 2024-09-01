@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { LOGIN_ROUTE, MAINPAGE_ROUTE } from "../utils/consts";
+import { LOGIN_ROUTE, MAINPAGE_ROUTE } from "../../utils/consts";
 import { observer } from "mobx-react-lite";
-import { Context } from "..";
+import { Context } from "../..";
 
 const Auth = observer(() => {
     const openedEye = "src/assets/img/view.png";

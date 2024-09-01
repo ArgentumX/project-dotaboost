@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import Slider from '@mui/material/Slider';
 import { Checkbox, FormControlLabel, Typography } from "@mui/material";
-import Calculator from "../components/Calculator";
-import { Context } from "..";
+import order_calculator from "../../utils/order_calculator";
+import { Context } from "../..";
 import swal from 'sweetalert';
-import { checkboxChildrenStyle, checkboxStyle, sliderStyle, textStyle } from "../utils/mui_styles";
+import { checkboxChildrenStyle, checkboxStyle, sliderStyle, textStyle } from "../../utils/mui_styles";
 import { useNavigate } from "react-router-dom";
-import { MAINPAGE_ROUTE } from "../utils/consts";
+import { MAINPAGE_ROUTE } from "../../utils/consts";
 
 function Order() {
     const openedEye = "src/assets/img/view.png";
@@ -34,7 +34,7 @@ function Order() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        setCost(Calculator(startMMR, endMMR, party, priority, steamguard, time))
+        setCost(order_calculator(startMMR, endMMR, party, priority, steamguard, time))
     }, [startMMR, endMMR, party, priority, steamguard, time])
 
 

@@ -1,4 +1,4 @@
-import $api from "../http"
+import $api from "../http/axios"
 
 export default class OrderService {
     static async createOrder(

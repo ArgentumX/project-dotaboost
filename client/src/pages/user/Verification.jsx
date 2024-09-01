@@ -1,12 +1,12 @@
 import { useContext, useEffect, useState } from "react";
-import Test from "../components/Test";
-import TestQuestion from "../components/TestQuestion";
-import { Context } from "..";
+import Test from "../../components/Verification/Test";
+import TestQuestion from "../../components/Verification/TestQuestion";
+import { Context } from "../..";
 import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
-import { MAINPAGE_ROUTE } from "../utils/consts";
-import { setImageUploadSettings, toggleImageUpload } from "../components/ImageUpload";
-import ExecutorTicketService from "../service/ExecutorTicketService";
+import { MAINPAGE_ROUTE } from "../../utils/consts";
+import { setImageUploadSettings, toggleImageUpload } from "../../components/ImageUpload/ImageUpload";
+import ExecutorTicketService from "../../service/ExecutorTicketService";
 import ReactLoading from "react-loading";
 
 function Verification() {
@@ -73,8 +73,8 @@ function Verification() {
                 } else if (store.executorTicket) {
                     swal({
                         title: "Успех!",
-                        button: "Продолжить верификацию.",
-                        text: "Тест пройден.",
+                        button: "Продолжить верификацию",
+                        text: "Тест пройден",
                     })
                 }
                 setLoading(false);

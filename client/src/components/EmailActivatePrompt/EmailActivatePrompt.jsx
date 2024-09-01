@@ -1,12 +1,8 @@
 import { useContext, useEffect } from "react";
-import { Context } from "..";
+import { Context } from "../..";
+import { toggleBlur } from "../../utils/blur";
 
-export function toggleBlur() {
-    const background = document.getElementById('container');
-    background.classList.toggle('blur')
-}
-
-function ActivatePrompt() {
+function EmailActivatePrompt() {
     useEffect(() => {
         toggleBlur();
     }, [])
@@ -26,4 +22,4 @@ function ActivatePrompt() {
     );
 }
 
-export default ActivatePrompt; 
+export default EmailActivatePrompt; 

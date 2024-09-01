@@ -1,9 +1,9 @@
 import { useContext, useState } from "react";
-import { toggleBlur } from "./ActivatePrompt";
+import { toggleBlur } from "../../utils/blur";
 import ReactCrop, { centerCrop, makeAspectCrop } from "react-image-crop";
 import 'react-image-crop/dist/ReactCrop.css'
 import { useDropzone } from "react-dropzone";
-import { Context } from ".."
+import { Context } from "../.."
 
 export let maxSizeMB = 1;
 export let isCrop = true;

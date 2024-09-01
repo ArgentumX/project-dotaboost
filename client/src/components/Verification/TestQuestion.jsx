@@ -1,5 +1,5 @@
 import { FormControl, FormControlLabel, Radio, RadioGroup, Typography } from "@mui/material";
-import { radioStyle, textStyle } from "../utils/mui_styles";
+import { radioStyle, textStyle } from "../../utils/mui_styles";
 
 function TestQuestion({ id, title, opts, onChange, value }) {
     const handleChange = (event) => {

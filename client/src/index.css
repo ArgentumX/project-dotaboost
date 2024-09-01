@@ -227,15 +227,15 @@ button:focus {
     bottom: 1rem;
 }
 
-.profile {
-    width: 945px;
+.profilePage {
+    width: 85%;
     overflow: hidden;
     display: block;
     margin-left: auto;
     margin-right: auto;
 }
 
-.profilePageImg {
+.profilePageBackground {
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -249,15 +249,16 @@ button:focus {
     align-items: center;
     justify-content: center;
     position: relative;
-    bottom: 8rem;
-    left: 3rem;
+    bottom: 15rem;
+    left: 6rem;
     width: fit-content;
 }
 
 .profilePageEditIcon {
     position: absolute;
-    right: 4em;
-    bottom: 19.2em;
+    width: 1.5%;
+    top: 10em;
+    left: 23%;
 }
 
 .profilePageEditIcon:hover {
@@ -265,7 +266,7 @@ button:focus {
 }
 
 .profilePageAvatar {
-    width: 141.75px;
+    width: 100%;
     display: block;
     border-radius: 50%;
     border: solid;
@@ -275,12 +276,14 @@ button:focus {
 }
 
 .profilePageInfo h1 {
+    font-size: 2.5em;
     margin: 0;
 }
 
 .profilePageInfo h4 {
+    font-size: 1.15em;
     margin: 0;
-    font-weight: 400;
+    font-weight: 500;
 }
 
 .profilePageInfo button {
@@ -582,8 +585,9 @@ button:focus {
 }
 
 .nav-horizontal .NavBarItem {
+    font-weight: 500;
     text-align: start;
-    font-size: 0.9em;
+    font-size: 1.1em;
     padding: 5px 15px;
     border-top: 1px solid rgba(65, 65, 65, 1.0);
 }
@@ -733,17 +737,17 @@ button:focus {
     filter: blur(1px) opacity(15%);
 }
 
-.userid-input {
+.numeric-input {
     display: flex;
     flex-direction: row;
     margin: 0.5em;
 }
 
-.userid-input p {
+.numeric-input p {
     margin: 0;
 }
 
-.userid-input input {
+.numeric-input input {
     background-color: #303030;
     font-family: 'Nunito', sans-serif;
     font-size: 1.0rem;

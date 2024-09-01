@@ -1,7 +1,7 @@
 import { useContext } from "react";
-import { Context } from "..";
+import { Context } from "../..";
 import { useNavigate } from "react-router-dom";
-import { ORDER_ROUTE } from "../utils/consts";
+import { ORDER_ROUTE } from "../../utils/consts";
 
 function NavItem(props) {
     const { store } = useContext(Context) ;
@@ -20,7 +20,7 @@ function NavItem(props) {
     }
 
     return (<>
-        <li className='NavBarItem' onClick={handleClick}>
+        <li className='NavBarItem' onClick={props.onClick ? props.onClick : handleClick}>
             {props.text}
         </li>
     </>);
