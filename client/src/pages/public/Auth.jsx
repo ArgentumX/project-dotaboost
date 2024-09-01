@@ -27,7 +27,7 @@ const Auth = observer(() => {
         setPasswordIcon(passwordIcon == openedEye ? closedEye : openedEye);
     }
 
-    const click = async () => {
+    const handleSubmitClick = async () => {
         try {
             if (isLogin) {
                 store.login(email, password)
@@ -75,7 +75,7 @@ const Auth = observer(() => {
                 <img className="password-icon" src={passwordIcon} alt="" onClick={handlePasswordIconClick} />
                 <button
                     type="submit"
-                    onClick={click}>
+                    onClick={handleSubmitClick}>
                     {isLogin ? "Войти" : "Зарегистрироваться"}
                 </button>
             </div>

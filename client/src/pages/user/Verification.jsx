@@ -1,36 +1,42 @@
 import { useContext, useEffect, useState } from "react";
-import Test from "../../components/Verification/Test";
-import TestQuestion from "../../components/Verification/TestQuestion";
-import { Context } from "../..";
+import { Context, root } from "../..";
 import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
 import { MAINPAGE_ROUTE } from "../../utils/consts";
 import { setImageUploadSettings, toggleImageUpload } from "../../components/ImageUpload/ImageUpload";
 import ExecutorTicketService from "../../service/ExecutorTicketService";
 import ReactLoading from "react-loading";
+import TestVerificationPage from "../../components/Verification/TestVerificationPage";
+import ImageVerificationPage from "../../components/Verification/ImageVerificationPage";
+import StatusVerificationPage from "../../components/Verification/StatusVerificationPage";
+
 
 function Verification() {
     const [answers, setAnswers] = useState({});
     const [testCompleted, setTestCompleted] = useState(false);
-    const [imageSent, setImageSent] = useState(false);
     const [loading, setLoading] = useState(true);
 
     const navigate = useNavigate();
 
     const { store } = useContext(Context);
 
-    let question_index = 1;
-
-    setImageUploadSettings(4, false, (screen) => {
+    setImageUploadSettings(4, false, async (screen) => {
         store.uploadScreenshot(screen);
-        setImageSent(!imageSent);
+        window.scrollTo(0, 0);
+        setLoading(true);
+        ExecutorTicketService.getUserTicket().catch((e) => {
+            setLoading(false);
+        }).then((data) => {
+            store.setExecutorTicket(data.ticket);
+            setLoading(false);
+        })
     });
 
     const handleAnswersChange = (id, value) => {
         setAnswers({ ...answers, [id]: value });
     }
 
-    const handleTestSubmit = () => {
+    const handleTestSubmit = (question_index) => {
         if (Object.keys(answers).length != question_index - 1) {
             swal({
                 title: "Ошибка",
@@ -50,6 +56,16 @@ function Verification() {
             setTestCompleted(true);
         }
     }
+
+    useEffect(() => {
+        setLoading(true);
+        ExecutorTicketService.getUserTicket().catch((e) => {
+            setLoading(false);
+        }).then(data => {
+            store.setExecutorTicket(data?.ticket);
+            setLoading(false);
+        })
+    }, [])
 
     useEffect(() => {
         if (testCompleted) {
@@ -76,24 +92,15 @@ function Verification() {
                         button: "Продолжить верификацию",
                         text: "Тест пройден",
                     })
+                    .then((value) => {
+                        setLoading(false);
+                    })
                 }
                 setLoading(false);
             })
 
         }
     }, [testCompleted])
-
-    useEffect(() => {
-        window.scrollTo(0, 0);
-
-        setLoading(true);
-        ExecutorTicketService.getUserTicket().catch((e) => {
-            setLoading(false);
-        }).then(data => {
-            store.setExecutorTicket(data?.ticket);
-            setLoading(false);
-        })
-    }, [imageSent])
 
     if (loading) {
         return (
@@ -105,116 +112,24 @@ function Verification() {
 
     if (store.executorTicket?.requiredUsername && !store.executorTicket?.image) {
         return (
-            <div className="center">
-                <div className="verification-image-wrapper">
-                    <h2>Следуйте указаниям для завершения верификации.</h2>
-                    <h3>1. Вам присвоен уникальный никнейм: «<b>{store.executorTicket.requiredUsername}</b>». В настройках профиля в Вашем Steam аккаунте поставьте этот ник.</h3>
-                    <h3>2. Запустите Dota 2 и перейдите в историю игр.</h3>
-                    <h3>3. Сделайте скриншот всего экрана, как показано на примере ниже.</h3>
-                    <img src="src/assets/img/verification-image-example.png" alt="" className="verification-example" />
-                    <h3>4. Загрузите скриншот.</h3>
-                    <div className="test-footer">
-                        <button onClick={toggleImageUpload}>Загрузить</button>
-                    </div>
-                </div>
-            </div>
+            <ImageVerificationPage
+                onSubmit={toggleImageUpload}
+            />
         );
     }
 
     if (store.executorTicket?.image) {
         return (
-            <div className="center">
-                <p>
-                    Вы уже отправили заявку на верификацию.
-                    Статус заявки:  {store.executorTicket.verified ?
-                        <b className="green">одобрена</b>
-                        :
-                        <b className="yellow">на рассмотрении</b>
-                    }.
-                </p>
-            </div>
+            <StatusVerificationPage />
         );
     }
 
     return (
-        <div className="center">
-            <Test>
-                <h1 className="test-header"> Ответьте на вопросы</h1>
-                <TestQuestion
-                    id={(question_index++).toString()}
-                    title="Ты пидор?"
-                    opts={["Да", "Нет"]}
-                    onChange={handleAnswersChange}
-                    value={answers[question_index - 1]}
-                />
-                <TestQuestion
-                    id={(question_index++).toString()}
-                    title="Точно?"
-                    opts={["Конечно", "Нет", "Не уверен"]}
-                    onChange={handleAnswersChange}
-                    value={answers[question_index - 1]}
-                />
-                <TestQuestion
-                    id={(question_index++).toString()}
-                    title="Ты пидор?"
-                    opts={["Да", "Нет"]}
-                    onChange={handleAnswersChange}
-                    value={answers[question_index - 1]}
-                />
-                <TestQuestion
-                    id={(question_index++).toString()}
-                    title="Точно?"
-                    opts={["Конечно", "Нет", "Не уверен"]}
-                    onChange={handleAnswersChange}
-                    value={answers[question_index - 1]}
-                />
-                <TestQuestion
-                    id={(question_index++).toString()}
-                    title="Ты пидор?"
-                    opts={["Да", "Нет"]}
-                    onChange={handleAnswersChange}
-                    value={answers[question_index - 1]}
-                />
-                <TestQuestion
-                    id={(question_index++).toString()}
-                    title="Точно?"
-                    opts={["Конечно", "Нет", "Не уверен"]}
-                    onChange={handleAnswersChange}
-                    value={answers[question_index - 1]}
-                />
-                <TestQuestion
-                    id={(question_index++).toString()}
-                    title="Ты пидор?"
-                    opts={["Да", "Нет"]}
-                    onChange={handleAnswersChange}
-                    value={answers[question_index - 1]}
-                />
-                <TestQuestion
-                    id={(question_index++).toString()}
-                    title="Точно?"
-                    opts={["Конечно", "Нет", "Не уверен"]}
-                    onChange={handleAnswersChange}
-                    value={answers[question_index - 1]}
-                />
-                <TestQuestion
-                    id={(question_index++).toString()}
-                    title="Ты пидор?"
-                    opts={["Да", "Нет"]}
-                    onChange={handleAnswersChange}
-                    value={answers[question_index - 1]}
-                />
-                <TestQuestion
-                    id={(question_index++).toString()}
-                    title="Точно?"
-                    opts={["Конечно", "Нет", "Не уверен"]}
-                    onChange={handleAnswersChange}
-                    value={answers[question_index - 1]}
-                />
-                <div className="test-footer">
-                    <button onClick={handleTestSubmit}>Отправить</button>
-                </div>
-            </Test>
-        </div>
+        <TestVerificationPage 
+            onChange={handleAnswersChange} 
+            onSubmit={handleTestSubmit}
+            value={answers}
+        />
     );
 }
 

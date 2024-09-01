@@ -149,22 +149,22 @@ function ImageUpload() {
 
         if (isCrop && crop) {
             formData.append('image', createImageFromCrop());
-            onSubmit(formData);
             setCrop();
             setSelectedImage();
             toggleImageUpload();
             document.getElementById('avatar').value = null;
             setFile();
+            onSubmit(formData);
             return;
         }
 
         if (!isCrop) {
             formData.append('image', selectedImage);
-            onSubmit(formData);
             setSelectedImage();
             toggleImageUpload();
             document.getElementById('avatar').value = null;
             setFile();
+            onSubmit(formData);
             return;
         }
     }

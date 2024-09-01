@@ -1,5 +1,6 @@
 import { useState } from "react";
 import AdminService from "../../service/AdminService";
+import { API_URL } from "../../http/axios";
 
 const ExecutorTicket = ({ ticket }) => {
     const [showImage, setShowImage] = useState([false]);
@@ -23,7 +24,7 @@ const ExecutorTicket = ({ ticket }) => {
 
     return (
 
-        <div className="ticket" key={ticket.id} id={ticket.id}>
+        <div className="ticket" id={ticket.id}>
             <h4><b>ID: </b>{ticket.id}</h4>
             {ticket.verified ?
                 <h4 className="green"><b>Verified: </b>true</h4>

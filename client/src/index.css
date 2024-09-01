@@ -259,6 +259,7 @@ button:focus {
     bottom: 13em;
     left: 5em;
     transition: 500ms;
+    width: 15%;
 }
 
 .profilePageEditIcon:hover {
@@ -272,7 +273,7 @@ button:focus {
 }
 
 .profilePageAvatar {
-    width: 100%;
+    height: 225px;
     display: block;
     border-radius: 50%;
     border: solid;
@@ -587,7 +588,7 @@ button:focus {
     font-family: 'Nunito', sans-serif;
     margin: 0;
     padding: 0em;
-    width: 237.05px;
+    width: 287px;
 }
 
 .nav-horizontal .NavBarItem {

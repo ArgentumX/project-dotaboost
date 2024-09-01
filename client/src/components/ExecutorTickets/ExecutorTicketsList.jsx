@@ -70,7 +70,7 @@ const ExecutorTicketsList = () => {
                         showUserId > 0 && ticket.userId != showUserId) {
                         return;
                     }
-                    return <ExecutorTicket ticket={ticket} />
+                    return <ExecutorTicket key={ticket.id} ticket={ticket} />
                 })}
             </div>
         </div>
