@@ -255,14 +255,20 @@ button:focus {
 }
 
 .profilePageEditIcon {
-    position: absolute;
-    width: 1.5%;
-    top: 10em;
-    left: 23%;
+    position: relative;
+    bottom: 13em;
+    left: 5em;
+    transition: 500ms;
 }
 
 .profilePageEditIcon:hover {
+    filter: brightness(85%);
     cursor: pointer;
+}
+
+.profilePageAvatarContainer {
+    display: inline;
+    max-height: 225px;
 }
 
 .profilePageAvatar {
