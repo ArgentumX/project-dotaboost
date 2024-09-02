@@ -6,6 +6,8 @@ const { ExecutorComment } = require("../models/comment-model");
 const ExecutorCommentDto = require("../dtos/executor-comment-dto");
 const batchServices = require("./batch-services");
 const adminService = require("./admin-service");
+const userService = require("./user-service");
+const UserDto = require("../dtos/user-dto");
 
 class CommentService {
     async getCommentModel(commentId) {
@@ -44,9 +46,18 @@ class CommentService {
     }
 
     async getExecutorComments(executorId) {
-        const comments = await ExecutorComment.findAll({ where: { executorId } });
-        const commentsData = comments.map((comments) => new ExecutorCommentDto(comments));
-        return { comments: commentsData };
+        const comments = await ExecutorComment.findAll({
+            where: { executorId },
+            include: [
+                {
+                    model: User,
+                },
+            ],
+        });
+
+        const commentsData = comments.map((comment) => new ExecutorCommentDto(comment));
+        const usersData = comments.map((comment) => new UserDto(comment.user));
+        return { comments: commentsData, users: usersData };
     }
     async removeComment(userId, commentId, force = false) {
         const comment = await this.getCommentModel(commentId);
