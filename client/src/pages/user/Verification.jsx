@@ -18,16 +18,16 @@ function Verification() {
 
     const navigate = useNavigate();
 
-    const { store } = useContext(Context);
+    const { executorStore } = useContext(Context);
 
     setImageUploadSettings(4, false, async (screen) => {
-        store.uploadScreenshot(screen);
+        executorStore.uploadScreenshot(screen);
         window.scrollTo(0, 0);
         setLoading(true);
         ExecutorTicketService.getUserTicket().catch((e) => {
             setLoading(false);
         }).then((data) => {
-            store.setExecutorTicket(data.ticket);
+            executorStore.setExecutorTicket(data.ticket);
             setLoading(false);
         })
     });
@@ -62,7 +62,7 @@ function Verification() {
         ExecutorTicketService.getUserTicket().catch((e) => {
             setLoading(false);
         }).then(data => {
-            store.setExecutorTicket(data?.ticket);
+            executorStore.setExecutorTicket(data?.ticket);
             setLoading(false);
         })
     }, [])
@@ -75,9 +75,9 @@ function Verification() {
             ExecutorTicketService.create(answers).catch((e) => {
                 setLoading(false);
             }).then(data => {
-                store.setExecutorTicket(data?.ticket);
-                if (!store.executorTicket) {
-                    console.log(store.executorTicket)
+                executorStore.setExecutorTicket(data?.ticket);
+                if (!executorStore.executorTicket) {
+                    console.log(executorStore.executorTicket)
                     swal({
                         title: "Тест не пройден.",
                         text: "",
@@ -86,7 +86,7 @@ function Verification() {
                         .then((value) => {
                             navigate(MAINPAGE_ROUTE);
                         })
-                } else if (store.executorTicket) {
+                } else if (executorStore.executorTicket) {
                     swal({
                         title: "Успех!",
                         button: "Продолжить верификацию",
@@ -110,7 +110,7 @@ function Verification() {
         );
     }
 
-    if (store.executorTicket?.requiredUsername && !store.executorTicket?.image) {
+    if (executorStore.executorTicket?.requiredUsername && !executorStore.executorTicket?.image) {
         return (
             <ImageVerificationPage
                 onSubmit={toggleImageUpload}
@@ -118,7 +118,7 @@ function Verification() {
         );
     }
 
-    if (store.executorTicket?.image) {
+    if (executorStore.executorTicket?.image) {
         return (
             <StatusVerificationPage />
         );

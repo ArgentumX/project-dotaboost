@@ -4,11 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { ORDER_ROUTE } from "../../utils/consts";
 
 function NavItem(props) {
-    const { store } = useContext(Context) ;
+    const { userStore } = useContext(Context) ;
     const navigate = useNavigate();
 
     const handleClick = () => {
-        if (props.link == ORDER_ROUTE && !store.isAuth) {
+        if (props.link == ORDER_ROUTE && !userStore.isAuth) {
             swal({
                 title: "Ошибка",
                 text: "Для того чтобы оформить заказ необходимо авторизоваться.",

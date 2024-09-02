@@ -8,7 +8,7 @@ const Auth = observer(() => {
     const openedEye = "src/assets/img/view.png";
     const closedEye = "src/assets/img/hide.png";
 
-    const { store } = useContext(Context);
+    const { userStore } = useContext(Context);
     const location = useLocation();
     const navigate = useNavigate();
     const isLogin = location.pathname === LOGIN_ROUTE;
@@ -18,10 +18,10 @@ const Auth = observer(() => {
     const [passwordIcon, setPasswordIcon] = useState(openedEye);
 
     useEffect(() => {
-        if (store.isAuth) {
+        if (userStore.isAuth) {
             navigate(MAINPAGE_ROUTE);
         }
-    }, [store.isAuth])
+    }, [userStore.isAuth])
 
     const handlePasswordIconClick = () => {
         setPasswordIcon(passwordIcon == openedEye ? closedEye : openedEye);
@@ -30,9 +30,9 @@ const Auth = observer(() => {
     const handleSubmitClick = async () => {
         try {
             if (isLogin) {
-                store.login(email, password)
+                userStore.login(email, password)
             } else if (password) {
-                store.registration(email, username, password)
+                userStore.registration(email, username, password)
             }
         } catch (e) {
             swal({

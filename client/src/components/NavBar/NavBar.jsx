@@ -6,19 +6,19 @@ import { observer } from "mobx-react-lite";
 import NavItem from "./NavItem";
 
 const NavBarProfile = observer(() => {
-    const { store } = useContext(Context)
+    const { userStore } = useContext(Context)
 
     const navigate = useNavigate();
 
     const defaultAvatar = "src/assets/img/default_profile_icon.png"
 
-    if (store.isAuth) {
+    if (userStore.isAuth) {
         return (
             <div>
                 <li className="NavBarProfile">
-                    <img src={store.user.avatar == null ? defaultAvatar : store.user.avatar} alt="" onClick={() => {navigate(PROFILE_ROUTE)}}/>
-                    <h3><NavLink to={PROFILE_ROUTE}>{store.user.username}</NavLink></h3>
-                    <h4><NavLink to="#">{store.user.balance.toFixed(2)} ₽</NavLink></h4>
+                    <img src={userStore.user.avatar == null ? defaultAvatar : userStore.user.avatar} alt="" onClick={() => {navigate(PROFILE_ROUTE)}}/>
+                    <h3><NavLink to={PROFILE_ROUTE}>{userStore.user.username}</NavLink></h3>
+                    <h4><NavLink to="#">{userStore.user.balance.toFixed(2)} ₽</NavLink></h4>
                 </li>
             </div>
         );
@@ -37,8 +37,8 @@ const NavBarProfile = observer(() => {
 });
 
 function NavBar() {
-    const { store } = useContext(Context)
-    const roles = store.user.roles ? [...store.user.roles] : []
+    const { userStore } = useContext(Context)
+    const roles = userStore.user.roles ? [...userStore.user.roles] : []
 
     return (
         <ul className="NavBar">

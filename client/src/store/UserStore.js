@@ -3,17 +3,13 @@ import AuthService from "../service/AuthService"
 import axios from "axios"
 import { API_URL } from "../http/axios"
 import UserService from "../service/UserService";
-import OrderService from "../service/OrderService";
-import ExecutorTicketService from "../service/ExecutorTicketService";
 
-export default class Store {
+export default class UserStore {
 
     constructor() {
         this.user = {};
         this.isAuth = false;
         this.isLoading = false;
-        this.order = {};
-        this.executorTicket = {};
         makeAutoObservable(this)
     }
 
@@ -27,14 +23,6 @@ export default class Store {
 
     setLoading(bool) {
         this.isLoading = bool;
-    }
-
-    setOrder(order) {
-        this.order = order;
-    }
-    
-    setExecutorTicket(ticket) {
-        this.executorTicket = ticket;
     }
 
     async login(email, password) {
@@ -168,39 +156,6 @@ export default class Store {
             swal({
                 title: "Ошибка",
                 text: e.response?.data?.message,
-                icon: "error"
-            })
-        }
-    }
-
-    async createOrder(startMMR, endMMR, party, priority, steamguard, playtime, steamUsername, steamPassword) {
-        try {
-            const response = await OrderService.createOrder(startMMR, endMMR, party, priority, steamguard, playtime, steamUsername, steamPassword);
-            this.setOrder(response.data.order);
-        } catch (e) {
-            if (e.response?.data?.message == 'unable to create new orders before other not payed') {
-                swal({
-                    title: "Ошибка",
-                    text: "Вы не можете создать заказ, если у Вас есть действующие неоплаченные заказы.",
-                    icon: "error"
-                })
-                return;
-            }
-            swal({
-                title: "Ошибка",
-                text: e.response?.data?.message,
-                icon: "error"
-            })
-        }
-    }
-
-    async uploadScreenshot(screen) {
-        try {
-            const response = await ExecutorTicketService.uploadScreenshot(screen);
-        } catch (e) {
-            swal({
-                title: "Oшибка",
-                text: e.response?.message,
                 icon: "error"
             })
         }

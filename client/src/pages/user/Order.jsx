@@ -29,7 +29,7 @@ function Order() {
 
     const firstRender = useRef(true);
 
-    const { store } = useContext(Context);
+    const { orderStore } = useContext(Context);
 
     const navigate = useNavigate();
 
@@ -44,9 +44,9 @@ function Order() {
             return;
         }
 
-        store.createOrder(startMMR, endMMR, party, priority, steamguard, playtime, steamLogin, steamPassword);
+        orderStore.createOrder(startMMR, endMMR, party, priority, steamguard, playtime, steamLogin, steamPassword);
 
-        if (store.order) {
+        if (orderStore.order) {
             swal({
                 title: "Поздравляем!",
                 text: "Ваш заказ успешно создан.",
@@ -55,7 +55,7 @@ function Order() {
                     navigate(MAINPAGE_ROUTE);
                 })
         } else {
-            console.log(store.order);
+            console.log(orderStore.order);
         }
     }, [orderSubmit])
 

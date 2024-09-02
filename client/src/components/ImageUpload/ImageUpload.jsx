@@ -23,7 +23,7 @@ export function toggleImageUpload() {
 }
 
 function ImageUpload() {
-    const { store } = useContext(Context);
+    const { userStore } = useContext(Context);
     const [selectedImage, setSelectedImage] = useState(null);
     const [crop, setCrop] = useState();
     const [isImageLoaded, setIsImageLoaded] = useState(false);
@@ -145,7 +145,7 @@ function ImageUpload() {
     }
 
     const handleSubmitClick = () => {
-        onSubmit = onSubmit.bind(store);
+        onSubmit = onSubmit.bind(userStore);
 
         if (isCrop && crop) {
             formData.append('image', createImageFromCrop());
