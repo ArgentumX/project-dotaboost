@@ -1,12 +1,12 @@
 import { ABOUTUS_ROUTE, ORDER_ROUTE, LOGIN_ROUTE, MAINPAGE_ROUTE, PROFILE_ROUTE, REGISTER_ROUTE, VERIFICATION_ROUTE, PASSWORD_RESET_ROUTE, ADMIN_ROUTE } from "./utils/consts";
-import MainPage from './pages/MainPage';
-import AboutUs from './pages/AboutUs';
-import Order from './pages/Order';
-import Auth from './pages/Auth';
-import Profile from "./pages/Profile";
-import Verification from "./pages/Verification";
-import PasswordReset from "./pages/PasswordReset";
-import Admin from "./pages/Admin";
+import MainPage from './pages/public/MainPage';
+import AboutUs from './pages/public/AboutUs';
+import Order from './pages/user/Order';
+import Auth from './pages/public/Auth';
+import Profile from "./pages/auth/Profile";
+import Verification from "./pages/user/Verification";
+import PasswordReset from "./pages/auth/PasswordReset";
+import Admin from "./pages/admin/Admin";
 
 export const authRoutes = [
     {

@@ -2,17 +2,27 @@ import React, { createContext } from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
-import Store from './store/Store.js'
+import UserStore from './store/UserStore.js'
+import OrderStore from './store/OrderStore.js'
+import ExecutorStore from './store/ExecutorStore.js'
 
-const store = new Store();
+const userStore = new UserStore();
+const orderStore = new OrderStore();
+const executorStore = new ExecutorStore();
 
 export const Context = createContext({
-    store,
+    userStore,
+    orderStore,
+    executorStore
 })
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+export const root = ReactDOM.createRoot(document.getElementById('root'));
+
+root.render(
     <Context.Provider value={{
-        store
+        userStore,
+        orderStore,
+        executorStore
     }}>
         <App/>
     </Context.Provider>,

@@ -1,0 +1,15 @@
+.test-header {
+    text-align: center;
+    font-weight: 500;
+    margin-top: 0;
+}
+
+.test-footer {
+    display: flex;
+    justify-content: center;
+    align-self: center;
+}
+
+.test-footer button {
+    padding: 5px 15px;
+}

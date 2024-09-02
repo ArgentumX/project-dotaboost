@@ -1,0 +1,11 @@
+.admin {
+    display: flex;
+    flex-direction: column;
+    padding: 2em 4em;
+    background-color: rgba(69, 69, 69, 0.5);
+    border-radius: 10px;
+    position: relative;
+    bottom: 10em;
+    width: 70%;
+    height: 30em;
+}
