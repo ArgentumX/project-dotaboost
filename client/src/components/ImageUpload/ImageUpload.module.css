@@ -1,0 +1,114 @@
+#image-upload {
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: fit-content;
+    padding: 35px;
+    box-shadow: 0 5px 30px rgba(0, 0, 0, .30);
+    border-radius: 25px;
+    background: rgb(45, 45, 45);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.5s;
+}
+
+.active{
+    top: 50% !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    transition: 0.5s !important;
+}
+
+.image-upload-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+    bottom: 3em;
+    margin: 1em 0em;
+}
+
+.image-upload-header .close {
+    position: absolute;
+    right: 0;
+    transition: 0.3s;
+}
+
+.image-upload-header h1 {
+    font-size: 1.5em;
+}
+
+.image-upload-header .close:hover {
+    cursor: pointer;
+    filter: brightness(70%);
+}
+
+.image-container {
+    width: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    height: fit-content;
+    position: relative;
+    bottom: 2em;
+    border: solid;
+    border-color: rgb(25, 25, 25);
+    border-width: 2px;
+}
+
+.drag {
+    border-style: dashed;
+    border-color: rgb(125, 125, 125)
+}
+
+.hint {
+    padding: 5em;
+}
+
+.hint h3 {
+    color: rgb(125, 125, 125);
+}
+
+.image-upload-footer {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.image-upload-footer #load {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    padding: 0.5rem 2rem;
+    border-radius: 1em;
+    border: solid;
+    border-width: 2px;
+    min-width: 2rem;
+    font-size: 1.3rem;
+    transition: 500ms;
+    background: #525252;
+    border-color: #525252;
+}
+
+.image-upload-footer #load:hover {
+    cursor: pointer;
+    transition: 300ms;
+    border-color: #424242;
+    background: #424242;
+}
+
+.image-upload-footer #load:active {
+    border-color: #727272;
+}
+
+.image-upload-footer #avatar {
+    visibility: hidden;
+    position: absolute;
+}

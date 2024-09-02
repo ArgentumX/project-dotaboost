@@ -1,9 +1,10 @@
 import { useContext, useState } from "react";
 import { toggleBlur } from "../../utils/blur";
 import ReactCrop, { centerCrop, makeAspectCrop } from "react-image-crop";
-import 'react-image-crop/dist/ReactCrop.css'
+import 'react-image-crop/dist/ReactCrop.css';
 import { useDropzone } from "react-dropzone";
-import { Context } from "../.."
+import { Context } from "../..";
+import styles from './ImageUpload.module.css';
 
 export let maxSizeMB = 1;
 export let isCrop = true;
@@ -19,7 +20,7 @@ export function setImageUploadSettings(_maxSizeMB, _isCrop, _onSubmit) {
 
 export function toggleImageUpload() {
     toggleBlur();
-    document.getElementById('ImageUpload').classList.toggle('active');
+    document.getElementById(styles["image-upload"]).classList.toggle(styles['active']);
 }
 
 function ImageUpload() {
@@ -27,7 +28,6 @@ function ImageUpload() {
     const [selectedImage, setSelectedImage] = useState(null);
     const [crop, setCrop] = useState();
     const [isImageLoaded, setIsImageLoaded] = useState(false);
-    const [file, setFile] = useState();
     const formData = new FormData();
 
     const fileValidation = (file) => {
@@ -73,7 +73,6 @@ function ImageUpload() {
 
     const onDrop = (acceptedFiles) => {
         const selectedFile = acceptedFiles[0];
-        setFile(selectedFile);
         uploadFile(selectedFile);
     };
 
@@ -84,7 +83,7 @@ function ImageUpload() {
     });
 
     function dataURLtoFile(dataurl, filename) {
-        var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+        var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1], //what the fuck
             bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
         while (n--) {
             u8arr[n] = bstr.charCodeAt(n);
@@ -153,7 +152,6 @@ function ImageUpload() {
             setSelectedImage();
             toggleImageUpload();
             document.getElementById('avatar').value = null;
-            setFile();
             onSubmit(formData);
             return;
         }
@@ -163,24 +161,23 @@ function ImageUpload() {
             setSelectedImage();
             toggleImageUpload();
             document.getElementById('avatar').value = null;
-            setFile();
             onSubmit(formData);
             return;
         }
     }
 
     return (
-        <div id="ImageUpload">
-            <div className="ImageUploadHeader">
+        <div id={styles["image-upload"]}>
+            <div className={styles["image-upload-header"]}>
                 <h1>Загрузка изображения</h1>
-                <img src="src/assets/img/close.png" alt="" className="close" role="button" onClick={() => {
+                <img src="src/assets/img/close.png" alt="" className={styles["close"]} role="button" onClick={() => {
                     toggleImageUpload();
                     setTimeout(() => {
                         setSelectedImage(null);
                     }, 500)
                 }} />
             </div>
-            <div className={isDragActive ? "ImageContainer drag" : "ImageContainer"} {...getRootProps()}>
+            <div className={isDragActive ? styles["image-container drag"] : styles["image-container"]} {...getRootProps()}>
                 {selectedImage && (
                     <ReactCrop
                         crop={isCrop ? crop : null}
@@ -198,16 +195,16 @@ function ImageUpload() {
                     </ReactCrop>
                 )}
                 {!selectedImage && (
-                    <div className="hint">
+                    <div className={styles["hint"]}>
                         <img src="src/assets/img/img.png" alt="" />
                         <h3>Переместите изображение сюда</h3>
                     </div>
                 )}
                 <input type="file" id="avatar" {...getInputProps()} />
             </div>
-            <div className="ImageUploadFooter">
-                <label htmlFor="avatar" id="load">Выбрать</label>
-                <button className="submit" onClick={handleSubmitClick}>Сохранить</button>
+            <div className={styles["image-upload-footer"]}>
+                <label htmlFor="avatar" id={styles["load"]} >Выбрать</label>
+                <button className={styles["submit"]} onClick={handleSubmitClick}>Сохранить</button>
             </div>
         </div>
     );

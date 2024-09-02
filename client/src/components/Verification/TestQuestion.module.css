@@ -1,0 +1,14 @@
+.test-question {
+    border: 2px solid grey;
+    border-radius: 5px;
+    margin-bottom: 1em;
+}
+
+.test-question-title {
+    margin: 0em 1em;
+    margin-top: 0.25em;
+}
+
+.test-question-answers-list {
+    margin-left: 1.5em;
+}

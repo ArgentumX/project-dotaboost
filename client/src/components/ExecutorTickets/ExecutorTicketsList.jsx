@@ -4,6 +4,7 @@ import AdminService from "../../service/AdminService";
 import ExecutorTicketOption from "./ExecutorTicketOption";
 import ExecutorTicket from "./ExecutorTicket";
 import ReactLoading from "react-loading";
+import styles from "./ExecutorTicketsList.module.css";
 
 const ExecutorTicketsList = () => {
     const [loading, setLoading] = useState(true);
@@ -62,7 +63,7 @@ const ExecutorTicketsList = () => {
                     label="Specifiy user ID:"
                 />
             </ExecutorTicketOptions>
-            <div className="tickets">
+            <div className={styles["tickets"]}>
                 {tickets.map((ticket) => {
                     if (!showClosed && ticket.closed ||
                         !showVerified && ticket.verified ||

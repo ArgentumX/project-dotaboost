@@ -1,6 +1,7 @@
 import { useState } from "react";
 import AdminService from "../../service/AdminService";
 import { API_URL } from "../../http/axios";
+import styles from "./ExecutorTicket.module.css";
 
 const ExecutorTicket = ({ ticket }) => {
     const [showImage, setShowImage] = useState([false]);
@@ -13,18 +14,18 @@ const ExecutorTicket = ({ ticket }) => {
 
     const handleApplyClick = (id) => {
         AdminService.verify(id, true);
-        document.getElementById(id.toString()).classList.toggle('ticket-closed');
+        document.getElementById(id.toString()).classList.toggle(styles['ticket-closed']);
 
     }
 
     const handleRejectClick = (id) => {
         AdminService.verify(id, false);
-        document.getElementById(id.toString()).classList.toggle('ticket-closed');
+        document.getElementById(id.toString()).classList.toggle(styles['ticket-closed']);
     }
 
     return (
 
-        <div className="ticket" id={ticket.id}>
+        <div className={styles["ticket"]} id={ticket.id}>
             <h4><b>ID: </b>{ticket.id}</h4>
             {ticket.verified ?
                 <h4 className="green"><b>Verified: </b>true</h4>
@@ -52,9 +53,9 @@ const ExecutorTicket = ({ ticket }) => {
             {showImage[ticket.id] && <img src={API_URL + ticket.image} />}
             {!ticket.closed && !ticket.verified && (
 
-                <div className="ticket-footer">
+                <div className={styles["ticket-footer"]}>
                     <button onClick={() => handleApplyClick(ticket.id)}>Apply</button>
-                    <button onClick={() => handleRejectClick(ticket.id)} className="second-button">Reject</button>
+                    <button onClick={() => handleRejectClick(ticket.id)} className={styles["second-button"]}>Reject</button>
                 </div>
             )}
         </div>

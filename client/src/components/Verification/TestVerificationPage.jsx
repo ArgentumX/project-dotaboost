@@ -1,5 +1,6 @@
 import Test from "./Test";
 import TestQuestion from "./TestQuestion";
+import styles from './TestVerificationPage.module.css';
 
 const TestVerificationPage = ({onChange, value, onSubmit}) => {   
     let question_index = 1;
@@ -7,7 +8,7 @@ const TestVerificationPage = ({onChange, value, onSubmit}) => {
     return (
         <div className="center">
             <Test>
-                <h1 className="test-header"> Ответьте на вопросы</h1>
+                <h1 className={styles["test-header"]}> Ответьте на вопросы</h1>
                 <TestQuestion
                     id={(question_index++).toString()}
                     title="Ты пидор?"
@@ -78,7 +79,7 @@ const TestVerificationPage = ({onChange, value, onSubmit}) => {
                     onChange={onChange}
                     value={value[question_index - 1]}
                 />
-                <div className="test-footer">
+                <div className={styles["test-footer"]}>
                     <button onClick={() => onSubmit(question_index)}>Отправить</button>
                 </div>
             </Test>

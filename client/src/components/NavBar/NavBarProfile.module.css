@@ -1,0 +1,45 @@
+.navbar-profile {
+    text-align: center;
+    float: right;
+    color: rgba(255, 255, 255, 0.75);
+    display: inline;
+    margin: 5px 25px;
+    position: absolute;
+    right: 0.5em;
+}
+
+.navbar-profile img {
+    width: 45px;
+    height: 45px;
+    margin: 0px 10px;
+    display: inline;
+    float: left;
+    border-radius: 50%;
+    border: solid;
+    border-width: 2px;
+    border-color: rgb(175, 175, 175);
+}
+
+.navbar-profile img:hover {
+    cursor: pointer;
+}
+
+.navbar-profile h3 {
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.8em;
+    float: right;
+    white-space: nowrap;
+    display: inline;
+    position: relative;
+    margin: 0px;
+}
+
+.navbar-profile h4 {
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.6em;
+    font-weight: 500;
+    margin: 0px;
+    top: 25px;
+    position: relative;
+    white-space: nowrap;
+}

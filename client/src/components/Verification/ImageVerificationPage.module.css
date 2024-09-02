@@ -1,0 +1,28 @@
+.verification-image-wrapper {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 2em 4em;
+    background-color: rgba(69, 69, 69, 0.5);
+    border-radius: 10px;
+    position: relative;
+    bottom: 13em;
+    width: 70%;
+}
+
+.verification-image-wrapper h2 {
+    text-align: center;
+}
+
+.verification-image-wrapper h3 {
+    margin: 0.2em;
+}
+
+.verification-image-example {
+    margin: 1em;
+}
+.verification-image-footer {
+    display: flex;
+    justify-content: center;
+    align-self: center;
+}

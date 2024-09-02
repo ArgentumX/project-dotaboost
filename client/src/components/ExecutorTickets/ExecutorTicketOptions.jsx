@@ -1,6 +1,6 @@
 const ExecutorTicketOptions = (props) => {
     return (
-        <div className="ticket-settings">
+        <div>
             {props.children}
         </div>
     );

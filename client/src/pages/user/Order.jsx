@@ -7,6 +7,7 @@ import swal from 'sweetalert';
 import { checkboxChildrenStyle, checkboxStyle, sliderStyle, textStyle } from "../../utils/mui_styles";
 import { useNavigate } from "react-router-dom";
 import { MAINPAGE_ROUTE } from "../../utils/consts";
+import styles from './Order.module.css';
 
 function Order() {
     const openedEye = "src/assets/img/view.png";
@@ -102,7 +103,7 @@ function Order() {
             "AFTERNOON": time[1],
             "EVENING": time[2],
         };
-        
+
         setPlaytime(playtimeObject);
         setOrderSubmit(true);
     }
@@ -129,11 +130,11 @@ function Order() {
 
     return (
         <div className="center">
-            <div className="order">
+            <div className={styles["order"]}>
                 <h1>Форма заказа</h1>
-                <div className="calculator">
+                <div className={styles["calculator"]}>
                     <h3>Начальный MMR:
-                        <input type="text" className="mmr-input" value={startMMR} onChange={(e) => handleStartMMRInput(e.target.value)} />
+                        <input type="text" className={styles["mmr-input"]} value={startMMR} onChange={(e) => handleStartMMRInput(e.target.value)} />
                     </h3>
                     <Slider
                         value={startMMR}
@@ -144,7 +145,7 @@ function Order() {
                         sx={sliderStyle}
                     />
                     <h3>Желаемый MMR:
-                        <input type="text" className="mmr-input" value={endMMR} onChange={(e) => handleEndMMRInput(e.target.value)} />
+                        <input type="text" className={styles["mmr-input"]} value={endMMR} onChange={(e) => handleEndMMRInput(e.target.value)} />
                     </h3>
                     <Slider
                         value={endMMR}
@@ -154,7 +155,7 @@ function Order() {
                         max={8000}
                         sx={sliderStyle}
                     />
-                    <div className="checkbox-container">
+                    <div className={styles["checkbox-container"]}>
                         <FormControlLabel
                             control={
                                 <Checkbox
@@ -294,10 +295,11 @@ function Order() {
                         }
                     </div>
                 </div>
-                <div className="steam-credentials">
+                <div className={styles["steam-credentials"]}>
                     <h3>Введите данные от Вашего Steam аккаунта</h3>
                     <input
                         className="textbox"
+                        id={styles['textbox']}
                         placeholder="Логин"
                         type="text"
                         value={steamLogin}
@@ -306,16 +308,17 @@ function Order() {
                     />
                     <input
                         className="textbox"
+                        id={styles['textbox']}
                         placeholder="Пароль"
                         type={passwordIcon == openedEye ? "password" : "text"}
                         value={steamPassword}
                         onChange={e => setSteamPassword(e.target.value)}
                         autoComplete="new-password"
                     />
-                    <img className="password-icon" src={passwordIcon} alt="" onClick={handlePasswordIconClick} />
+                    <img className="password-icon" id={styles['password-icon']} src={passwordIcon} alt="" onClick={handlePasswordIconClick} />
                 </div>
                 <h2>Рассчетная стоимость: <b>{cost}₽</b></h2>
-                <button className="button" onClick={submit}>Подтвердить заказ</button>
+                <button onClick={submit}>Подтвердить заказ</button>
             </div>
         </div>
     );

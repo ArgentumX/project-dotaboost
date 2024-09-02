@@ -1,54 +1,24 @@
 import { useContext } from "react";
-import { ABOUTUS_ROUTE, ORDER_ROUTE, MAINPAGE_ROUTE, LOGIN_ROUTE, REGISTER_ROUTE, PROFILE_ROUTE, ADMIN_ROUTE } from "../../utils/consts";
+import { ABOUTUS_ROUTE, ORDER_ROUTE, MAINPAGE_ROUTE, PROFILE_ROUTE, ADMIN_ROUTE } from "../../utils/consts";
 import { Context } from "../..";
-import { NavLink, useNavigate } from "react-router-dom";
-import { observer } from "mobx-react-lite";
 import NavItem from "./NavItem";
+import NavBarProfile from "./NavBarProfile";
+import styles from "./NavBar.module.css";
 
-const NavBarProfile = observer(() => {
-    const { userStore } = useContext(Context)
-
-    const navigate = useNavigate();
-
-    const defaultAvatar = "src/assets/img/default_profile_icon.png"
-
-    if (userStore.isAuth) {
-        return (
-            <div>
-                <li className="NavBarProfile">
-                    <img src={userStore.user.avatar == null ? defaultAvatar : userStore.user.avatar} alt="" onClick={() => {navigate(PROFILE_ROUTE)}}/>
-                    <h3><NavLink to={PROFILE_ROUTE}>{userStore.user.username}</NavLink></h3>
-                    <h4><NavLink to="#">{userStore.user.balance.toFixed(2)} ₽</NavLink></h4>
-                </li>
-            </div>
-        );
-    }
-    else {
-        return (
-            <div>
-                <li className="NavBarProfile">
-                    <img src={defaultAvatar} alt="" />
-                    <h3><NavLink to={REGISTER_ROUTE}>Регистрация</NavLink></h3>
-                    <h4><NavLink to={LOGIN_ROUTE}>Вход</NavLink></h4>
-                </li>
-            </div>
-        );
-    }
-});
 
 function NavBar() {
     const { userStore } = useContext(Context)
     const roles = userStore.user.roles ? [...userStore.user.roles] : []
 
     return (
-        <ul className="NavBar">
+        <ul className={styles["navbar"]}>
             <NavItem text="Главная" link={MAINPAGE_ROUTE} />
             <NavItem text="О нас" link={ABOUTUS_ROUTE} />
             <NavItem text="Профиль" link={PROFILE_ROUTE} />
             {!roles.includes("EXECUTOR") &&
                 <NavItem text="Заказать буст" link={ORDER_ROUTE} />}
             {(roles.includes("ADMIN") || roles.includes("GOD")) &&
-                <NavItem text="Admin" link={ADMIN_ROUTE}/>
+                <NavItem text="Admin" link={ADMIN_ROUTE} />
             }
             <NavBarProfile />
         </ul>

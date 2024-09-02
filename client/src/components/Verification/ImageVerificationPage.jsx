@@ -1,19 +1,20 @@
 import { useContext } from "react";
 import { Context } from "../..";
+import styles from './ImageVerificationPage.module.css';
 
 const ImageVerificationPage = ({onSubmit}) => {
     const {executorStore} = useContext(Context);
 
     return (
         <div className="center">
-        <div className="verification-image-wrapper">
+        <div className={styles["verification-image-wrapper"]}>
             <h2>Следуйте указаниям для завершения верификации.</h2>
             <h3>1. Вам присвоен уникальный никнейм: «<b>{executorStore.executorTicket.requiredUsername}</b>». В настройках профиля в Вашем Steam аккаунте поставьте этот ник.</h3>
             <h3>2. Запустите Dota 2 и перейдите в историю игр.</h3>
             <h3>3. Сделайте скриншот всего экрана, как показано на примере ниже.</h3>
-            <img src="src/assets/img/verification-image-example.png" alt="" className="verification-example" />
+            <img src="src/assets/img/verification-image-example.png" alt="" className={styles["verification-image-example"]} />
             <h3>4. Загрузите скриншот.</h3>
-            <div className="test-footer">
+            <div className={styles["verification-image-footer"]}>
                 <button onClick={onSubmit}>Загрузить</button>
             </div>
         </div>

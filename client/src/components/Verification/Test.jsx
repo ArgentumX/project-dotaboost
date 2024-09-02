@@ -1,6 +1,8 @@
+import styles from './Test.module.css';
+
 function Test(props) {
     return(
-        <div className="verification-test">
+        <div className={styles["verification-test"]}>
             {props.children} 
         </div>
     );

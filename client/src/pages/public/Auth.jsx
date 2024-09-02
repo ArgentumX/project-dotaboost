@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { LOGIN_ROUTE, MAINPAGE_ROUTE } from "../../utils/consts";
 import { observer } from "mobx-react-lite";
 import { Context } from "../..";
+import styles from './Auth.module.css';
 
 const Auth = observer(() => {
     const openedEye = "src/assets/img/view.png";
@@ -45,7 +46,7 @@ const Auth = observer(() => {
 
     return (
         <div className="center">
-            <div className="AuthBox">
+            <div className={styles['auth-container']}>
                 <h1>{isLogin ? "Вход" : "Регистрация"}</h1>
                 <input
                     className="textbox"
@@ -72,7 +73,7 @@ const Auth = observer(() => {
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                 />
-                <img className="password-icon" src={passwordIcon} alt="" onClick={handlePasswordIconClick} />
+                <img className="password-icon" id={styles['password-icon']} src={passwordIcon} alt="" onClick={handlePasswordIconClick} />
                 <button
                     type="submit"
                     onClick={handleSubmitClick}>

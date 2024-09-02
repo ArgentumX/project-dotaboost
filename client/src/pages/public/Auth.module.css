@@ -1,0 +1,30 @@
+.auth-container {
+    border-radius: 15px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.3em;
+    background-color: rgba(69, 69, 69, 0.5);
+    padding: 9rem 15rem;
+    max-width: 15rem;
+    max-height: 8rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.auth-container button {
+    position: relative;
+    bottom: 2rem;
+}
+
+.auth-container h1 {
+    position: relative;
+    bottom: 1rem;
+}
+
+#password-icon {
+    bottom: 3.65em;
+    left: 12em;
+}
+

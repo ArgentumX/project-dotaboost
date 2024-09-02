@@ -1,5 +1,6 @@
 import { Checkbox, FormControlLabel, Typography } from "@mui/material";
 import { checkboxStyle, textStyle } from "../../utils/mui_styles";
+import styles from './ExecutorTicketOption.module.css';
 
 const ExecutorTicketOption = ({ type, onChange, value, label }) => {
     if (type == "checkbox") {
@@ -21,7 +22,7 @@ const ExecutorTicketOption = ({ type, onChange, value, label }) => {
 
     if (type == "numeric") {
         return (
-            <div className="numeric-input">
+            <div className={styles["numeric-input"]}>
                 <p>{label}</p>
                 <input type="text" onChange={(e) => {
                     if (!isNaN(e.target.value)) {
