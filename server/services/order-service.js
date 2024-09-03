@@ -12,6 +12,7 @@ const executorService = require("./executor-service");
 const tgBotService = require("./tg-bot-service");
 const recordService = require("./record-service");
 const adminService = require("./admin-service");
+const chatService = require("./chat-service");
 
 class OrderService {
     async getOrder(orderId, hideSecretData = true) {
@@ -65,6 +66,7 @@ class OrderService {
             throw ApiError.BadRequest("unable to create new orders before other not payed");
         }
 
+        const { chat } = await chatService.createChat([userId]);
         const order = await Order.create({
             party,
             priority,
@@ -75,6 +77,7 @@ class OrderService {
             startRating,
             currentRating: startRating,
             endRating,
+            chatId: chat.id,
         });
         await order.setUser(user);
         const orderData = new OrderDto(order, false);
@@ -145,6 +148,7 @@ class OrderService {
             throw ApiError.BadRequest("Order is already taken");
         }
         await order.setExecutor(executor);
+        await chatService.addChatMember(order.chatId, userId);
         await recordService.createOrderRecord(
             order,
             executor,
@@ -172,6 +176,7 @@ class OrderService {
             throw ApiError.BadRequest("order not found");
         }
         await executor.setOrder(null);
+        await chatService.removeChatMember(order.chatId, userId);
         await recordService.createOrderRecord(
             order,
             executor,

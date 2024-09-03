@@ -10,6 +10,7 @@ module.exports = class OrderDto {
     startRating;
     currentRating;
     endRating;
+    chatId;
 
     constructor(model, hideSecretData = true) {
         this.id = model.id;
@@ -21,6 +22,7 @@ module.exports = class OrderDto {
         this.closed = model.closed;
         this.endRating = model.endRating;
         this.currentRating = model.currentRating;
+        this.chatId = model.chatId;
         if (!hideSecretData) {
             this.steamUsername = model.steamUsername;
             this.steamPassword = model.steamPassword;

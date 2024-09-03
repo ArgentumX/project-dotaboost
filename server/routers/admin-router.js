@@ -46,12 +46,5 @@ router.patch(
     param("orderId").isNumeric(),
     adminController.closeOrder
 );
-// TODO rework
-/*router.post(
-    "/force-verify",
-    authMiddleware,
-    checkRoleMiddleware(config.ROLES.LIST.admin.title),
-    executorTicketController.
-);*/
 
 module.exports = router;

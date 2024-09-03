@@ -79,6 +79,8 @@ Record.belongsTo(Executor);
 Order.hasMany(Record, { onDelete: "CASCADE" });
 Record.belongsTo(Order);
 
+Order.belongsTo(Chat);
+
 Executor.hasMany(Batch);
 Batch.belongsTo(Executor);
 
