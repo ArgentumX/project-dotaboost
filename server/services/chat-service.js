@@ -8,6 +8,7 @@ const { Chat } = require("../models/chat-model");
 const { Message } = require("../models/message-model");
 const { User, UserChat } = require("../models/user-model");
 const userService = require("./user-service");
+const socketService = require("./socket-service");
 
 class ChatService {
     async handleGetChatMessagesRequest(userId, chatId, offset) {
@@ -56,7 +57,10 @@ class ChatService {
             throw ApiError.BadRequest("user is not member of this chat");
         }
         const message = await Message.create({ text, userId, chatId });
-        return { message: new MessageDto(message) };
+        const messageData = new MessageDto(message);
+        const usersId = (await this.getChatMembersId(chatId)).filter((value) => value !== userId);
+        socketService.sendMessageToChatMembers(usersId, { message: messageData });
+        return { message: messageData };
     }
 
     async addChatMember(chatId, userId) {
@@ -76,6 +80,10 @@ class ChatService {
         const messagesData = messages.map((message) => new MessageDto(message));
         const usersData = this.getUsersByMessageModels(messages);
         return { messages: messagesData, users: usersData };
+    }
+
+    async getChatMembersId(chatId) {
+        return (await UserChat.findAll({ where: { chatId } })).map((userChat) => userChat.userId);
     }
 
     getUsersByMessageModels(messageModels) {
