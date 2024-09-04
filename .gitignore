@@ -25,6 +25,6 @@ dist-ssr
 
 
 # Server setting
-server/static/images/*
+server/src/public/images/*
 server/build/*
 .env
