@@ -74,4 +74,4 @@ class PriceCalculator {
         return Math.ceil(price);
     }
 }
-module.exports = new PriceCalculator();
+module.exports.PriceCalculator = new PriceCalculator();

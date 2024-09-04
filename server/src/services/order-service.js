@@ -5,7 +5,7 @@ const config = require("../config");
 const jwt = require("jsonwebtoken");
 const OrderDto = require("../dtos/order-dto");
 const { createFilter } = require("../utils/db-utils");
-const priceCalculator = require("../../global/prices/price-calculator");
+import PriceCalculator from "../public/global/prices/price-calculator";
 const userService = require("./user-service");
 const { Model } = require("sequelize");
 const executorService = require("./executor-service");

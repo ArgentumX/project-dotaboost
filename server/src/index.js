@@ -22,8 +22,7 @@ app.use(
     })
 );
 app.use(express.json());
-app.use(express.static(path.resolve(__dirname, "static")));
-app.use(fileUpload({ abortOnLimit: true }));
+app.use(express.static(path.resolve(__dirname, "public")));
 app.use("/api", router);
 // Must be the last for errors handling of previous lines
 app.use(errorHandler);

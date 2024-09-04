@@ -8,12 +8,12 @@ const fs = require("fs");
 class Files {
     createStaticImage(imageFile, prefix) {
         const imageName = `${prefix + Uuid.v4()}.jpg`;
-        imageFile.mv(path.resolve(__dirname, "..", "static", imageName));
+        imageFile.mv(path.resolve(__dirname, "..", "public/images", imageName));
         return imageName;
     }
 
     async deleteStaticImage(imageName) {
-        const filePath = path.resolve(__dirname, "..", "static", imageName);
+        const filePath = path.resolve(__dirname, "..", "public/images", imageName);
         fs.unlink(filePath, (e) => {
             if (e) {
                 console.error(e);
