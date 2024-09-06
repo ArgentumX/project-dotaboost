@@ -118,13 +118,13 @@ class UserService {
         return await this.createUserTokens(user, ip);
     }
 
-    async getUser(userId, loadRolesData = false) {
+    async getUser(userId, loadRolesData = false, hideSecretData = true) {
         let roles;
         const user = await this.getUserModel(userId);
         if (loadRolesData) {
             roles = await roleService.getUserRoles(user.id);
         }
-        const userData = new UserDto(user, roles);
+        const userData = new UserDto(user, roles, hideSecretData, await this.getLastIp(userId));
         return { user: userData };
     }
 
@@ -190,6 +190,12 @@ class UserService {
     async isExecutor(userId) {
         const executor = await Executor.findOne({ where: { userId } });
         return executor != null;
+    }
+
+    // May return null
+    async getLastIp(userId) {
+        const token = await tokenService.findToken(userId, config.TOKENS.TYPE.REFRESH);
+        return token ? token.ip : null;
     }
 
     async isBanned(userId) {

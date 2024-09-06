@@ -68,5 +68,11 @@ router.patch(
     param("userId").isNumeric(),
     adminController.createExecutor
 );
-
+router.get(
+    "/user/:userId",
+    authMiddleware,
+    checkRoleMiddleware(config.ROLES.LIST.admin.title),
+    param("userId").isNumeric(),
+    adminController.getUser
+);
 module.exports = router;

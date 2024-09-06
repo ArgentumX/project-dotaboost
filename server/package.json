@@ -20,6 +20,7 @@
         "express-fileupload": "^1.5.1",
         "express-fileupload-validator": "^2.0.1",
         "express-validator": "^7.1.0",
+        "fs-extra": "^11.2.0",
         "ip-matching": "^2.1.2",
         "jsonwebtoken": "^9.0.2",
         "node-telegram-bot-api": "^0.63.0",

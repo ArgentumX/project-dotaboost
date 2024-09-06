@@ -24,7 +24,7 @@ class Files {
         try {
             const filePath = path.resolve(__dirname, "..", "blacklist.txt");
             const content = fs
-                .readFileSync(filePath, "utf8")
+                .readFileSync(filePath, "utf-8")
                 .replaceAll("\r", "")
                 .split("\n")
                 .filter((item) => item !== "");

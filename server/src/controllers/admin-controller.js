@@ -120,6 +120,19 @@ class AdminController {
             next(e);
         }
     }
+    async getUser(req, res, next) {
+        try {
+            const { userId } = req.params;
+            const valErrors = validationResult(req);
+            if (!valErrors.isEmpty()) {
+                return next(ApiError.ValidationError(valErrors));
+            }
+            const result = await adminService.handleGetUserRequest(userId);
+            return res.json(result);
+        } catch (e) {
+            next(e);
+        }
+    }
 }
 
 module.exports = new AdminController();

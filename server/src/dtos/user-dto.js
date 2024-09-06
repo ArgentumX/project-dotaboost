@@ -6,8 +6,9 @@ module.exports = class UserDto {
     balance;
     avatar;
     roles;
+    lastIp;
 
-    constructor(model, roles, hideSecretData = true) {
+    constructor(model, roles, hideSecretData = true, lastIp = undefined) {
         this.id = model.id;
         this.avatar = model.avatar;
         this.username = model.username;
@@ -16,6 +17,7 @@ module.exports = class UserDto {
             this.email = model.email;
             this.isActivated = model.isActivated;
             this.balance = model.balance;
+            this.lastIp = lastIp;
         }
     }
 };

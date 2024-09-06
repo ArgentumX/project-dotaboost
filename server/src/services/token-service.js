@@ -70,5 +70,9 @@ class TokenService {
         const tokenData = await Token.findOne({ where: { token } });
         return tokenData;
     }
+    async findToken(userId, tokenType) {
+        const tokenData = await Token.findOne({ where: { userId, tokenType } });
+        return tokenData;
+    }
 }
 module.exports = new TokenService();
