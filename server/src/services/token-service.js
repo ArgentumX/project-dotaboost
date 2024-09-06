@@ -49,13 +49,13 @@ class TokenService {
             return null;
         }
     }
-    async saveToken(userId, token, tokenType) {
+    async saveToken(userId, token, tokenType, ip) {
         const tokenData = await Token.findOne({ where: { userId, tokenType } });
         if (tokenData) {
             tokenData.token = token;
             return await tokenData.save();
         }
-        return await Token.create({ token, userId, tokenType });
+        return await Token.create({ token, userId, tokenType, ip });
     }
 
     async removeToken(token) {

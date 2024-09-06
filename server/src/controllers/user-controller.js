@@ -13,17 +13,19 @@ const mailService = require("../services/mail-service");
 const executorService = require("../services/executor-service");
 const tgBotService = require("../services/tg-bot-service");
 const chatService = require("../services/chat-service");
+const requestIp = require("request-ip");
 
 class UserController {
     async registration(req, res, next) {
         try {
             const { email, username, password } = req.body;
             const valErrors = validationResult(req);
+            const clientIp = requestIp.getClientIp(req);
 
             if (!valErrors.isEmpty()) {
                 return next(ApiError.ValidationError(valErrors));
             }
-            const userData = await userService.registration(email, username, password);
+            const userData = await userService.registration(email, username, password, clientIp);
             res.cookie("refreshToken", userData.refreshToken, {
                 maxAge: config.REFRESH_TOKEN_DAY_LIFETIME * 24 * 60 * 60 * 1000,
                 httpOnly: true,
@@ -37,11 +39,12 @@ class UserController {
     async login(req, res, next) {
         try {
             const { email, password } = req.body;
+            const clientIp = requestIp.getClientIp(req);
             const valErrors = validationResult(req);
             if (!valErrors.isEmpty()) {
                 return next(ApiError.ValidationError(valErrors));
             }
-            const userData = await userService.login(email, password);
+            const userData = await userService.login(email, password, clientIp);
             res.cookie("refreshToken", userData.refreshToken, {
                 maxAge: config.REFRESH_TOKEN_DAY_LIFETIME * 24 * 60 * 60 * 1000,
                 httpOnly: true,
@@ -66,7 +69,8 @@ class UserController {
     async refresh(req, res, next) {
         try {
             const { refreshToken } = req.cookies;
-            const userData = await userService.refresh(refreshToken);
+            const clientIp = requestIp.getClientIp(req);
+            const userData = await userService.refresh(refreshToken, clientIp);
             res.cookie("refreshToken", userData.refreshToken, {
                 maxAge: config.REFRESH_TOKEN_DAY_LIFETIME * 24 * 60 * 60 * 1000,
                 httpOnly: true,

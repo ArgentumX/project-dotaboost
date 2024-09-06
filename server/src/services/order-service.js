@@ -137,7 +137,7 @@ class OrderService {
         if (executor.orderId) {
             throw ApiError.BadRequest("cant take more than one order simultaneously");
         }
-        const order = await Order.findByPk(orderId);
+        const order = await Order.findByPk(orderId, { where: { paid: true } });
         if (!order) {
             throw ApiError.BadRequest("order not found");
         }

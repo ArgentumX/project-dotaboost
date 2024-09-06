@@ -9,8 +9,9 @@ const UserDto = require("../dtos/user-dto");
 const ApiError = require("../errors/api-error");
 const fileUtils = require("../utils/file-utils");
 const { Executor } = require("../models/models");
+const ipUtils = require("ip-matching");
 
-async function setPassword(user, password) {
+async function _setPassword(user, password) {
     const passwordHash = await this.getPasswordHash(password);
     user.password = passwordHash;
     await user.save();
@@ -19,7 +20,7 @@ async function setPassword(user, password) {
 }
 
 class UserService {
-    async registration(email, username, password) {
+    async registration(email, username, password, ip) {
         const candidateByUsername = await User.findOne({ where: { username } });
         if (candidateByUsername) {
             throw ApiError.BadRequest("username is already in use");
@@ -43,7 +44,7 @@ class UserService {
             email,
             `${process.env.API_URL}/api/user/activate/${activationLink}`
         );
-        return await this.createUserTokens(user);
+        return await this.createUserTokens(user, ip);
     }
 
     async getUserModel(userId) {
@@ -58,7 +59,7 @@ class UserService {
         return bcrypt.hash(password, Number(process.env.HASH_REPEAT));
     }
 
-    async login(email, password) {
+    async login(email, password, ip) {
         const user = await User.findOne({ where: { email } });
         if (!user) {
             throw ApiError.BadRequest("Wrong email or password");
@@ -67,14 +68,19 @@ class UserService {
         if (!isRightPassword) {
             throw ApiError.BadRequest("Wrong email or password");
         }
-        return await this.createUserTokens(user);
+        return await this.createUserTokens(user, ip);
     }
 
-    async createUserTokens(user) {
+    async createUserTokens(user, ip) {
         const roles = await roleService.getUserRoles(user.id);
         const userDto = new UserDto(user, roles, false);
         const tokens = tokenService.generateAuthTokens({ ...userDto });
-        await tokenService.saveToken(userDto.id, tokens.refreshToken, config.TOKENS.TYPE.REFRESH);
+        await tokenService.saveToken(
+            userDto.id,
+            tokens.refreshToken,
+            config.TOKENS.TYPE.REFRESH,
+            ip
+        );
         return { ...tokens, user: userDto };
     }
 
@@ -92,17 +98,17 @@ class UserService {
         return await tokenService.removeUserTokens(userId);
     }
 
-    async refresh(refreshToken) {
+    async refresh(refreshToken, ip) {
         if (!refreshToken) {
             throw ApiError.UnauthorizedError();
         }
         const userData = tokenService.validateRefreshToken(refreshToken);
         const tokenFromDb = await tokenService.findToken(refreshToken);
-        if (!userData || !tokenFromDb) {
+        if (!userData || !tokenFromDb || !ipUtils.matches(tokenFromDb.ip, ip)) {
             throw ApiError.UnauthorizedError();
         }
         const user = await User.findByPk(userData.id);
-        return await this.createUserTokens(user);
+        return await this.createUserTokens(user, ip);
     }
 
     async getUser(userId, loadRolesData = false) {
@@ -158,7 +164,7 @@ class UserService {
         if (!isRightPassword) {
             throw ApiError.BadRequest("Wrong email or password");
         }
-        return await setPassword(user, newPassword);
+        return await _setPassword(user, newPassword);
     }
 
     async recoverAccess(token, newPassword) {
@@ -171,7 +177,7 @@ class UserService {
         if (!user) {
             throw ApiError.BadRequest(config.MESSAGES.USER_NOT_FOUND);
         }
-        return await setPassword(user, newPassword);
+        return await _setPassword(user, newPassword);
     }
 
     async isExecutor(userId) {
