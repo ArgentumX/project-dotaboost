@@ -11,9 +11,14 @@ const roleService = require("./services/role-service");
 const http = require("http");
 const { init } = require("./services/socket-service");
 const socketService = require("./services/socket-service");
+const {
+    IpBlacklistMiddleware,
+    loadBlacklistData,
+} = require("./middleware/ip-blacklist-middleware");
 const PORT = process.env.PORT || 5000;
 
 const app = express();
+app.use(IpBlacklistMiddleware);
 app.use(cookieParser());
 app.use(
     cors({
@@ -33,6 +38,7 @@ async function start() {
     try {
         await sequelize.authenticate();
         await sequelize.sync();
+        await loadBlacklistData();
         await roleService.initRoles();
         socketService.init(server);
         server.listen(PORT, () => {
