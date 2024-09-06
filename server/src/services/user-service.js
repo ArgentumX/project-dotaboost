@@ -64,6 +64,10 @@ class UserService {
         if (!user) {
             throw ApiError.BadRequest("Wrong email or password");
         }
+        if (await this.isBanned(user.id)) {
+            throw ApiError.NoPermissions();
+        }
+
         const isRightPassword = await bcrypt.compare(password, user.password);
         if (!isRightPassword) {
             throw ApiError.BadRequest("Wrong email or password");
@@ -103,6 +107,9 @@ class UserService {
             throw ApiError.UnauthorizedError();
         }
         const userData = tokenService.validateRefreshToken(refreshToken);
+        if (await this.isBanned(userData.id)) {
+            throw ApiError.NoPermissions();
+        }
         const tokenFromDb = await tokenService.findToken(refreshToken);
         if (!userData || !tokenFromDb || !ipUtils.matches(tokenFromDb.ip, ip)) {
             throw ApiError.UnauthorizedError();
@@ -183,6 +190,13 @@ class UserService {
     async isExecutor(userId) {
         const executor = await Executor.findOne({ where: { userId } });
         return executor != null;
+    }
+
+    async isBanned(userId) {
+        return await roleService.hasRole(userId, config.ROLES.LIST.banned.title);
+    }
+    async isPostBanned(userId) {
+        return await roleService.hasRole(userId, config.ROLES.LIST.post_ban.title);
     }
 }
 

@@ -12,9 +12,9 @@ const tgBotService = require("./tg-bot-service");
 
 class ExecutorService {
     async createExecutor(userId) {
-        const user = await User.findByPk(userId);
-        if (!user) {
-            throw ApiError.BadRequest("user not found");
+        const user = await userService.getUserModel(userId);
+        if (await userService.isExecutor(userId)) {
+            throw ApiError.BadRequest("user is already executor");
         }
         const executor = await Executor.create({});
         await user.setExecutor(executor);

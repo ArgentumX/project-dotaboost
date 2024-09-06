@@ -7,7 +7,6 @@ const ApiError = require("../errors/api-error");
 const roleService = require("../services/role-service");
 const adminService = require("../services/admin-service");
 
-// TODO replace to roleService
 module.exports = function (roleTitle) {
     return async function (req, res, next) {
         try {

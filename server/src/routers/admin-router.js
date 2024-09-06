@@ -47,4 +47,26 @@ router.patch(
     adminController.closeOrder
 );
 
+router.patch(
+    "/user/:userId/ban",
+    authMiddleware,
+    checkRoleMiddleware(config.ROLES.LIST.admin.title),
+    param("userId").isNumeric(),
+    adminController.banUser
+);
+router.patch(
+    "/user/:userId/post-ban",
+    authMiddleware,
+    checkRoleMiddleware(config.ROLES.LIST.admin.title),
+    param("userId").isNumeric(),
+    adminController.postBanUser
+);
+router.patch(
+    "/user/:userId/create-executor",
+    authMiddleware,
+    checkRoleMiddleware(config.ROLES.LIST.admin.title),
+    param("userId").isNumeric(),
+    adminController.createExecutor
+);
+
 module.exports = router;

@@ -4,7 +4,16 @@ module.exports = {
             user: { title: "USER", display: false, allowAdding: true },
             admin: { title: "ADMIN", display: false, allowAdding: false },
             executor: { title: "EXECUTOR", display: true, allowAdding: true },
-            god: { title: "GOD", display: false, allowAdding: false },
+            banned: {
+                title: "BANNED",
+                display: true,
+                allowAdding: true,
+            },
+            post_ban: {
+                title: "POST_BANNED",
+                display: true,
+                allowAdding: true,
+            },
         },
         DEFAULT_ROLE_ID: "USER",
     },

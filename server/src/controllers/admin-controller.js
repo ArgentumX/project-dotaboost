@@ -80,15 +80,41 @@ class AdminController {
         }
     }
 
-    async addUserRole(req, res, next) {
+    async banUser(req, res, next) {
         try {
-            const { roleTittle } = req.body;
             const { userId } = req.params;
             const valErrors = validationResult(req);
             if (!valErrors.isEmpty()) {
                 return next(ApiError.ValidationError(valErrors));
             }
-            const result = await adminService.handleAddUserRoleRequest(userId, roleTittle);
+            const result = await adminService.handleBanUserRequest(userId);
+            return res.json(result);
+        } catch (e) {
+            next(e);
+        }
+    }
+    async postBanUser(req, res, next) {
+        try {
+            const { userId } = req.params;
+            const valErrors = validationResult(req);
+            if (!valErrors.isEmpty()) {
+                return next(ApiError.ValidationError(valErrors));
+            }
+            const result = await adminService.handlePostBanUserRequest(userId);
+            return res.json(result);
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    async createExecutor(req, res, next) {
+        try {
+            const { userId } = req.params;
+            const valErrors = validationResult(req);
+            if (!valErrors.isEmpty()) {
+                return next(ApiError.ValidationError(valErrors));
+            }
+            const result = await adminService.handleCreateExecutorRequest(userId);
             return res.json(result);
         } catch (e) {
             next(e);
