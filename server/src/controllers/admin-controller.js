@@ -2,6 +2,7 @@ const { validationResult } = require("express-validator");
 const ApiError = require("../errors/api-error");
 const executorTicketService = require("../services/executor-ticket-service");
 const orderService = require("../services/order-service");
+const adminService = require("../services/admin-service");
 
 class AdminController {
     async verifyExecutorInfo(req, res, next) {
@@ -73,6 +74,21 @@ class AdminController {
                 return next(ApiError.ValidationError(valErrors));
             }
             const result = await orderService.closeOrderById(orderId);
+            return res.json(result);
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    async addUserRole(req, res, next) {
+        try {
+            const { roleTittle } = req.body;
+            const { userId } = req.params;
+            const valErrors = validationResult(req);
+            if (!valErrors.isEmpty()) {
+                return next(ApiError.ValidationError(valErrors));
+            }
+            const result = await adminService.handleAddUserRoleRequest(userId, roleTittle);
             return res.json(result);
         } catch (e) {
             next(e);

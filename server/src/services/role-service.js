@@ -29,6 +29,7 @@ class RoleService {
         if (!(await userModel.hasRole(role))) {
             await userModel.addRole(role);
         }
+        return { message: "success" };
     }
 
     async getUserRoles(userId) {
