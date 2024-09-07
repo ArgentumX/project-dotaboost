@@ -5,9 +5,9 @@ const { Executor } = require("../models/models");
 const { ExecutorComment } = require("../models/comment-model");
 const ExecutorCommentDto = require("../dtos/executor-comment-dto");
 const batchServices = require("./batch-services");
-const adminService = require("./admin-service");
 const userService = require("./user-service");
 const UserDto = require("../dtos/user-dto");
+const executorService = require("./executor-service");
 
 class CommentService {
     async getCommentModel(commentId) {
@@ -18,13 +18,10 @@ class CommentService {
         return comment;
     }
     async postExecutorComment(userId, executorId, text) {
-        const user = await User.findByPk(userId);
-        if (!user) {
-            throw ApiError.BadRequest("user not found");
-        }
-        const executor = await Executor.findByPk(executorId);
-        if (!executor) {
-            throw ApiError.BadRequest("executor not found");
+        const user = userService.getUserModel(userId);
+        const executor = executorService.getExecutorModelByUserId(userId);
+        if (await userService.isPostBanned(userId)) {
+            throw ApiError.NoPermissions();
         }
         const usedService = await batchServices.isExecutorServiceUsed(userId, executorId);
         if (!usedService) {
@@ -59,10 +56,15 @@ class CommentService {
         const usersData = comments.map((comment) => new UserDto(comment.user));
         return { comments: commentsData, users: usersData };
     }
+
+    async removeUserComments(userId) {
+        await ExecutorComment.destroy({ where: { userId } });
+        return { message: "success" };
+    }
     async removeComment(userId, commentId, force = false) {
         const comment = await this.getCommentModel(commentId);
         if (!force) {
-            if (comment.userId !== userId && !(await adminService.isAdmin(userId))) {
+            if (comment.userId !== userId && !(await userService.isAdmin(userId))) {
                 throw ApiError.NoPermissions();
             }
         }

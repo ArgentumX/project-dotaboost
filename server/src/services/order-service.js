@@ -11,7 +11,6 @@ const { Model } = require("sequelize");
 const executorService = require("./executor-service");
 const tgBotService = require("./tg-bot-service");
 const recordService = require("./record-service");
-const adminService = require("./admin-service");
 const chatService = require("./chat-service");
 
 class OrderService {
@@ -189,7 +188,7 @@ class OrderService {
     async removeOrder(userId, orderId, force = false) {
         const order = await this.getOrderModel(orderId);
         if (!force) {
-            if (order.userId !== userId && !(await adminService.isAdmin(userId))) {
+            if (order.userId !== userId && !(await userService.isAdmin(userId))) {
                 throw ApiError.NoPermissions();
             }
         }

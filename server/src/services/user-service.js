@@ -204,6 +204,9 @@ class UserService {
     async isPostBanned(userId) {
         return await roleService.hasRole(userId, config.ROLES.LIST.post_ban.title);
     }
+    async isAdmin(userId) {
+        return await roleService.hasRole(userId, config.ROLES.LIST.admin.title);
+    }
 }
 
 module.exports = new UserService();

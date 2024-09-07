@@ -5,10 +5,7 @@ const config = require("../config");
 const roleService = require("./role-service");
 const ExecutorDto = require("../dtos/executor-dto");
 const OrderDto = require("../dtos/order-dto");
-const recordService = require("./record-service");
 const userService = require("./user-service");
-const orderService = require("./order-service");
-const tgBotService = require("./tg-bot-service");
 
 class ExecutorService {
     async createExecutor(userId) {

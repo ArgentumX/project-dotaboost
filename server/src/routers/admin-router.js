@@ -62,6 +62,20 @@ router.patch(
     adminController.postBanUser
 );
 router.patch(
+    "/user/:userId/unban",
+    authMiddleware,
+    checkRoleMiddleware(config.ROLES.LIST.admin.title),
+    param("userId").isNumeric(),
+    adminController.unbanUser
+);
+router.patch(
+    "/user/:userId/post-unban",
+    authMiddleware,
+    checkRoleMiddleware(config.ROLES.LIST.admin.title),
+    param("userId").isNumeric(),
+    adminController.postUnbanUser
+);
+router.patch(
     "/user/:userId/create-executor",
     authMiddleware,
     checkRoleMiddleware(config.ROLES.LIST.admin.title),

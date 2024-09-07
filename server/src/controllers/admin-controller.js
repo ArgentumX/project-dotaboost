@@ -1,8 +1,8 @@
 const { validationResult } = require("express-validator");
 const ApiError = require("../errors/api-error");
+const adminService = require("../services/admin-service");
 const executorTicketService = require("../services/executor-ticket-service");
 const orderService = require("../services/order-service");
-const adminService = require("../services/admin-service");
 
 class AdminController {
     async verifyExecutorInfo(req, res, next) {
@@ -87,7 +87,7 @@ class AdminController {
             if (!valErrors.isEmpty()) {
                 return next(ApiError.ValidationError(valErrors));
             }
-            const result = await adminService.handleBanUserRequest(userId);
+            const result = await adminService.handleBanRequest(userId);
             return res.json(result);
         } catch (e) {
             next(e);
@@ -100,7 +100,33 @@ class AdminController {
             if (!valErrors.isEmpty()) {
                 return next(ApiError.ValidationError(valErrors));
             }
-            const result = await adminService.handlePostBanUserRequest(userId);
+            const result = await adminService.handlePostBanRequest(userId);
+            return res.json(result);
+        } catch (e) {
+            next(e);
+        }
+    }
+    async unbanUser(req, res, next) {
+        try {
+            const { userId } = req.params;
+            const valErrors = validationResult(req);
+            if (!valErrors.isEmpty()) {
+                return next(ApiError.ValidationError(valErrors));
+            }
+            const result = await adminService.handleUnbanRequest(userId);
+            return res.json(result);
+        } catch (e) {
+            next(e);
+        }
+    }
+    async postUnbanUser(req, res, next) {
+        try {
+            const { userId } = req.params;
+            const valErrors = validationResult(req);
+            if (!valErrors.isEmpty()) {
+                return next(ApiError.ValidationError(valErrors));
+            }
+            const result = await adminService.handlePostUnbanRequest(userId);
             return res.json(result);
         } catch (e) {
             next(e);

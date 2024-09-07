@@ -18,16 +18,29 @@ class RoleService {
         }
     }
 
-    async addUserRole(userModel, roleTitle) {
+    async getRoleModel(roleTitle) {
         const role = await Role.findByPk(roleTitle);
         if (!role) {
             throw ApiError.BadRequest("role not found");
         }
+        return role;
+    }
+
+    async addUserRole(userModel, roleTitle) {
+        const role = await this.getRoleModel(roleTitle);
         if (!role.allowAdding) {
             throw ApiError.NoPermissions();
         }
         if (!(await userModel.hasRole(role))) {
             await userModel.addRole(role);
+        }
+        return { message: "success" };
+    }
+
+    async removeUserRole(userModel, roleTitle) {
+        const role = await this.getRoleModel(roleTitle);
+        if (await userModel.hasRole(role)) {
+            await userModel.removeRoles([roleTitle]);
         }
         return { message: "success" };
     }

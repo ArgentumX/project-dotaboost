@@ -5,7 +5,7 @@ const config = require("../config");
 const users = require("../services/user-service");
 const ApiError = require("../errors/api-error");
 const roleService = require("../services/role-service");
-const adminService = require("../services/admin-service");
+const userService = require("../services/user-service");
 
 module.exports = function (roleTitle) {
     return async function (req, res, next) {
@@ -16,7 +16,7 @@ module.exports = function (roleTitle) {
             }
             if (
                 roleTitle === config.ROLES.LIST.admin.title &&
-                !(await adminService.isAdmin(decoded.id))
+                !(await userService.isAdmin(decoded.id))
             ) {
                 throw ApiError.NoPermissions();
             }
