@@ -70,7 +70,7 @@ class TokenService {
         const tokenData = await Token.findOne({ where: { token } });
         return tokenData;
     }
-    async findToken(userId, tokenType) {
+    async findTokenByType(userId, tokenType) {
         const tokenData = await Token.findOne({ where: { userId, tokenType } });
         return tokenData;
     }

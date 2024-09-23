@@ -194,7 +194,7 @@ class UserService {
 
     // May return null
     async getLastIp(userId) {
-        const token = await tokenService.findToken(userId, config.TOKENS.TYPE.REFRESH);
+        const token = await tokenService.findTokenByType(userId, config.TOKENS.TYPE.REFRESH);
         return token ? token.ip : null;
     }
 
