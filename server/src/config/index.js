@@ -50,6 +50,7 @@ module.exports = {
     USERNAME_MAX_LENGTH: 16,
     MAX_MB_AVATAR_FILESIZE: 1,
     MAX_MB_SCREEN_FILESIZE: 4,
+    MAX_MB_UPLOAD_FILE_SIZE: 4,
     PLAY_TIME_KEYS: ["MORNING", "NIGHT", "AFTERNOON", "EVENING"],
     ALLOWED_ORDER_FILTERS: ["userId", "closed", "steamGuard", "party", "priority"],
     ALLOWED_TICKET_FILTERS: ["userId", "closed", "verified"],
